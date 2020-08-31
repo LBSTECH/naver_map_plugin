@@ -1,0 +1,386 @@
+//
+//  NaverMapController.swift
+//  naver_map_plugin
+//
+//  Created by Maximilian on 2020/08/19.
+//
+
+import UIKit
+import Flutter
+import NMapsMap
+
+protocol NaverMapOptionSink {
+    func setIndoorEnable(_ indoorEnable: Bool)
+    func setNightModeEnable(_ nightModeEnable: Bool)
+    func setLiteModeEnable(_ liteModeEnable: Bool)
+    func setMapType(_ typeIndex: Int)
+    func setBuildingHeight(_ buildingHeight: Float)
+    func setSymbolScale(_ symbolScale: CGFloat)
+    func setSymbolPerspectiveRatio(_ symbolPerspectiveRatio: CGFloat)
+    func setActiveLayers(_ activeLayers: Array<Any>)
+    
+    func setRotationGestureEnable(_ rotationGestureEnable: Bool)
+    func setScrollGestureEnable(_ scrollGestureEnable: Bool)
+    func setTiltGestureEnable(_ tiltGestureEnable: Bool)
+    func setZoomGestureEnable(_ zoomGestureEnable: Bool)
+    func setLocationButtonEnable(_ locationButtonEnable: Bool)
+    func setLocationTrackingMode(_ locationTrackingMode: UInt)
+}
+
+
+class NaverMapController: NSObject, FlutterPlatformView, NaverMapOptionSink, NMFMapViewTouchDelegate, NMFMapViewCameraDelegate {
+    var mapView : NMFMapView
+    var naverMap : NMFNaverMapView
+    let viewId : Int64
+    
+    var markersController: NaverMarkersController?
+    var pathController: NaverPathController?
+    var circleController: NaverCircleController?
+    
+    var channel : FlutterMethodChannel?
+    var registrar : FlutterPluginRegistrar?
+    
+    init(viewId: Int64, frame: CGRect, registrar: FlutterPluginRegistrar, argument: NSDictionary?) {
+        self.viewId = viewId
+        self.registrar = registrar
+        
+        // property set
+        naverMap = NMFNaverMapView(frame: frame)
+        mapView = naverMap.mapView
+        channel = FlutterMethodChannel(name: "naver_map_plugin_\(viewId)",
+                                       binaryMessenger: registrar.messenger())
+        super.init()
+        markersController = NaverMarkersController(naverMap: naverMap,
+                                                   registrar: registrar,
+                                                   touchHandler: overlayTouchHandler(overlay:))
+        pathController = NaverPathController(naverMap: naverMap,
+                                             registrar: registrar,
+                                             touchHandler: overlayTouchHandler(overlay:))
+        circleController = NaverCircleController(naverMap: naverMap,
+                                                 touchHandler: overlayTouchHandler(overlay:))
+        channel?.setMethodCallHandler(handle(call:result:))
+        
+        // map view 설정
+        mapView.touchDelegate = self
+        mapView.addCameraDelegate(delegate: self)
+        if let arg = argument {
+            if let initialPositionData = arg["initialCameraPosition"] {
+                if initialPositionData is NSDictionary {
+                    mapView.moveCamera(NMFCameraUpdate(position: toCameraPosition(json: initialPositionData)))
+                }
+            }
+            if let options = arg["options"] as? NSDictionary {
+                interpretMapOption(option: options, sink: self)
+            }
+            if let markerData = arg["markers"] as? Array<Any> {
+                markersController?.add(jsonArray: markerData)
+            }
+            if let pathData = arg["paths"] as? Array<Any> {
+                pathController?.set(jsonArray: pathData)
+            }
+            if let circleData = arg["circles"] as? Array<Any> {
+                circleController?.add(jsonArray: circleData)
+            }
+        }
+        
+        naverMap.showZoomControls = false
+        naverMap.showIndoorLevelPicker = false
+        naverMap.showLocationButton = false
+    }
+    
+    func view() -> UIView {
+        return naverMap
+    }
+    
+    func handle(call: FlutterMethodCall, result: FlutterResult) {
+        switch call.method {
+        case "map#waitForMap":
+            result(nil)
+            break
+        case "map#update":
+            if let arg = call.arguments as! NSDictionary?, let option = arg["options"] as? NSDictionary {
+                interpretMapOption(option: option, sink: self)
+                result(true)
+            } else {
+                result(false)
+            }
+            break
+        case "map#getVisibleRegion":
+            let bounds = mapView.contentBounds
+            result(latlngBoundToJson(bound: bounds))
+            break
+        case "map#getPosition":
+            let position = mapView.cameraPosition
+            result(cameraPositionToJson(position: position))
+            break
+        case "tracking#mode":
+            if let arg = call.arguments as! NSDictionary? {
+                setLocationTrackingMode(arg["locationTrackingMode"] as! UInt)
+                result(true)
+            } else {
+                result(false)
+            }
+            break
+        case "map#getSize" :
+            let width = CGFloat(mapView.mapWidth)
+            let height = CGFloat(mapView.mapHeight)
+            let resolution = UIScreen.main.nativeBounds.width / UIScreen.main.bounds.width
+            let data = [
+                "width" : width * resolution,
+                "height" : height * resolution
+            ]
+            result(data)
+            break
+        case "camera#move" :
+            if let arg = call.arguments as? NSDictionary {
+                let update = toCameraUpdate(json: arg["cameraUpdate"]!)
+                mapView.moveCamera(update)
+            }
+            result(nil)
+            break
+        case "map#capture" :
+            let dir = NSTemporaryDirectory()
+            let fileName = "\(NSUUID().uuidString).jpg"
+            if let tmpFileUrl = NSURL.fileURL(withPathComponents: [dir, fileName]) {
+                DispatchQueue.main.async {
+                    self.naverMap.takeSnapShot({ (image) in
+                        if let data = image.jpegData(compressionQuality: 1.0) ?? image.pngData() {
+                            do{
+                                try data.write(to: tmpFileUrl)
+                                self.channel?.invokeMethod("snapshot#done", arguments: ["path" : tmpFileUrl.path])
+                            }catch {
+                                self.channel?.invokeMethod("snapshot#done", arguments: ["path" : nil])
+                            }
+                        }else {
+                            self.channel?.invokeMethod("snapshot#done", arguments: ["path" : nil])
+                        }
+                    })
+                }
+            }
+            result(nil)
+            break
+        case "circleOverlay#update" :
+            if let arg = call.arguments as? NSDictionary {
+                if let dataToAdd = arg["circlesToAdd"] as? Array<Any> {
+                    circleController?.add(jsonArray: dataToAdd)
+                }
+                if let dataToModify = arg["circlesToChange"] as? Array<Any> {
+                    circleController?.modify(jsonArray: dataToModify)
+                }
+                if let dataToRemove = arg["circleIdsToRemove"] as? Array<Any>{
+                    circleController?.remove(jsonArray: dataToRemove)
+                }
+            }
+            result(nil)
+            break
+        case "pathOverlay#update" :
+            if let arg = call.arguments as? NSDictionary {
+                if let dataToAdd = arg["pathToAddOrUpdate"] as? Array<Any> {
+                    pathController?.set(jsonArray: dataToAdd)
+                }
+                if let dataToRemove = arg["pathIdsToRemove"] as? Array<Any>{
+                    pathController?.remove(jsonArray: dataToRemove)
+                }
+            }
+            result(nil)
+            break
+        case "markers#update" :
+            if let arg = call.arguments as? NSDictionary {
+                if let dataToAdd = arg["markersToAdd"] as? Array<Any> {
+                    markersController?.add(jsonArray: dataToAdd)
+                }
+                if let dataToModify = arg["markersToChange"] as? Array<Any> {
+                    markersController?.modify(jsonArray: dataToModify)
+                }
+                if let dataToRemove = arg["markerIdsToRemove"] as? Array<Any>{
+                    markersController?.remove(jsonArray: dataToRemove)
+                }
+            }
+            result(nil)
+            break
+        default:
+            print("지정되지 않은 메서드콜 함수명이 들어왔습니다.\n함수명 : \(call.method)")
+        }
+    }
+    
+    // ==================== naver map camera delegate ==================
+    func mapView(_ mapView: NMFMapView, cameraIsChangingByReason reason: Int) {
+        self.channel?.invokeMethod("camera#move",
+                                   arguments: ["position" : latlngToJson(latlng: mapView.cameraPosition.target)])
+    }
+    
+    func mapView(_ mapView: NMFMapView, cameraDidChangeByReason reason: Int, animated: Bool) {
+        self.channel?.invokeMethod("camera#idle" , arguments: nil)
+    }
+    
+    
+    
+    // ========================== About Map Option ==============================
+    func interpretMapOption(option: NSDictionary, sink: NaverMapOptionSink){
+        if let indoorEnable = option["indoorEnable"] as? Bool {
+            sink.setIndoorEnable(indoorEnable)
+        }
+        if let nightModeEnable = option["nightModeEnable"] as? Bool {
+            sink.setNightModeEnable(nightModeEnable)
+        }
+        if let liteModeEnable = option["liteModeEnable"] as? Bool {
+            sink.setLiteModeEnable(liteModeEnable)
+        }
+        if let mapType = option["mapType"] as? Int {
+            sink.setMapType(mapType)
+        }
+        if let height = option["buildingHeight"] as? Float {
+             sink.setBuildingHeight(height)
+        }
+        if let scale = option["symbolScale"] as? CGFloat {
+            sink.setSymbolScale(scale)
+        }
+        if let ratio = option["symbolPerspectiveRatio"] as? CGFloat{
+            sink.setSymbolPerspectiveRatio(ratio)
+        }
+        if let layers = option["activeLayers"] as? Array<Any> {
+            sink.setActiveLayers(layers)
+        }
+        if let rotationGestureEnable = option["rotationGestureEnable"] as? Bool {
+            sink.setRotationGestureEnable(rotationGestureEnable)
+        }
+        if let scrollGestureEnable = option["scrollGestureEnable"] as? Bool {
+            sink.setScrollGestureEnable(scrollGestureEnable)
+        }
+        if let tiltGestureEnable = option["tiltGestureEnable"] as? Bool {
+            sink.setTiltGestureEnable(tiltGestureEnable)
+        }
+        if let zoomGestureEnable = option["zoomGestureEnable"] as? Bool{
+            sink.setZoomGestureEnable(zoomGestureEnable)
+        }
+        if let locationButtonEnable = option["locationButtonEnable"] as? Bool{
+            sink.setLocationButtonEnable(locationButtonEnable)
+        }
+        if let locationTrackingMode = option["locationTrackingMode"] as? UInt {
+            sink.setLocationTrackingMode(locationTrackingMode)
+        }
+    }
+    
+    
+    // Naver touch Delegate method
+    func mapView(_ mapView: NMFMapView, didTapMap latlng: NMGLatLng, point: CGPoint) {
+        channel?.invokeMethod("map#onTap", arguments: ["position" : [latlng.lat, latlng.lng]])
+    }
+    
+    func mapView(_ mapView: NMFMapView, didTap symbol: NMFSymbol) -> Bool {
+        channel?.invokeMethod("map#onSymbolClick",
+                              arguments: ["position" : latlngToJson(latlng: symbol.position),
+                                          "caption" : symbol.caption!])
+        return false
+    }
+    
+    // naver overlay touch handler
+    func overlayTouchHandler(overlay: NMFOverlay) -> Bool {
+        if let marker = overlay.userInfo["marker"] as? NMarkerController {
+            channel?.invokeMethod("marker#onTap", arguments: ["markerId" : marker.id,
+                                                              "iconWidth" :  marker.marker.width,
+                                                              "iconHeight" : marker.marker.height])
+            return markersController!.toggleInfoWindow(marker)
+        } else if let path = overlay.userInfo["path"] as? NPathController {
+            channel?.invokeMethod("path#onTap",
+                                  arguments: ["pathId" , path.id])
+            return true
+        } else if let circle = overlay.userInfo["circle"] as? NCircleController{
+            channel?.invokeMethod("circle#onTap",
+                                  arguments: ["overlayId" : circle.id])
+            return true
+        }
+        return false
+    }
+    
+    // naver map option sink method
+    func setIndoorEnable(_ indoorEnable: Bool) {
+        mapView.isIndoorMapEnabled = indoorEnable
+    }
+    
+    func setNightModeEnable(_ nightModeEnable: Bool) {
+        mapView.isNightModeEnabled = nightModeEnable
+    }
+    
+    func setLiteModeEnable(_ liteModeEnable: Bool) {
+        mapView.liteModeEnabled = liteModeEnable
+    }
+    
+    func setMapType(_ typeIndex: Int) {
+        let type = NMFMapType(rawValue: typeIndex)!
+        mapView.mapType = type
+    }
+    
+    func setBuildingHeight(_ buildingHeight: Float) {
+        mapView.buildingHeight = buildingHeight
+    }
+    
+    func setSymbolScale(_ symbolScale: CGFloat) {
+        mapView.symbolScale = symbolScale
+    }
+    
+    func setSymbolPerspectiveRatio(_ symbolPerspectiveRatio: CGFloat) {
+        mapView.symbolPerspectiveRatio = symbolPerspectiveRatio
+    }
+    
+    func setActiveLayers(_ activeLayers: Array<Any>) {
+        mapView.setLayerGroup(NMF_LAYER_GROUP_BUILDING, isEnabled: false)
+        mapView.setLayerGroup(NMF_LAYER_GROUP_TRAFFIC, isEnabled: false)
+        mapView.setLayerGroup(NMF_LAYER_GROUP_TRANSIT, isEnabled: false)
+        mapView.setLayerGroup(NMF_LAYER_GROUP_BICYCLE, isEnabled: false)
+        mapView.setLayerGroup(NMF_LAYER_GROUP_MOUNTAIN, isEnabled: false)
+        mapView.setLayerGroup(NMF_LAYER_GROUP_CADASTRAL, isEnabled: false)
+        activeLayers.forEach { (any) in
+            let index = any as! Int
+            switch index {
+            case 0 :
+                mapView.setLayerGroup(NMF_LAYER_GROUP_BUILDING, isEnabled: true)
+                break
+            case 1:
+                mapView.setLayerGroup(NMF_LAYER_GROUP_TRAFFIC, isEnabled: true)
+                break
+            case 2:
+                mapView.setLayerGroup(NMF_LAYER_GROUP_TRANSIT, isEnabled: true)
+                break
+            case 3:
+                mapView.setLayerGroup(NMF_LAYER_GROUP_BICYCLE, isEnabled: true)
+                break
+            case 4:
+                mapView.setLayerGroup(NMF_LAYER_GROUP_MOUNTAIN, isEnabled: true)
+                break
+            case 5:
+                mapView.setLayerGroup(NMF_LAYER_GROUP_CADASTRAL, isEnabled: true)
+                break
+            default:
+                return
+            }
+        }
+    }
+    
+    func setRotationGestureEnable(_ rotationGestureEnable: Bool) {
+        mapView.isRotateGestureEnabled = rotationGestureEnable
+    }
+    
+    func setScrollGestureEnable(_ scrollGestureEnable: Bool) {
+        mapView.isScrollGestureEnabled = scrollGestureEnable
+    }
+    
+    func setTiltGestureEnable(_ tiltGestureEnable: Bool) {
+        mapView.isTiltGestureEnabled = tiltGestureEnable
+    }
+    
+    func setZoomGestureEnable(_ zoomGestureEnable: Bool) {
+        mapView.isZoomGestureEnabled = zoomGestureEnable
+    }
+    
+    func setLocationButtonEnable(_ locationButtonEnable: Bool) {
+        
+    }
+    
+    func setLocationTrackingMode(_ locationTrackingMode: UInt) {
+        mapView.positionMode = NMFMyPositionMode(rawValue: locationTrackingMode)!
+    }
+    
+}
+
+
