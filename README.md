@@ -4,7 +4,7 @@
 
 Plug-in which shows naver map on flutter project support Android and iOS.
 
-## Getting Started
+## Install
 
 해당 플러그인은 [Naver Cloud PlatForm - map][L1] 에서 제공하는 map서비스를 Android와 iOS 환경에서 보여주는 플러그인입니다. 
 
@@ -12,6 +12,14 @@ Plug-in which shows naver map on flutter project support Android and iOS.
 
 - Naver cloud platform 에서 콘솔의 AI·Application Service > AI·NAVER API > Application에서 애플리케이션을 등록합니다.
 - 등록한 애플리케이션을 선택해 Client ID값을 확인하고 변경 화면에서 Maps가 선택되어 있는지 확인한다.
+
+pubspec.yaml에 plug in dependencies에 작성
+``` yaml
+naver_map_plugin:
+    git:
+      url: URL_OF_THIS_REPO
+      ref: master
+```
 
 ## ANDROID GETTING START
 
