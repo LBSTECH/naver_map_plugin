@@ -72,6 +72,19 @@ $ brew install git-lfs
 </dict>
 ```
 
+> naver map에서 현위치탐색 기능을 사용하기 위해서는 info.plist에서 권한을 명시한다.
+``` 
+<dict>
+    <key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+	<string>USAGE PERPOSE</string>
+	<key>NSLocationAlwaysUsageDescription</key>
+	<string>USAGE PERPOSE</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>USAGE PERPOSE</string>
+</dict>
+```
+
+
 > 이후 AppDelefate에서 위치 사용권한을 획득하는 예제.
 ``` swift
 if (CLLocationManager.locationServicesEnabled()) {
