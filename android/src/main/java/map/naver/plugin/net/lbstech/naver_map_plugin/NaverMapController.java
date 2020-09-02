@@ -288,9 +288,8 @@ public class NaverMapController implements
             case "map#capture" :
                 {
                     if (naverMap == null) result.success(null);
-                    naverMap.takeSnapshot((Bitmap snapshot) -> {
-                        result.success(treatCapture(snapshot));
-                    });
+                    naverMap.takeSnapshot(this::treatCapture);
+                    result.success(null);
                 }
                 break;
             case "circleOverlay#update":
@@ -307,18 +306,21 @@ public class NaverMapController implements
         }
     }
 
-    private String treatCapture(Bitmap snapshot){
+    private void treatCapture(Bitmap snapshot){
+        String result = null;
         try {
             File file = File.createTempFile("road", ".jpg", activity.getApplicationContext().getCacheDir());
             FileOutputStream fos = new FileOutputStream(file);
             snapshot.compress(Bitmap.CompressFormat.JPEG, 100, fos);
             fos.flush();
             fos.close();
-            return file.getPath();
+            result = file.getPath();
         } catch (IOException e) {
             Log.e("takeCapture", e.getMessage());
-            return null;
         }
+        HashMap<String, String> arg = new HashMap<>(2);
+        arg.put("path", result);
+        methodChannel.invokeMethod("snapshot#done", arg);
     }
 
     @Override
