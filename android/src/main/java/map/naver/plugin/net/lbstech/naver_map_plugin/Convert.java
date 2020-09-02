@@ -80,7 +80,7 @@ public class Convert {
     }
 
     @SuppressWarnings("unchecked")
-    static CameraUpdate toCameraUpdate(Object o) {
+    static CameraUpdate toCameraUpdate(Object o, float density) {
         final List data = (List) o;
         switch ((String) data.get(0)) {
             case "newCameraPosition":
@@ -99,7 +99,9 @@ public class Convert {
                 double level = (double) data.get(1);
                 return CameraUpdate.zoomTo(level);
             case "fitBounds":
-                return CameraUpdate.fitBounds(toLatLngBounds(data.get(1)));
+                int dp = (int) data.get(2);
+                int px = Math.round(dp * density);
+                return CameraUpdate.fitBounds(toLatLngBounds(data.get(1)), px);
             default:
                 throw new IllegalArgumentException("Cannot interpret " + o + " as CameraUpdate");
         }

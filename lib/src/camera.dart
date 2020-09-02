@@ -115,7 +115,7 @@ class CameraUpdate{
   /// 변경하는 CameraUpdate 객체를 생성합니다.
   /// </br>
   /// 기울기 각도와 베어링 각도는 0으로 변경되며, 피봇 지점은 무시됩니다
-  /// <h3>padding 은 바운더리에 맞는 영역에 대해 상하좌우 여백을 설정하며 pixel 단위입니다.</h3>
+  /// <h3>padding 은 바운더리에 맞는 영역에 대해 상하좌우 여백을 설정하며 상대크기 단위입니다.</h3>
   static CameraUpdate fitBounds(LatLngBounds bounds, {int padding = 0}){
     return CameraUpdate._(<dynamic>['fitBounds', bounds._toList(), padding]);
   }
