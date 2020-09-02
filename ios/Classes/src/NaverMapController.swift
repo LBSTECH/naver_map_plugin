@@ -278,8 +278,8 @@ class NaverMapController: NSObject, FlutterPlatformView, NaverMapOptionSink, NMF
     func overlayTouchHandler(overlay: NMFOverlay) -> Bool {
         if let marker = overlay.userInfo["marker"] as? NMarkerController {
             channel?.invokeMethod("marker#onTap", arguments: ["markerId" : marker.id,
-                                                              "iconWidth" :  marker.marker.width,
-                                                              "iconHeight" : marker.marker.height])
+                                                              "iconWidth" :  pxFromPt(marker.marker.width),
+                                                              "iconHeight" : pxFromPt(marker.marker.height)])
             return markersController!.toggleInfoWindow(marker)
         } else if let path = overlay.userInfo["path"] as? NPathController {
             channel?.invokeMethod("path#onTap",
