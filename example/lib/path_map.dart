@@ -146,6 +146,8 @@ class _PathMapPageState extends State<PathMapPage> {
               PathOverlayId('path'),
               _coordinates,
               width: _width,
+              color: Colors.red,
+              outlineColor: Colors.white,
             )},
           ),
 
@@ -154,6 +156,7 @@ class _PathMapPageState extends State<PathMapPage> {
             child: Container(
               margin: EdgeInsets.symmetric(vertical: 40, horizontal: 36),
               padding: EdgeInsets.all(8),
+              height: MediaQuery.of(context).size.height*0.1,
               decoration: BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.circular(6),

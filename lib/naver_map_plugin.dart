@@ -26,7 +26,7 @@ part 'src/overlay_image.dart';
 
 part 'src/path_overlay.dart';
 
-part 'src/paht_overlay_updates.dart';
+part 'src/path_overlay_updates.dart';
 
 part 'src/ui.dart';
 

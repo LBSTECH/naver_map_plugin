@@ -142,7 +142,7 @@ class PathOverlay {
         'outlineWidth': outlineWidth,
         'passedColor': passedColor.value,
         'passedOutlineColor': passedOutlineColor.value,
-        'patternImage': patternImage?.blob,
+        'patternImage': patternImage?._toJson(),
         'patternInterval': patternInterval,
         'progress': progress,
         'width': width,

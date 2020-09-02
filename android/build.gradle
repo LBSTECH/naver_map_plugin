@@ -16,6 +16,9 @@ rootProject.allprojects {
     repositories {
         google()
         jcenter()
+        maven {
+            url 'https://navercorp.bintray.com/maps'
+        }
     }
 }
 
@@ -29,5 +32,15 @@ android {
     }
     lintOptions {
         disable 'InvalidPackage'
+    }
+
+    compileOptions {
+        sourceCompatibility = 1.8
+        targetCompatibility = 1.8
+    }
+    dependencies {
+        // 네이버 지도 SDK
+        implementation 'com.naver.maps:map-sdk:3.9.1'
+        implementation 'com.google.android.gms:play-services-location:17.0.0'
     }
 }

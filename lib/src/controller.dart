@@ -35,8 +35,8 @@ class NaverMapController{
     switch (call.method){
       case 'marker#onTap':
         String markerId = call.arguments['markerId'];
-        int iconWidth = (call.arguments['iconWidth'] as double).floor();
-        int iconHeight = (call.arguments['iconHeight'] as double).floor();
+        int iconWidth = call.arguments['iconWidth'] as int;
+        int iconHeight = call.arguments['iconHeight'] as int;
         _naverMapState._markerTapped(markerId, iconWidth, iconHeight);
         break;
       case 'path#onTap' :

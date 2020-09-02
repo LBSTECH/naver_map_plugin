@@ -35,6 +35,7 @@ class _CircleMapPageState extends State<CircleMapPage> {
               padding: EdgeInsets.symmetric(vertical: 40, horizontal: 32),
               child: Container(
                 padding: EdgeInsets.all(8),
+                height: MediaQuery.of(context).size.height*0.1,
                 decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(6),

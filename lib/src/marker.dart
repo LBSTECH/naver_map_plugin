@@ -32,15 +32,6 @@ class Marker{
   /// iconSize 는 'width' 와 'height'의 key값을 가지고 있다.
   OnMarkerTab onMarkerTab;
 
-  /// 클릭 리스너가 클릭이벤트를 소진하는 지정할 수 있습니다.
-  ///
-  /// true 일때, 이벤트는 완전히 소진되며, false 일때 z-index가 낮은 오버레이나,
-  /// 지도에게 이벤트가 전달됩니다.
-  ///
-  ///
-  /// 기본값은 false 입니다.
-  final bool consumeTapEvents;
-
   /// 좌표를 지정합니다.
   /// -
   /// 만약 position이 유효하지 않은(LatLng.isValid()가 false인) 좌표라면
@@ -180,7 +171,6 @@ class Marker{
     this.alpha,
     this.flat,
     this.onMarkerTab,
-    this.consumeTapEvents = false,
     this.icon,
     this.captionText,
     this.captionTextSize,
@@ -207,7 +197,6 @@ class Marker{
   Map<String, dynamic> _toJson() {
     assert(markerId != null);
     assert(position != null);
-    assert(consumeTapEvents != null);
 
     final Map<String, dynamic> json = <String, dynamic>{};
 
@@ -220,7 +209,6 @@ class Marker{
     addIfPresent('markerId', markerId);
     addIfPresent('alpha', alpha);
     addIfPresent('flat', flat);
-    addIfPresent('consumeTapEvents', consumeTapEvents);
     addIfPresent('position', position?._toJson());
     addIfPresent('captionText', captionText);
     addIfPresent('captionTextSize', captionTextSize);
@@ -258,7 +246,6 @@ class Marker{
     return markerId == typedOther.markerId &&
         alpha == typedOther.alpha &&
         flat == typedOther.flat &&
-        consumeTapEvents == typedOther.consumeTapEvents &&
         position == typedOther.position &&
         zIndex == typedOther.zIndex &&
         globalZIndex == typedOther.globalZIndex &&
@@ -300,7 +287,6 @@ class Marker{
       captionRequestedWidth: captionRequestedWidth,
       captionText: captionText,
       captionTextSize: captionTextSize,
-      consumeTapEvents: consumeTapEvents,
       flat: flat,
       globalZIndex: globalZIndex,
       iconTintColor: iconTintColor,
@@ -321,8 +307,7 @@ class Marker{
   @override
   String toString() {
     return 'Marker{markerId: $markerId, alpha: $alpha, '
-        'consumeTapEvents: $consumeTapEvents, flat: $flat, '
-        'position: $position, zIndex: $zIndex, '
+        'flat: $flat, position: $position, zIndex: $zIndex, '
         'onMarkerTab: $onMarkerTab, infowindow : $infoWindow}';
   }
 
