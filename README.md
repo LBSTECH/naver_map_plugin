@@ -1,6 +1,8 @@
 # naver_map_plugin
 
-flutter naver map plugin
+네이버지도를 플러터에서 띄울 수 있는 플러그인입니다. 
+
+Plug-in which shows naver map on flutter project.
 
 ## Getting Started
 
