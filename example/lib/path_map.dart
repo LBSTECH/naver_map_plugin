@@ -141,7 +141,6 @@ class _PathMapPageState extends State<PathMapPage> {
             onMapCreated: _onMapCreated,
             onMapTap: _onMapTap,
             markers: _markers,
-            initLocationTrackingMode: LocationTrackingMode.Follow,
             pathOverlays: {PathOverlay(
               PathOverlayId('path'),
               _coordinates,
@@ -183,6 +182,10 @@ class _PathMapPageState extends State<PathMapPage> {
 
   void _onMapCreated(NaverMapController controller) {
     _controller.complete(controller);
+    controller.moveCamera(CameraUpdate.fitBounds(
+      LatLngBounds.fromLatLngList(_coordinates),
+      padding: 48,
+    ));
   }
 
   void _onMapTap(LatLng latLng) {

@@ -50,6 +50,27 @@ class LatLngBounds {
   /// The northeast corner of the rectangle.
   final LatLng northeast;
 
+  /// <h2>LatLng 의 배열로 LatLngBounds 를 만드는 factory</h2>
+  /// <hr/>
+  /// <p>list로 전달된 [LatLng]들의 배열들을 이용해서 south, north, east, west 를
+  /// 계산하여 [LatLngBounds]를 생성한다.</p>
+  factory LatLngBounds.fromLatLngList(List<LatLng> latLngs){
+    if (latLngs == null || latLngs.length < 2) {
+      throw ArgumentError('최소한 2개 이상의 리스트 길이가 있어야 LatLngBounds를 만들 수 있습니다.');
+    }
+    double south = 200, west = 200;
+    double north = -200, east = -200;
+    for (LatLng latLng in latLngs){
+      if (south > latLng.longitude) south = latLng.longitude;
+      if (north < latLng.longitude) north = latLng.longitude;
+      if (east < latLng.latitude) east = latLng.latitude;
+      if (west > latLng.latitude) west = latLng.latitude;
+    }
+    return LatLngBounds(
+      southwest: LatLng(west, south),
+      northeast: LatLng(east, north),
+    );
+  }
 
   List<List<double>> get json => [southwest.json, northeast.json];
 
