@@ -1,6 +1,4 @@
-
 part of naver_map_plugin;
-
 
 class NaverMap extends StatefulWidget {
   const NaverMap({
@@ -24,6 +22,7 @@ class NaverMap extends StatefulWidget {
     this.buildingHeight = 1.0,
     this.symbolScale = 1.0,
     this.symbolPerspectiveRatio = 1.0,
+    this.locationButtonEnable = true,
     this.rotationGestureEnable = true,
     this.scrollGestureEnable = true,
     this.tiltGestureEnable = true,
@@ -32,7 +31,7 @@ class NaverMap extends StatefulWidget {
     this.initLocationTrackingMode = LocationTrackingMode.NoFollow,
     this.markers = const [],
     this.circles = const [],
-  }) : super(key : key);
+  }) : super(key: key);
 
   /// 지도가 완전히 만들어진 후에 컨트롤러를 파라미터로 가지는 콜백.
   /// 해당 콜백이 호출되기 전에는 지도가 만들어지는 중이다.
@@ -123,6 +122,13 @@ class NaverMap extends StatefulWidget {
   /// NaveraMap 최초 생성 이후,
   /// flutter에서 setState() 함수로 값을 변경해도 반영 되지 않는다.
   ///
+  /// 이 속성을 이용해서 지도상에 기본 현위치 버튼을 생성할 수 있다.
+  /// 기본값은 true이다.
+  final bool locationButtonEnable;
+
+  /// NaveraMap 최초 생성 이후,
+  /// flutter에서 setState() 함수로 값을 변경해도 반영 되지 않는다.
+  ///
   /// 이 속성을 이용해서 지도의 회전을 불가능하게 할 수 있다.
   /// 기본값은 true이다.
   ///
@@ -170,7 +176,7 @@ class NaverMap extends StatefulWidget {
 
   /// 지도에 표시될 [PathOverlay]의 [Set] 입니다..
   final Set<PathOverlay> pathOverlays;
-  
+
   /// 지도에 표시될 [CircleOverlay]의 [List]입니다.
   final List<CircleOverlay> circles;
 
@@ -235,7 +241,7 @@ class _NaverMapState extends State<NaverMap> {
       'options': _naverMapOptions.toMap(),
       'markers': _serializeMarkerSet(widget.markers) ?? [],
       'paths': _serializePathOverlaySet(widget.pathOverlays) ?? [],
-      'circles' : _serializeCircleSet(widget.circles) ?? [],
+      'circles': _serializeCircleSet(widget.circles) ?? [],
     };
 
     if (defaultTargetPlatform == TargetPlatform.android) {
@@ -246,7 +252,7 @@ class _NaverMapState extends State<NaverMap> {
         creationParamsCodec: const StandardMessageCodec(),
       );
       return view;
-    }else if (defaultTargetPlatform == TargetPlatform.iOS) {
+    } else if (defaultTargetPlatform == TargetPlatform.iOS) {
       final view = UiKitView(
         viewType: VIEW_TYPE,
         onPlatformViewCreated: onPlatformViewCreated,
@@ -271,9 +277,8 @@ class _NaverMapState extends State<NaverMap> {
 
   void _updateOptions() async {
     final _NaverMapOptions newOption = _NaverMapOptions.fromWidget(widget);
-    final Map<String, dynamic> updates =
-        _naverMapOptions.updatesMap(newOption);
-    if(updates.isEmpty) return;
+    final Map<String, dynamic> updates = _naverMapOptions.updatesMap(newOption);
+    if (updates.isEmpty) return;
     final NaverMapController controller = await _controller.future;
     controller._updateMapOptions(updates);
     _naverMapOptions = newOption;
@@ -291,13 +296,11 @@ class _NaverMapState extends State<NaverMap> {
   void _updatePathOverlay() async {
     final NaverMapController controller = await _controller.future;
     controller._updatePathOverlay(_PathOverlayUpdates.from(
-        _paths.values?.toSet(),
-        widget.pathOverlays?.toSet())
-    );
+        _paths.values?.toSet(), widget.pathOverlays?.toSet()));
     _paths = _keyByPathOverlayId(widget.pathOverlays);
   }
 
-  void _updateCircleOverlay() async{
+  void _updateCircleOverlay() async {
     final NaverMapController controller = await _controller.future;
     controller._updateCircleOverlay(_CircleOverlayUpdate.from(
       _circles.values?.toSet(),
@@ -306,28 +309,27 @@ class _NaverMapState extends State<NaverMap> {
     _circles = _keyByCircleId(widget.circles);
   }
 
-
-  void _markerTapped(String markerId, int iconWidth, int iconHeight){
+  void _markerTapped(String markerId, int iconWidth, int iconHeight) {
     assert(markerId != null);
-    if(_markers[markerId]?.onMarkerTab != null) {
+    if (_markers[markerId]?.onMarkerTab != null) {
       _markers[markerId].onMarkerTab(
         _markers[markerId],
-        <String, int>{'width' : iconWidth, 'height' : iconHeight},
+        <String, int>{'width': iconWidth, 'height': iconHeight},
       );
     }
   }
 
-  void _pathOverlayTapped(String pathId){
+  void _pathOverlayTapped(String pathId) {
     assert(pathId != null);
     PathOverlayId pathOverlayId = PathOverlayId(pathId);
-    if (_paths[pathOverlayId]?.onPathOverlayTab != null){
+    if (_paths[pathOverlayId]?.onPathOverlayTab != null) {
       _paths[pathOverlayId].onPathOverlayTab(pathOverlayId);
     }
   }
 
-  void _circleOverlayTapped(String overlayId){
+  void _circleOverlayTapped(String overlayId) {
     assert(overlayId != null);
-    if (_circles[overlayId]?.onTap != null){
+    if (_circles[overlayId]?.onTap != null) {
       _circles[overlayId].onTap(overlayId);
     }
   }
@@ -344,16 +346,13 @@ class _NaverMapState extends State<NaverMap> {
     if (widget.onSymbolTap != null) widget.onSymbolTap(position, caption);
   }
 
-  void _cameraMove(LatLng position){
-    if(widget.onCameraChange != null)
-      widget.onCameraChange(position);
+  void _cameraMove(LatLng position) {
+    if (widget.onCameraChange != null) widget.onCameraChange(position);
   }
 
-  void _cameraIdle(){
-    if(widget.onCameraIdle != null)
-      widget.onCameraIdle();
+  void _cameraIdle() {
+    if (widget.onCameraIdle != null) widget.onCameraIdle();
   }
-
 }
 
 class _NaverMapOptions {
@@ -366,6 +365,7 @@ class _NaverMapOptions {
     this.buildingHeight,
     this.symbolScale,
     this.symbolPerspectiveRatio,
+    this.locationButtonEnable,
     this.zoomGestureEnable,
     this.tiltGestureEnable,
     this.scrollGestureEnable,
@@ -385,6 +385,7 @@ class _NaverMapOptions {
       buildingHeight: map.buildingHeight,
       symbolScale: map.symbolScale,
       symbolPerspectiveRatio: map.symbolPerspectiveRatio,
+      locationButtonEnable: map.locationButtonEnable,
       rotationGestureEnable: map.rotationGestureEnable,
       scrollGestureEnable: map.scrollGestureEnable,
       tiltGestureEnable: map.tiltGestureEnable,
@@ -403,6 +404,7 @@ class _NaverMapOptions {
   final double buildingHeight;
   final double symbolScale;
   final double symbolPerspectiveRatio;
+  final bool locationButtonEnable;
   final bool rotationGestureEnable;
   final bool scrollGestureEnable;
   final bool tiltGestureEnable;
@@ -412,32 +414,32 @@ class _NaverMapOptions {
   final LocationTrackingMode initLocationTrackingMode;
 
   Map<String, dynamic> toMap() {
-    final Map<String, dynamic> optionsMap = <String, dynamic>{};
-
-    void addIfNonNull(String fieldName, dynamic value) {
-      if (value != null) {
-        optionsMap[fieldName] = value;
-      }
-    }
+    final Map<String, dynamic> optionsMap = {};
 
     List<int> inactiveLayerIndices = [];
     activeLayers?.forEach((layer) => inactiveLayerIndices.add(layer.index));
 
-    addIfNonNull('mapType', mapType?.index);
-    addIfNonNull('liteModeEnable', liteModeEnable);
-    addIfNonNull('nightModeEnable', nightModeEnable);
-    addIfNonNull('indoorEnable', indoorEnable);
-    addIfNonNull('activeLayers', inactiveLayerIndices);
-    addIfNonNull('buildingHeight', buildingHeight);
-    addIfNonNull('symbolScale', symbolScale);
-    addIfNonNull('symbolPerspectiveRatio', symbolPerspectiveRatio);
-    addIfNonNull('scrollGestureEnable', scrollGestureEnable);
-    addIfNonNull('zoomGestureEnable', zoomGestureEnable);
-    addIfNonNull('rotationGestureEnable', rotationGestureEnable);
-    addIfNonNull('tiltGestureEnable', tiltGestureEnable);
-    addIfNonNull('isDevMode', isDevMode);
-    addIfNonNull('originalBehaviorDisable', originalBehaviorDisable);
-    addIfNonNull('locationTrackingMode', initLocationTrackingMode?.index);
+    optionsMap.putIfAbsent('mapType', () => mapType?.index);
+    optionsMap.putIfAbsent('liteModeEnable', () => liteModeEnable);
+    optionsMap.putIfAbsent('nightModeEnable', () => nightModeEnable);
+    optionsMap.putIfAbsent('indoorEnable', () => indoorEnable);
+    optionsMap.putIfAbsent('activeLayers', () => inactiveLayerIndices);
+    optionsMap.putIfAbsent('buildingHeight', () => buildingHeight);
+    optionsMap.putIfAbsent('symbolScale', () => symbolScale);
+    optionsMap.putIfAbsent(
+        'symbolPerspectiveRatio', () => symbolPerspectiveRatio);
+    optionsMap.putIfAbsent('locationButtonEnable', () => locationButtonEnable);
+    optionsMap.putIfAbsent('scrollGestureEnable', () => scrollGestureEnable);
+    optionsMap.putIfAbsent('zoomGestureEnable', () => zoomGestureEnable);
+    optionsMap.putIfAbsent(
+        'rotationGestureEnable', () => rotationGestureEnable);
+    optionsMap.putIfAbsent('tiltGestureEnable', () => tiltGestureEnable);
+    optionsMap.putIfAbsent('isDevMode', () => isDevMode);
+    optionsMap.putIfAbsent(
+        'originalBehaviorDisable', () => originalBehaviorDisable);
+    optionsMap.putIfAbsent(
+        'locationTrackingMode', () => initLocationTrackingMode?.index);
+
     return optionsMap;
   }
 
@@ -448,5 +450,4 @@ class _NaverMapOptions {
       ..removeWhere(
           (String key, dynamic value) => prevOptionsMap[key] == value);
   }
-
 }
