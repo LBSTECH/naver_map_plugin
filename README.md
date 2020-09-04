@@ -15,10 +15,8 @@ Plug-in which shows naver map on flutter project support Android and iOS.
 
 pubspec.yaml에 plug in dependencies에 작성
 ``` yaml
-naver_map_plugin:
-    git:
-      url: URL_OF_THIS_REPO
-      ref: master
+dependencies:
+  naver_map_plugin: ^0.8.0
 ```
 
 ## ANDROID GETTING START
