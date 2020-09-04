@@ -42,9 +42,8 @@ public func toCameraUpdate(json: Any) -> NMFCameraUpdate{
     case "zoomTo":
         return NMFCameraUpdate(zoomTo: data[1] as! Double)
     case "fitBounds":
-        let resolutionFactor = UIScreen.main.nativeBounds.width / UIScreen.main.bounds.width
-        let px = data[2] as! CGFloat
-        return NMFCameraUpdate(fit: toLatLngBounds(json: data[1]), padding: px / resolutionFactor)
+        let pt = data[2] as! Int
+        return NMFCameraUpdate(fit: toLatLngBounds(json: data[1]), padding: CGFloat(pt))
     default:
         return NMFCameraUpdate()
     }
