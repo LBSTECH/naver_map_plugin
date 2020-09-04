@@ -1,3 +1,4 @@
-## 0.0.1
+## 0.8.0
 
-* TODO: Describe initial release.
+- initial publish
+Flutter Plug-in which shows naver map on flutter project support Android and iOS.
