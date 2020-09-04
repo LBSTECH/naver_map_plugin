@@ -17,7 +17,7 @@ import java.util.Map;
 
 import io.flutter.view.FlutterMain;
 
-public class Convert {
+class Convert {
 
     @SuppressWarnings("ConstantConditions")
     static void carveMapOptions(NaverMapOptionSink sink, Map<String, Object> options) {
@@ -57,7 +57,7 @@ public class Convert {
         return new LatLng(data.get(0), data.get(1));
     }
 
-    static LatLngBounds toLatLngBounds(Object o) {
+    private static LatLngBounds toLatLngBounds(Object o) {
         if (o == null) {
             return null;
         }
@@ -152,6 +152,7 @@ public class Convert {
         return points;
     }
 
+    @SuppressWarnings("MalformedFormatString")
     static int toColorInt(Object value){
         if (value instanceof Long || value instanceof Integer) {
             return Color.parseColor(String.format("#%08x", value));

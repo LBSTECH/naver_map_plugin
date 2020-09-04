@@ -17,7 +17,7 @@ public class NaverMapFactory extends PlatformViewFactory {
     private final BinaryMessenger binaryMessenger;
     private final Activity activity;
 
-    public NaverMapFactory(
+    NaverMapFactory(
             AtomicInteger state,
             BinaryMessenger binaryMessenger,
             Activity activity) {

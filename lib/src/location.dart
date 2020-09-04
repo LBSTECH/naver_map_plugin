@@ -122,11 +122,11 @@ class LatLngBounds {
   @override
   int get hashCode => hashValues(southwest, northeast);
 }
-
-List<Map<String, double>> _serializeLatLngList(List<LatLng> locations) {
-  if (locations == null) return null;
-  return locations.map((location) => location._toJson()).toList();
-}
+//
+//List<Map<String, double>> _serializeLatLngList(List<LatLng> locations) {
+//  if (locations == null) return null;
+//  return locations.map((location) => location._toJson()).toList();
+//}
 
 enum LocationTrackingMode{
   /// 위치를 추적하지 않습니다.

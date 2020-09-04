@@ -18,7 +18,6 @@ import com.naver.maps.map.MapView;
 import com.naver.maps.map.NaverMap;
 import com.naver.maps.map.NaverMapOptions;
 import com.naver.maps.map.OnMapReadyCallback;
-import com.naver.maps.map.overlay.Marker;
 import com.naver.maps.map.util.FusedLocationSource;
 
 import java.io.File;
@@ -27,7 +26,6 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import io.flutter.Log;
@@ -62,7 +60,6 @@ public class NaverMapController implements
     private NaverMap naverMap;
     private boolean disposed = false;
     private MethodChannel.Result mapReadyResult;
-    private NaverMapListeners listeners;
     private int locationTrackingMode;
 
     private final Float density;
@@ -104,7 +101,7 @@ public class NaverMapController implements
             mapReadyResult.success(null);
             mapReadyResult = null;
         }
-        listeners = new NaverMapListeners(methodChannel, mapView.getContext(), naverMap);
+        NaverMapListeners listeners = new NaverMapListeners(methodChannel, mapView.getContext(), naverMap);
 
         naverMap.setOnMapClickListener(listeners);
         naverMap.setOnSymbolClickListener(listeners);
@@ -178,7 +175,7 @@ public class NaverMapController implements
         activity.getApplication().unregisterActivityLifecycleCallbacks(this);
     }
 
-    @SuppressWarnings({"ConstantConditions", "unchecked"})
+    @SuppressWarnings({"ConstantConditions"})
     @Override
     public void onMethodCall(@NonNull MethodCall methodCall,@NonNull MethodChannel.Result result) {
         switch (methodCall.method){
@@ -193,7 +190,7 @@ public class NaverMapController implements
                 break;
             case "map#update" :
                 {
-                    Convert.carveMapOptions(this, (Map<String, Object>) methodCall.argument("options"));
+                    Convert.carveMapOptions(this, methodCall.argument("options"));
                     result.success(true);
                 }
                 break;

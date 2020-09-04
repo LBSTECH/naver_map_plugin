@@ -8,7 +8,6 @@ import com.naver.maps.geometry.LatLng;
 import com.naver.maps.map.NaverMap;
 import com.naver.maps.map.Symbol;
 import com.naver.maps.map.overlay.CircleOverlay;
-import com.naver.maps.map.overlay.InfoWindow;
 import com.naver.maps.map.overlay.Marker;
 import com.naver.maps.map.overlay.Overlay;
 import com.naver.maps.map.overlay.PathOverlay;
@@ -16,7 +15,6 @@ import com.naver.maps.map.overlay.PathOverlay;
 import java.util.HashMap;
 import java.util.Map;
 
-import io.flutter.Log;
 import io.flutter.plugin.common.MethodChannel;
 
 public class NaverMapListeners implements

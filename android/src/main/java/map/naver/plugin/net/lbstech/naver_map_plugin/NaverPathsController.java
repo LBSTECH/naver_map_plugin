@@ -1,8 +1,5 @@
 package map.naver.plugin.net.lbstech.naver_map_plugin;
 
-import android.graphics.Color;
-import android.util.Log;
-
 import androidx.annotation.NonNull;
 
 import com.naver.maps.map.NaverMap;
@@ -83,16 +80,16 @@ class NaverPathsController {
             if (hideCollidedSymbols != null) path.setHideCollidedSymbols((boolean) hideCollidedSymbols);
 
             final Object color = option.get("color");
-            if (color != null) path.setColor(Convert.toColorInt((Long) color));
+            if (color != null) path.setColor(Convert.toColorInt(color));
 
             final Object outlineColor = option.get("outlineColor");
-            if (outlineColor != null) path.setOutlineColor(Convert.toColorInt((Long) outlineColor));
+            if (outlineColor != null) path.setOutlineColor(Convert.toColorInt(outlineColor));
 
             final Object passedColor = option.get("passedColor");
-            if (passedColor != null) path.setPassedColor(Convert.toColorInt((Long) passedColor));
+            if (passedColor != null) path.setPassedColor(Convert.toColorInt(passedColor));
 
             final Object passedOutlineColor = option.get("passedOutlineColor");
-            if (passedOutlineColor != null) path.setPassedOutlineColor(Convert.toColorInt((Long) passedOutlineColor));
+            if (passedOutlineColor != null) path.setPassedOutlineColor(Convert.toColorInt(passedOutlineColor));
 
             final Object patternImage = option.get("patternImage");
             if (patternImage != null) path.setPatternImage(Convert.toOverlayImage(patternImage));
