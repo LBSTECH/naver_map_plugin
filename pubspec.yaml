@@ -1,7 +1,6 @@
 name: naver_map_plugin
-description: Android환경과 ios환경에서 네이버지도를 표시하는 프로젝트입니다.
-  flutter naver map plugin support android and iOS. and this plugin stil has lots of problem.
-version: 0.8.2
+description: flutter naver map plugin support android and iOS. naver map service is limited to south korea which has high accuracy.
+version: 0.8.3
 homepage:
 repository: https://github.com/LBSTECH/naver_map_plugin.git
 
