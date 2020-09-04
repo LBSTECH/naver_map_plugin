@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
-import 'package:naver_map_plugin_example/base_map.dart';
-import 'package:naver_map_plugin_example/circle_map.dart';
-import 'package:naver_map_plugin_example/marker_map_page.dart';
-import 'package:naver_map_plugin_example/path_map.dart';
+import 'base_map.dart';
+import 'circle_map.dart';
+import 'marker_map_page.dart';
+import 'path_map.dart';
 
 void main() {
   runApp(MyApp());
@@ -22,7 +22,6 @@ class _MyAppState extends State<MyApp> {
     );
   }
 }
-
 
 class MainPage extends StatefulWidget {
   @override
@@ -45,26 +44,28 @@ class _MainPageState extends State<MainPage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: menuText.map((text) => GestureDetector(
-            onTap: () => _onTapMenuItem(text),
-            child: Container(
-              margin: EdgeInsets.symmetric(vertical: 8),
-              padding: EdgeInsets.all(16),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(6),
-                border: Border.all(color: Colors.indigo),
-              ),
-              child: Text(
-                text,
-                style: TextStyle(
-                  color: Colors.indigo,
-                  fontSize: 12,
-                  fontWeight: FontWeight.w600,
-                ),
-                textAlign: TextAlign.center,
-              ),
-            ),
-          )).toList(),
+          children: menuText
+              .map((text) => GestureDetector(
+                    onTap: () => _onTapMenuItem(text),
+                    child: Container(
+                      margin: EdgeInsets.symmetric(vertical: 8),
+                      padding: EdgeInsets.all(16),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(6),
+                        border: Border.all(color: Colors.indigo),
+                      ),
+                      child: Text(
+                        text,
+                        style: TextStyle(
+                          color: Colors.indigo,
+                          fontSize: 12,
+                          fontWeight: FontWeight.w600,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
+                  ))
+              .toList(),
         ),
       ),
     );
@@ -72,26 +73,34 @@ class _MainPageState extends State<MainPage> {
 
   _onTapMenuItem(String text) {
     final index = menuText.indexOf(text);
-    switch(index){
+    switch (index) {
       case 0:
-        Navigator.push(context, MaterialPageRoute(
-          builder: (context) => BaseMapPage(),
-        ));
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => BaseMapPage(),
+            ));
         break;
       case 1:
-        Navigator.push(context, MaterialPageRoute(
-          builder: (context) => MarkerMapPage(),
-        ));
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => MarkerMapPage(),
+            ));
         break;
       case 2:
-        Navigator.push(context, MaterialPageRoute(
-          builder: (context) => PathMapPage(),
-        ));
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => PathMapPage(),
+            ));
         break;
       case 3:
-        Navigator.push(context, MaterialPageRoute(
-          builder: (context) => CircleMapPage(),
-        ));
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => CircleMapPage(),
+            ));
         break;
     }
   }

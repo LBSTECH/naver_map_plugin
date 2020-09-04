@@ -37,6 +37,8 @@ class Convert {
             sink.setSymbolPerspectiveRatio((Double) options.get("symbolPerspectiveRatio"));
         if (options.containsKey("activeLayers"))
             sink.setActiveLayers((List) options.get("activeLayers"));
+        if (options.containsKey("locationButtonEnable"))
+            sink.setLocationButtonEnable((Boolean) options.get("locationButtonEnable"));
         if (options.containsKey("scrollGestureEnable"))
             sink.setScrollGestureEnable((Boolean) options.get("scrollGestureEnable"));
         if (options.containsKey("zoomGestureEnable"))
