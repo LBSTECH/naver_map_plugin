@@ -43,7 +43,7 @@ class NaverMap extends StatefulWidget {
   /// 사용자가 선택한 지점의 [LatLng]을 파라미터로 가진다.
   final OnMapTap onMapTap;
 
-  /// 지도를 롱 탭했을때 호출되는 콜백함수.
+  /// 지도를 롱 탭했을때 호출되는 콜백함수. (Android only)
   ///
   ///
   /// 사용자가 선택한 지점의 [LatLng]을 파라미터로 가진다.
@@ -180,7 +180,7 @@ class NaverMap extends StatefulWidget {
   /// 지도에 표시될 [CircleOverlay]의 [List]입니다.
   final List<CircleOverlay> circles;
 
-  /// 지도가 더블탭될때 콜백되는 메서드
+  /// 지도가 더블탭될때 콜백되는 메서드. (Android only)
   final OnMapDoubleTap onMapDoubleTap;
 
   /// 더블탭 이벤트, 투핑거탭 이벤트 시에 기본 동작이 동작되는 것을 막을 수 있습니다.
@@ -195,7 +195,7 @@ class NaverMap extends StatefulWidget {
   /// 기본값은 [LocationTrackingMode.NoFollow] 입니다.
   final LocationTrackingMode initLocationTrackingMode;
 
-  /// 지도가 두 손가락으로 탭 되었을때 호출되는 콜백 메서드.
+  /// 지도가 두 손가락으로 탭 되었을때 호출되는 콜백 메서드. (Android only)
   final OnMapTwoFingerTap onMapTwoFingerTap;
 
   final OnSymbolTap onSymbolTap;
