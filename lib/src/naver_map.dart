@@ -336,9 +336,22 @@ class _NaverMapState extends State<NaverMap> {
 
   void _mapTap(LatLng position) {
     assert(position != null);
-    if (widget.onMapTap != null) {
-      widget.onMapTap(position);
-    }
+    widget.onMapTap?.call(position);
+  }
+
+  void _mapLongTap(LatLng position) {
+    assert(position != null);
+    widget.onMapLongTap?.call(position);
+  }
+
+  void _mapDoubleTap(LatLng position) {
+    assert(position != null);
+    widget.onMapDoubleTap?.call(position);
+  }
+
+  void _mapTwoFingerTap(LatLng position) {
+    assert(position != null);
+    widget.onMapTwoFingerTap?.call(position);
   }
 
   void _symbolTab(LatLng position, String caption) {

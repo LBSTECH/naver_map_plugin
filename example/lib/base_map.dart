@@ -10,6 +10,7 @@ class BaseMapPage extends StatefulWidget {
 }
 
 class _BaseMapPageState extends State<BaseMapPage> {
+  final scaffoldKey = GlobalKey<ScaffoldState>();
   Completer<NaverMapController> _controller = Completer();
 
   MapType _mapType = MapType.Basic;
@@ -18,6 +19,7 @@ class _BaseMapPageState extends State<BaseMapPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: scaffoldKey,
       appBar: AppBar(),
       body: Stack(
         children: <Widget>[
@@ -33,6 +35,11 @@ class _BaseMapPageState extends State<BaseMapPage> {
             indoorEnable: true,
             onCameraChange: _onCameraChange,
             onCameraIdle: _onCameraIdle,
+            onMapTap: _onMapTap,
+            onMapLongTap: _onMapLongTap,
+            onMapDoubleTap: _onMapDoubleTap,
+            onMapTwoFingerTap: _onMapTwoFingerTap,
+            onSymbolTap: _onSymbolTap,
           ),
           Padding(
             padding: EdgeInsets.all(16),
@@ -42,6 +49,51 @@ class _BaseMapPageState extends State<BaseMapPage> {
         ],
       ),
     );
+  }
+
+  _onMapTap(LatLng position) {
+    scaffoldKey.currentState.showSnackBar(SnackBar(
+      content:
+          Text('[onTap] lat: ${position.latitude}, lon: ${position.longitude}'),
+      duration: Duration(milliseconds: 500),
+      backgroundColor: Colors.black,
+    ));
+  }
+
+  _onMapLongTap(LatLng position) {
+    scaffoldKey.currentState.showSnackBar(SnackBar(
+      content: Text(
+          '[onLongTap] lat: ${position.latitude}, lon: ${position.longitude}'),
+      duration: Duration(milliseconds: 500),
+      backgroundColor: Colors.black,
+    ));
+  }
+
+  _onMapDoubleTap(LatLng position) {
+    scaffoldKey.currentState.showSnackBar(SnackBar(
+      content: Text(
+          '[onDoubleTap] lat: ${position.latitude}, lon: ${position.longitude}'),
+      duration: Duration(milliseconds: 500),
+      backgroundColor: Colors.black,
+    ));
+  }
+
+  _onMapTwoFingerTap(LatLng position) {
+    scaffoldKey.currentState.showSnackBar(SnackBar(
+      content: Text(
+          '[onTwoFingerTap] lat: ${position.latitude}, lon: ${position.longitude}'),
+      duration: Duration(milliseconds: 500),
+      backgroundColor: Colors.black,
+    ));
+  }
+
+  _onSymbolTap(LatLng position, String caption) {
+    scaffoldKey.currentState.showSnackBar(SnackBar(
+      content: Text(
+          '[onSymbolTap] caption: $caption, lat: ${position.latitude}, lon: ${position.longitude}'),
+      duration: Duration(milliseconds: 500),
+      backgroundColor: Colors.black,
+    ));
   }
 
   _mapTypeSelector() {
@@ -71,8 +123,6 @@ class _BaseMapPageState extends State<BaseMapPage> {
               title = '지형도';
               break;
           }
-
-//          return Text('');
 
           return GestureDetector(
             onTap: () => _onTapTypeSelector(type),
