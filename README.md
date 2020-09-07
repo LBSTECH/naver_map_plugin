@@ -19,6 +19,11 @@ dependencies:
   naver_map_plugin: ^0.8.3
 ```
 
+### Warning
+ - 지도에서 제공하는 기본 컨트롤러가 잘 작동하지 않는 문제 (이유를 찾지 못하고 있음)
+ - android는 현 위치 버튼만 정상 작동
+ - 시뮬레이터에서 Run할 경우 hot reload가 정상작동 하지 않을 수 있음.
+
 ## ANDROID GETTING START
 
 > AndroidManifest.xml에 지정

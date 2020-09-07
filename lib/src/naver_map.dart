@@ -14,7 +14,6 @@ class NaverMap extends StatefulWidget {
     this.onCameraChange,
     this.onCameraIdle,
     this.pathOverlays,
-    this.originalBehaviorDisable = false,
     this.initialCameraPosition,
     this.mapType = MapType.Basic,
     this.liteModeEnable = false,
@@ -29,6 +28,7 @@ class NaverMap extends StatefulWidget {
     this.tiltGestureEnable = true,
     this.zoomGestureEnable = true,
     this.isDevMode = true,
+    this.locationButtonEnable = false,
     this.initLocationTrackingMode = LocationTrackingMode.NoFollow,
     this.markers = const [],
     this.circles = const [],
@@ -165,6 +165,11 @@ class NaverMap extends StatefulWidget {
   /// 이 값 또한 setState()로 변경해도 처라되지 않는다.
   final bool isDevMode;
 
+  /// <h2> Naver Map에서 기본적으로 제공하는 현위치 버튼을 활성화시킨다.</h2>
+  /// <br/>
+  /// <p>기본값은 [false]이다.</p>
+  final bool locationButtonEnable;
+
   /// 지도에 표시될 마커의 리스트입니다.
   final List<Marker> markers;
 
@@ -176,13 +181,6 @@ class NaverMap extends StatefulWidget {
 
   /// 지도가 더블탭될때 콜백되는 메서드
   final OnMapDoubleTap onMapDoubleTap;
-
-  /// 더블탭 이벤트, 투핑거탭 이벤트 시에 기본 동작이 동작되는 것을 막을 수 있습니다.
-  ///
-  ///
-  /// 온전히 커스터마이징하기 위해서 해당 옵션을 true 로 변경하세요.
-  /// 기본값은 false 입니다.
-  final bool originalBehaviorDisable;
 
   /// 최초 지도 생성시에 위치추적모드를 선택할 수 있습니다.
   ///
@@ -371,8 +369,8 @@ class _NaverMapOptions {
     this.scrollGestureEnable,
     this.rotationGestureEnable,
     this.isDevMode,
-    this.originalBehaviorDisable,
     this.initLocationTrackingMode,
+    this.locationButtonEnable,
   });
 
   static _NaverMapOptions fromWidget(NaverMap map) {
@@ -390,8 +388,8 @@ class _NaverMapOptions {
       tiltGestureEnable: map.tiltGestureEnable,
       zoomGestureEnable: map.zoomGestureEnable,
       isDevMode: map.isDevMode,
-      originalBehaviorDisable: map.originalBehaviorDisable,
       initLocationTrackingMode: map.initLocationTrackingMode,
+      locationButtonEnable: map.locationButtonEnable,
     );
   }
 
@@ -408,8 +406,8 @@ class _NaverMapOptions {
   final bool tiltGestureEnable;
   final bool zoomGestureEnable;
   final bool isDevMode;
-  final bool originalBehaviorDisable;
   final LocationTrackingMode initLocationTrackingMode;
+  final bool locationButtonEnable;
 
   Map<String, dynamic> toMap() {
     final Map<String, dynamic> optionsMap = <String, dynamic>{};
@@ -436,8 +434,8 @@ class _NaverMapOptions {
     addIfNonNull('rotationGestureEnable', rotationGestureEnable);
     addIfNonNull('tiltGestureEnable', tiltGestureEnable);
     addIfNonNull('isDevMode', isDevMode);
-    addIfNonNull('originalBehaviorDisable', originalBehaviorDisable);
     addIfNonNull('locationTrackingMode', initLocationTrackingMode?.index);
+    addIfNonNull('locationButtonEnable', locationButtonEnable);
     return optionsMap;
   }
 

@@ -184,6 +184,10 @@ public class NaverMapBuilder implements NaverMapOptionSink {
 
     @Override
     public void setLocationButtonEnable(boolean locationButtonEnable) {
+        options.indoorLevelPickerEnabled(false)
+                .zoomControlEnabled(false)
+                .compassEnabled(false);
+
         options.locationButtonEnabled(locationButtonEnable);
     }
 
@@ -192,7 +196,7 @@ public class NaverMapBuilder implements NaverMapOptionSink {
         this.locationTrackingMode = locationTrackingMode;
     }
 
-    public void setInitialCameraPosition(Map<String, Object> cameraPosition){
+    void setInitialCameraPosition(Map<String, Object> cameraPosition){
         options.camera(Convert.toCameraPosition(cameraPosition));
     }
 
@@ -207,7 +211,7 @@ public class NaverMapBuilder implements NaverMapOptionSink {
 
     void setInitialCircles(List initialCircles) { this.initialCircles = initialCircles; }
 
-    public void setInitialPaths(List<Object> initialPaths) {
+    void setInitialPaths(List<Object> initialPaths) {
         this.initialPaths = initialPaths;
     }
 

@@ -110,6 +110,7 @@ public class NaverMapController implements
         naverMap.setLocationSource(new FusedLocationSource(activity, 0xAAFF));
         setLocationTrackingMode(locationTrackingMode);
 
+
         // 맵 완전히 만들어진 이후에 오버레이 추가.
         // - 패스
         pathsController = new NaverPathsController(naverMap, listeners, density);

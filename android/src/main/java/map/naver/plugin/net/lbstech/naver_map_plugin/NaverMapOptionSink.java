@@ -19,6 +19,8 @@ public interface NaverMapOptionSink {
 
     void setActiveLayers(List activeLayers);
 
+    void setLocationButtonEnable(boolean locationButtonEnable);
+
     /**
      * flutter 에서 setState()로 값을 변경해도 반영되지 않는 method. 최초 생성시에만 값변경.
      */
@@ -29,8 +31,6 @@ public interface NaverMapOptionSink {
     void setTiltGestureEnable(boolean tiltGestureEnable);
 
     void setZoomGestureEnable(boolean zoomGestureEnable);
-
-    void setLocationButtonEnable(boolean locationButtonEnable);
 
     void setLocationTrackingMode(int locationTrackingMode);
 
