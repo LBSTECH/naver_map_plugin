@@ -97,6 +97,11 @@ public class NaverMapController implements
     @Override
     public void onMapReady(@NonNull NaverMap naverMap) {
         this.naverMap = naverMap;
+
+        // 제대로 동작하지 않는 컨트롤러 UI로 원인이 밝혀지기 전까진 강제 비활성화.
+        this.naverMap.getUiSettings().setZoomControlEnabled(false);
+        this.naverMap.getUiSettings().setIndoorLevelPickerEnabled(false);
+
         if (mapReadyResult != null) {
             mapReadyResult.success(null);
             mapReadyResult = null;

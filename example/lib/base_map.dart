@@ -18,84 +18,81 @@ class _BaseMapPageState extends State<BaseMapPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(),
       body: Stack(
         children: <Widget>[
           NaverMap(
             initialCameraPosition: CameraPosition(
               target: LatLng(37.566570, 126.978442),
-              zoom: 17
+              zoom: 17,
             ),
             onMapCreated: onMapCreated,
             mapType: _mapType,
             initLocationTrackingMode: _trackingMode,
+            locationButtonEnable: true,
             indoorEnable: true,
             onCameraChange: _onCameraChange,
             onCameraIdle: _onCameraIdle,
           ),
-
-          _mapTypeSelector(),
+          Padding(
+            padding: EdgeInsets.all(16),
+            child: _mapTypeSelector(),
+          ),
           _trackingModeSelector(),
-          _toMyLocationButton(),
         ],
       ),
     );
   }
 
   _mapTypeSelector() {
-    return Align(
-      alignment: Alignment.topRight,
-      child: Container(
-        padding: EdgeInsets.all(16),
-        margin: EdgeInsets.only(top: 36),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.end,
-          children: MapType.values.map((e) {
-            String title;
-            switch (e) {
-              case MapType.Basic:
-                title = '기본';
-                break;
-              case MapType.Navi:
-                title = '내비';
-                break;
-              case MapType.Satellite:
-                title = '위성';
-                break;
-              case MapType.Hybrid:
-                title = '위성혼합';
-                break;
-              case MapType.Terrain:
-                title = '지형도';
-                break;
-            }
-            return GestureDetector(
-              onTap: () => _onTapTypeSelector(e),
-              child: Container(
-                decoration: BoxDecoration(
+    return SizedBox(
+      height: kToolbarHeight,
+      child: ListView.separated(
+        itemCount: MapType.values.length,
+        scrollDirection: Axis.horizontal,
+        separatorBuilder: (_, __) => SizedBox(width: 16),
+        itemBuilder: (_, index) {
+          final type = MapType.values[index];
+          String title;
+          switch (type) {
+            case MapType.Basic:
+              title = '기본';
+              break;
+            case MapType.Navi:
+              title = '내비';
+              break;
+            case MapType.Satellite:
+              title = '위성';
+              break;
+            case MapType.Hybrid:
+              title = '위성혼합';
+              break;
+            case MapType.Terrain:
+              title = '지형도';
+              break;
+          }
+
+//          return Text('');
+
+          return GestureDetector(
+            onTap: () => _onTapTypeSelector(type),
+            child: Container(
+              decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(6),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black26,
-                      blurRadius: 3
-                    )
-                  ]
-                ),
-                margin: EdgeInsets.only(bottom: 16),
-                padding: EdgeInsets.symmetric(vertical: 12, horizontal: 12),
-                child: Text(
-                  title,
-                  style: TextStyle(
+                  boxShadow: [BoxShadow(color: Colors.black26, blurRadius: 3)]),
+              margin: EdgeInsets.only(bottom: 16),
+              padding: EdgeInsets.symmetric(vertical: 12, horizontal: 12),
+              child: Text(
+                title,
+                style: TextStyle(
                     color: Colors.black87,
                     fontWeight: FontWeight.w600,
-                    fontSize: 13
-                  ),
-                ),
+                    fontSize: 13),
               ),
-            );
-          }).toList(),
-        ),
+            ),
+          );
+        },
       ),
     );
   }
@@ -108,13 +105,14 @@ class _BaseMapPageState extends State<BaseMapPage> {
         child: Container(
           margin: EdgeInsets.only(right: 16, bottom: 48),
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(6),
-            color: Colors.white,
-            boxShadow: [BoxShadow(
-              color: Colors.black12,
-              blurRadius: 2,
-            )]
-          ),
+              borderRadius: BorderRadius.circular(6),
+              color: Colors.white,
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black12,
+                  blurRadius: 2,
+                )
+              ]),
           padding: EdgeInsets.all(12),
           child: Column(
             mainAxisSize: MainAxisSize.min,
@@ -131,34 +129,6 @@ class _BaseMapPageState extends State<BaseMapPage> {
     );
   }
 
-  _toMyLocationButton() {
-    return Align(
-      alignment: Alignment.bottomLeft,
-      child: GestureDetector(
-        onTap: _onTapLocation,
-        child: Container(
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(4),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black12,
-                blurRadius: 3
-              )
-            ]
-          ),
-          margin: EdgeInsets.only(left: 16, bottom: 80),
-          padding: EdgeInsets.all(8),
-          child: Icon(
-            Icons.my_location,
-            color: Colors.black87,
-          ),
-        ),
-      ),
-    );
-  }
-
-
   /// 지도 생성 완료시
   void onMapCreated(NaverMapController controller) {
     if (_controller.isCompleted) _controller = Completer();
@@ -166,7 +136,7 @@ class _BaseMapPageState extends State<BaseMapPage> {
   }
 
   /// 지도 유형 선택시
-  void _onTapTypeSelector(MapType type) async{
+  void _onTapTypeSelector(MapType type) async {
     if (_mapType != type) {
       setState(() {
         _mapType = type;
@@ -175,7 +145,7 @@ class _BaseMapPageState extends State<BaseMapPage> {
   }
 
   /// my location button
-  void _onTapLocation() async{
+  void _onTapLocation() async {
     final controller = await _controller.future;
     controller.setLocationTrackingMode(LocationTrackingMode.Follow);
   }
@@ -189,21 +159,22 @@ class _BaseMapPageState extends State<BaseMapPage> {
   }
 
   /// 지도 스냅샷
-  void _onTapTakeSnapShot() async{
+  void _onTapTakeSnapShot() async {
     final controller = await _controller.future;
-    controller.takeSnapshot((path){
+    controller.takeSnapshot((path) {
       showDialog(
           context: context,
-          builder: (context){
+          builder: (context) {
             return AlertDialog(
               contentPadding: EdgeInsets.zero,
-              content: path != null ? Image.file(
-                File(path),
-              ) : Text('path is null!'),
+              content: path != null
+                  ? Image.file(
+                      File(path),
+                    )
+                  : Text('path is null!'),
               titlePadding: EdgeInsets.zero,
             );
-          }
-      );
+          });
     });
   }
 }

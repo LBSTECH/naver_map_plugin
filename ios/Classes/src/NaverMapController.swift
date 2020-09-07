@@ -23,8 +23,8 @@ protocol NaverMapOptionSink {
     func setScrollGestureEnable(_ scrollGestureEnable: Bool)
     func setTiltGestureEnable(_ tiltGestureEnable: Bool)
     func setZoomGestureEnable(_ zoomGestureEnable: Bool)
-    func setLocationButtonEnable(_ locationButtonEnable: Bool)
     func setLocationTrackingMode(_ locationTrackingMode: UInt)
+    func setLocationButtonEnable(_ locationButtonEnable: Bool)
 }
 
 
@@ -83,9 +83,9 @@ class NaverMapController: NSObject, FlutterPlatformView, NaverMapOptionSink, NMF
             }
         }
         
+        // 제대로 동작하지 않는 컨트롤러 UI로 원인이 밝혀지기 전까진 강제 비활성화.
         naverMap.showZoomControls = false
         naverMap.showIndoorLevelPicker = false
-        naverMap.showLocationButton = false
     }
     
     func view() -> UIView {
@@ -213,8 +213,6 @@ class NaverMapController: NSObject, FlutterPlatformView, NaverMapOptionSink, NMF
         self.channel?.invokeMethod("camera#idle" , arguments: nil)
     }
     
-    
-    
     // ========================== About Map Option ==============================
     func interpretMapOption(option: NSDictionary, sink: NaverMapOptionSink){
         if let indoorEnable = option["indoorEnable"] as? Bool {
@@ -253,14 +251,13 @@ class NaverMapController: NSObject, FlutterPlatformView, NaverMapOptionSink, NMF
         if let zoomGestureEnable = option["zoomGestureEnable"] as? Bool{
             sink.setZoomGestureEnable(zoomGestureEnable)
         }
-        if let locationButtonEnable = option["locationButtonEnable"] as? Bool{
-            sink.setLocationButtonEnable(locationButtonEnable)
-        }
         if let locationTrackingMode = option["locationTrackingMode"] as? UInt {
             sink.setLocationTrackingMode(locationTrackingMode)
         }
+        if let locationButtonEnable = option["locationButtonEnable"] as? Bool{
+           sink.setLocationButtonEnable(locationButtonEnable)
+        }
     }
-    
     
     // Naver touch Delegate method
     func mapView(_ mapView: NMFMapView, didTapMap latlng: NMGLatLng, point: CGPoint) {
@@ -373,14 +370,11 @@ class NaverMapController: NSObject, FlutterPlatformView, NaverMapOptionSink, NMF
         mapView.isZoomGestureEnabled = zoomGestureEnable
     }
     
-    func setLocationButtonEnable(_ locationButtonEnable: Bool) {
-        
-    }
-    
     func setLocationTrackingMode(_ locationTrackingMode: UInt) {
         mapView.positionMode = NMFMyPositionMode(rawValue: locationTrackingMode)!
     }
     
+    func setLocationButtonEnable(_ locationButtonEnable: Bool) {
+        naverMap.showLocationButton = locationButtonEnable
+    }
 }
-
-
