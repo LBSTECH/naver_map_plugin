@@ -209,7 +209,7 @@ class NaverMapController: NSObject, FlutterPlatformView, NaverMapOptionSink, NMF
                                    arguments: ["position" : latlngToJson(latlng: mapView.cameraPosition.target)])
     }
     
-    func mapView(_ mapView: NMFMapView, cameraDidChangeByReason reason: Int, animated: Bool) {
+    func mapViewCameraIdle(_ mapView: NMFMapView) {
         self.channel?.invokeMethod("camera#idle" , arguments: nil)
     }
     

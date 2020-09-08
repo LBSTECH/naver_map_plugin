@@ -18,6 +18,7 @@ class _ControllerTestState extends State<ControllerTest> {
         onMapCreated: _onMapCreated,
         initLocationTrackingMode: LocationTrackingMode.Follow,
         locationButtonEnable: true,
+        onCameraIdle: _onCameraIdle,
       ),
     );
   }
@@ -25,5 +26,11 @@ class _ControllerTestState extends State<ControllerTest> {
   void _onMapCreated(NaverMapController controller) {
     if (_controller.isCompleted) _controller = Completer();
     _controller.complete(controller);
+  }
+
+  void _onCameraIdle() async{
+    final controller = await _controller.future;
+    final position = await controller.getCameraPosition();
+    print(position);
   }
 }
