@@ -9,3 +9,6 @@ Flutter Plug-in which shows naver map on flutter project support Android and iOS
 ## 0.8.2
 
 ## 0.8.3
+
+## 0.8.4
+iOS camera onIdle delegate 수정,
