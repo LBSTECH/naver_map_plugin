@@ -161,4 +161,15 @@ class NaverMapController{
     _channel.invokeMethod<String>('map#capture');
   }
 
+  /// <h3>지도의 content padding 을 설정한다.</h3>
+  /// <p>인자로 받는 값의 단위는 DP 단위이다.</p>
+  Future<void> setContentPadding({int left, int right, int top, int bottom}) async{
+    await _channel.invokeMethod('map#padding', <String, dynamic>{
+      'left' : left,
+      'right' : right,
+      'top' : top,
+      'bottom' : bottom,
+    });
+  }
+
 }

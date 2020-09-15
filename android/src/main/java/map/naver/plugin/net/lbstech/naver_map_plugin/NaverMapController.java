@@ -288,6 +288,21 @@ public class NaverMapController implements
                             null);
                 }
                 break;
+            case "map#padding" :
+                {
+                    if (naverMap == null) result.success(null);
+                    int left = methodCall.argument("left");
+                    int right = methodCall.argument("right");
+                    int top = methodCall.argument("top");
+                    int bottom = methodCall.argument("bottom");
+                    naverMap.setContentPadding(
+                            Math.round(left*density),
+                            Math.round(top*density),
+                            Math.round(right*density),
+                            Math.round(bottom*density));
+                    result.success(null);
+                }
+                break;
             case "map#capture" :
                 {
                     if (naverMap == null) result.success(null);
