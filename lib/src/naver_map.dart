@@ -1,7 +1,8 @@
 
 part of naver_map_plugin;
 
-
+/// <h2> 네이버 지도 </h2>
+/// <p> </p>
 class NaverMap extends StatefulWidget {
   const NaverMap({
     Key key,
@@ -152,17 +153,15 @@ class NaverMap extends StatefulWidget {
   /// 기본값은 true이다.
   final bool zoomGestureEnable;
 
-  ///  이 값이 true인 경우에는 Naver Map 이 TextureView에서 작동하고,
-  ///  false 인 경우 Naver Map 이 GLSurfaceView 위에서 작동한다.
-  ///
-  ///
-  /// GLSurfaceView 가 물론 성능이 월등하지만 리로드시에 앱이 다운되는 문제가
-  /// 발생하므로 기본값으로 true 를 가지고 리로드에도 문제가 발생하지 않는다.
-  ///
-  ///
-  /// 앱을 출시할때에는 값을 false 로 변경하기를 권장한다.
-  ///
-  /// 이 값 또한 setState()로 변경해도 처라되지 않는다.
+  ///  <hr/>
+  ///  <h2>주의!! android platform</h2>
+  ///  <h3>이 값이 true인 경우에는 Naver Map 이 TextureView에서 작동하고,
+  ///  false 인 경우 Naver Map 이 GLSurfaceView 위에서 작동한다.</h3>
+  ///  <hr/>
+  /// <p>GLSurfaceView 가 물론 성능이 월등하지만 리로드시에 앱이 다운되는 문제가
+  /// 발생하므로 기본값으로 true 를 가지고 리로드에도 문제가 발생하지 않는다.</p>
+  /// 앱을 출시할때에는 값을 false 로 변경하기를 권장한다. 이 값 또한 setState()로
+  /// 변경해도 처라되지 않는다.
   final bool isDevMode;
 
   /// <h2> Naver Map에서 기본적으로 제공하는 현위치 버튼을 활성화시킨다.</h2>
@@ -190,6 +189,8 @@ class NaverMap extends StatefulWidget {
   /// 지도가 두 손가락으로 탭 되었을때 호출되는 콜백 메서드. (Android only)
   final OnMapTwoFingerTap onMapTwoFingerTap;
 
+  /// <h2>심볼 탭 이벤트</h2>
+  /// <p>빌딩을 나타내는 심볼이나, 공공시설을 표시하는 심볼등을 선택했을 경우 호출된다.</p>
   final OnSymbolTap onSymbolTap;
 
   @override
