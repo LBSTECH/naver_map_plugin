@@ -109,6 +109,9 @@ public class NaverMapController implements
         NaverMapListeners listeners = new NaverMapListeners(methodChannel, mapView.getContext(), naverMap);
 
         naverMap.setOnMapClickListener(listeners);
+        naverMap.setOnMapDoubleTapListener(listeners);
+        naverMap.setOnMapLongClickListener(listeners);
+        naverMap.setOnMapTwoFingerTapListener(listeners);
         naverMap.setOnSymbolClickListener(listeners);
         naverMap.addOnCameraChangeListener(listeners);
         naverMap.addOnCameraIdleListener(listeners);

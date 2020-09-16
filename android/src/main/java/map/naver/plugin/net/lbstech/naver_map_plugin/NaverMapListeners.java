@@ -2,6 +2,7 @@ package map.naver.plugin.net.lbstech.naver_map_plugin;
 
 import android.content.Context;
 import android.graphics.PointF;
+
 import androidx.annotation.NonNull;
 
 import com.naver.maps.geometry.LatLng;
@@ -22,6 +23,9 @@ public class NaverMapListeners implements
         NaverMap.OnSymbolClickListener,
         NaverMap.OnCameraChangeListener,
         NaverMap.OnCameraIdleListener,
+        NaverMap.OnMapLongClickListener,
+NaverMap.OnMapDoubleTapListener,
+NaverMap.OnMapTwoFingerTapListener,
         Overlay.OnClickListener {
 
     // member variable
@@ -29,7 +33,7 @@ public class NaverMapListeners implements
     private final Context context;
     private NaverMap naverMap;
 
-    NaverMapListeners(MethodChannel channel, Context context, NaverMap naverMap){
+    NaverMapListeners(MethodChannel channel, Context context, NaverMap naverMap) {
         this.channel = channel;
         this.context = context;
         this.naverMap = naverMap;
@@ -42,6 +46,28 @@ public class NaverMapListeners implements
         channel.invokeMethod("map#onTap", arguments);
     }
 
+    @Override
+    public void onMapLongClick(@NonNull PointF pointF, @NonNull LatLng latLng) {
+        final Map<String, Object> arguments = new HashMap<>(2);
+        arguments.put("position", Convert.latLngToJson(latLng));
+        channel.invokeMethod("map#onLongTap", arguments);
+    }
+
+    @Override
+    public boolean onMapDoubleTap(@NonNull PointF pointF, @NonNull LatLng latLng) {
+        final Map<String, Object> arguments = new HashMap<>(2);
+        arguments.put("position", Convert.latLngToJson(latLng));
+        channel.invokeMethod("map#onMapDoubleTap", arguments);
+        return false;
+    }
+
+    @Override
+    public boolean onMapTwoFingerTap(@NonNull PointF pointF, @NonNull LatLng latLng) {
+        final Map<String, Object> arguments = new HashMap<>(2);
+        arguments.put("position", Convert.latLngToJson(latLng));
+        channel.invokeMethod("map#onMapTwoFingerTap", arguments);
+        return false;
+    }
 
     @Override
     public boolean onSymbolClick(@NonNull Symbol symbol) {
@@ -51,7 +77,6 @@ public class NaverMapListeners implements
         channel.invokeMethod("map#onSymbolClick", arguments);
         return true;
     }
-
 
     @Override
     public void onCameraChange(int i, boolean b) {
@@ -68,7 +93,7 @@ public class NaverMapListeners implements
 
     @Override
     public boolean onClick(@NonNull Overlay overlay) {
-        if(overlay instanceof Marker){
+        if (overlay instanceof Marker) {
             NaverMarkerController.MarkerController controller =
                     (NaverMarkerController.MarkerController) overlay.getTag();
             if (controller == null) return true;
@@ -80,7 +105,7 @@ public class NaverMapListeners implements
 
             channel.invokeMethod("marker#onTap", arguments);
             return true;
-        }else if (overlay instanceof PathOverlay){
+        } else if (overlay instanceof PathOverlay) {
             NaverPathsController.PathController controller =
                     (NaverPathsController.PathController) overlay.getTag();
             if (controller == null) return true;
@@ -89,7 +114,7 @@ public class NaverMapListeners implements
             arguments.put("pathId", controller.id);
             channel.invokeMethod("path#onTap", arguments);
             return true;
-        }else if (overlay instanceof CircleOverlay){
+        } else if (overlay instanceof CircleOverlay) {
             NaverCircleController.CircleController controller =
                     (NaverCircleController.CircleController) overlay.getTag();
             if (controller == null) return true;
