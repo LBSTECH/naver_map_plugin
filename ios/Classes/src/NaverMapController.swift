@@ -159,6 +159,15 @@ class NaverMapController: NSObject, FlutterPlatformView, NaverMapOptionSink, NMF
             }
             result(nil)
             break
+        case "map#padding":
+            if let arg = call.arguments as? NSDictionary {
+                if let top = arg["top"] as? CGFloat, let left = arg["left"] as? CGFloat,
+                   let right = arg["right"] as? CGFloat, let bottom = arg["bottom"] as? CGFloat {
+                    mapView.contentInset = UIEdgeInsets(top: top, left: left, bottom: bottom, right: right)
+                }
+            }
+            result(nil)
+            break
         case "circleOverlay#update" :
             if let arg = call.arguments as? NSDictionary {
                 if let dataToAdd = arg["circlesToAdd"] as? Array<Any> {
