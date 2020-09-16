@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:naver_map_plugin_example/base_map.dart';
 import 'package:naver_map_plugin_example/circle_map.dart';
-import 'package:naver_map_plugin_example/controller_test.dart';
+import 'package:naver_map_plugin_example/padding_test.dart';
 import 'package:naver_map_plugin_example/marker_map_page.dart';
 import 'package:naver_map_plugin_example/path_map.dart';
 
@@ -97,7 +97,7 @@ class _MainPageState extends State<MainPage> {
         break;
       case 4:
         Navigator.push(context, MaterialPageRoute(
-          builder: (context) => ControllerTest(),
+          builder: (context) => PaddingTest(),
         ));
         break;
     }

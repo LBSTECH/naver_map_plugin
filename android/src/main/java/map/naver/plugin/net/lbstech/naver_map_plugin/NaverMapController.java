@@ -291,10 +291,10 @@ public class NaverMapController implements
             case "map#padding" :
                 {
                     if (naverMap == null) result.success(null);
-                    int left = methodCall.argument("left");
-                    int right = methodCall.argument("right");
-                    int top = methodCall.argument("top");
-                    int bottom = methodCall.argument("bottom");
+                    float left = Convert.toFloat(methodCall.argument("left"));
+                    float right = Convert.toFloat(methodCall.argument("right"));
+                    float top = Convert.toFloat(methodCall.argument("top"));
+                    float bottom = Convert.toFloat(methodCall.argument("bottom"));
                     naverMap.setContentPadding(
                             Math.round(left*density),
                             Math.round(top*density),
