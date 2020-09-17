@@ -80,12 +80,15 @@ class _PaddingTestState extends State<PaddingTest> {
   }
 
   void _onTapUp() async{
-    final edge = EdgeInsets.only(left: 16);
-    print("edge 값 : ${edge.left}, ${edge.top}, ${edge.right}, ${edge.bottom}");
-
     if (!_controller.isCompleted) return;
+
+    final cont = await _controller.future;
+    final meterPerDp = await cont.getMeterPerDp();
+    final meterPerPx = await cont.getMeterPerPx();
+
+    print("meterPerDp : $meterPerDp, meterPerPx : $meterPerPx");
+
     if (_padding < 300) {
-      final cont = await _controller.future;
       setState(() {
         _padding += 20;
         cont.setContentPadding(bottom: _padding);

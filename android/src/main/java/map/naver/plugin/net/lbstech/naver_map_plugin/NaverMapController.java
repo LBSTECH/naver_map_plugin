@@ -247,6 +247,26 @@ public class NaverMapController implements
                             null);
                 }
                 break;
+            case "meter#dp" :
+                {
+                    if (naverMap == null) {
+                        Log.e("getMeterPerDp", "네이버맵이 초기화되지 않았습니다.");
+                        result.success(null);
+                        break;
+                    }
+                    result.success(naverMap.getProjection().getMetersPerDp());
+                }
+                break;
+            case "meter#px" :
+                {
+                    if (naverMap == null) {
+                        Log.e("getMeterPerDp", "네이버맵이 초기화되지 않았습니다.");
+                        result.success(null);
+                        break;
+                    }
+                    result.success(naverMap.getProjection().getMetersPerPixel());
+                }
+                break;
             case "markers#update":
                 {
                     List markersToAdd = methodCall.argument("markersToAdd");

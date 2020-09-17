@@ -184,4 +184,18 @@ class NaverMapController{
     });
   }
 
+  /// <h2>현재 지도의 축적을 미터/DP 단위로 반환합니다.</h2>
+  /// <p>dp 단위를 미터로 환산하는 경우 해당 메서드를 통해서 확인할 수 있다.</p>
+  Future<double> getMeterPerDp() async{
+    final result = await _channel.invokeMethod<double>('meter#dp');
+    return result ?? 0.0;
+  }
+
+  /// <h2>현재 지도의 축적을 미터/Pixel 단위로 반환합니다.</h2>
+  /// <p>픽셀 단위를 미터로 환산하는 경우 해당 메서드를 통해서 확인할 수 있다.</p>
+  Future<double> getMeterPerPx() async{
+    final result = await _channel.invokeMethod<double>('meter#px');
+    return result ?? 0.0;
+  }
+
 }
