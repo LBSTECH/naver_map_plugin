@@ -131,6 +131,15 @@ class NaverMapController: NSObject, FlutterPlatformView, NaverMapOptionSink, NMF
             ]
             result(data)
             break
+        case "meter#dp" :
+            let meterPerPx = mapView.projection.metersPerPixel().advanced(by: 0.0)
+            let density = Double.init(UIScreen.main.scale)
+            result(meterPerPx*density)
+            break
+        case "meter#px":
+            let meterPerPx = mapView.projection.metersPerPixel().advanced(by: 0.0)
+            result(meterPerPx)
+            break
         case "camera#move" :
             if let arg = call.arguments as? NSDictionary {
                 let update = toCameraUpdate(json: arg["cameraUpdate"]!)
