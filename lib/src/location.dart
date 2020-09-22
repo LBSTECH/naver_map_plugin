@@ -42,7 +42,8 @@ class LatLngBounds {
   LatLngBounds({@required this.southwest, @required this.northeast})
       : assert(southwest != null),
         assert(northeast != null),
-        assert(southwest.latitude <= northeast.latitude);
+        assert(southwest.latitude <= northeast.latitude),
+        assert(southwest.longitude <= northeast.longitude);
 
   /// The southwest corner of the rectangle.
   final LatLng southwest;
@@ -54,21 +55,26 @@ class LatLngBounds {
   /// <hr/>
   /// <p>list로 전달된 [LatLng]들의 배열들을 이용해서 south, north, east, west 를
   /// 계산하여 [LatLngBounds]를 생성한다.</p>
-  factory LatLngBounds.fromLatLngList(List<LatLng> latLngs){
+  factory LatLngBounds.fromLatLngList(List<LatLng> latLngs) {
     if (latLngs == null || latLngs.length < 2) {
       throw ArgumentError('최소한 2개 이상의 리스트 길이가 있어야 LatLngBounds를 만들 수 있습니다.');
     }
-    double south = 200, west = 200;
-    double north = -200, east = -200;
-    for (LatLng latLng in latLngs){
-      if (south > latLng.longitude) south = latLng.longitude;
-      if (north < latLng.longitude) north = latLng.longitude;
-      if (east < latLng.latitude) east = latLng.latitude;
-      if (west > latLng.latitude) west = latLng.latitude;
+
+    double south = latLngs.first.latitude;
+    double north = latLngs.first.latitude;
+    double west = latLngs.first.longitude;
+    double east = latLngs.first.longitude;
+
+    for (LatLng latLng in latLngs.skip(1)) {
+      if (north < latLng.latitude) north = latLng.latitude;
+      if (south > latLng.latitude) south = latLng.latitude;
+      if (east < latLng.longitude) east = latLng.longitude;
+      if (west > latLng.longitude) west = latLng.longitude;
     }
+
     return LatLngBounds(
-      southwest: LatLng(west, south),
-      northeast: LatLng(east, north),
+      southwest: LatLng(south, west),
+      northeast: LatLng(north, east),
     );
   }
 
@@ -128,7 +134,7 @@ class LatLngBounds {
 //  return locations.map((location) => location._toJson()).toList();
 //}
 
-enum LocationTrackingMode{
+enum LocationTrackingMode {
   /// 위치를 추적하지 않습니다.
   None,
 
