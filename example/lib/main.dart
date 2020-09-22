@@ -5,6 +5,7 @@ import 'package:naver_map_plugin_example/circle_map.dart';
 import 'package:naver_map_plugin_example/padding_test.dart';
 import 'package:naver_map_plugin_example/marker_map_page.dart';
 import 'package:naver_map_plugin_example/path_map.dart';
+import 'package:naver_map_plugin_example/polyline_map.dart';
 
 void main() {
   runApp(MyApp());
@@ -35,6 +36,7 @@ class _MainPageState extends State<MainPage> {
     '기본 지도 예제',
     '마커 예제',
     '패스 예제',
+    '폴리라인 예제',
     '원형 오버레이 예제',
     '컨트롤러 테스트',
   ];
@@ -92,10 +94,15 @@ class _MainPageState extends State<MainPage> {
         break;
       case 3:
         Navigator.push(context, MaterialPageRoute(
-          builder: (context) => CircleMapPage(),
+          builder: (context) => PolylineMapPage(),
         ));
         break;
       case 4:
+        Navigator.push(context, MaterialPageRoute(
+          builder: (context) => CircleMapPage(),
+        ));
+        break;
+      case 5:
         Navigator.push(context, MaterialPageRoute(
           builder: (context) => PaddingTest(),
         ));
