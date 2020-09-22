@@ -46,7 +46,7 @@ public class NaverMapController implements
         OnMapReadyCallback,
         MethodChannel.MethodCallHandler,
         Application.ActivityLifecycleCallbacks,
-        NaverMapOptionSink{
+        NaverMapOptionSink {
 
     private MapView mapView;
     private final AtomicInteger activityState;
@@ -55,6 +55,7 @@ public class NaverMapController implements
     private final Activity activity;
     private List initialMarkers;
     private List initialPaths;
+    private List initialPolylines;
     private List initialCircles;
 
     private NaverMap naverMap;
@@ -65,6 +66,7 @@ public class NaverMapController implements
     private final Float density;
 
     private NaverPathsController pathsController;
+    private NaverPolylineController polylineController;
     private NaverMarkerController markerController;
     private NaverCircleController circleController;
 
@@ -77,6 +79,7 @@ public class NaverMapController implements
             NaverMapOptions options,
             List initialMarkers,
             List initialPaths,
+            List initialPolylines,
             List initialCircles
     ) {
         this.mapView = new MapView(context, options);
@@ -86,9 +89,10 @@ public class NaverMapController implements
         this.density = context.getResources().getDisplayMetrics().density;
         this.initialMarkers = initialMarkers;
         this.initialPaths = initialPaths;
+        this.initialPolylines = initialPolylines;
         this.initialCircles = initialCircles;
 
-        methodChannel = new MethodChannel(binaryMessenger, "naver_map_plugin_"+ id);
+        methodChannel = new MethodChannel(binaryMessenger, "naver_map_plugin_" + id);
         registrarActivityHashCode = activity.hashCode();
 
         methodChannel.setMethodCallHandler(this);
@@ -123,6 +127,9 @@ public class NaverMapController implements
         // - 패스
         pathsController = new NaverPathsController(naverMap, listeners, density);
         pathsController.set(initialPaths);
+
+        polylineController = new NaverPolylineController(naverMap, listeners, density);
+        polylineController.set(initialPolylines);
 
         markerController = new NaverMarkerController(naverMap, listeners, density, mapView.getContext());
         markerController.add(initialMarkers);
@@ -186,168 +193,162 @@ public class NaverMapController implements
 
     @SuppressWarnings({"ConstantConditions"})
     @Override
-    public void onMethodCall(@NonNull MethodCall methodCall,@NonNull MethodChannel.Result result) {
-        switch (methodCall.method){
-            case "map#waitForMap":
-                {
-                    if(naverMap != null){
-                        result.success(null);
-                        return;
+    public void onMethodCall(@NonNull MethodCall methodCall, @NonNull MethodChannel.Result result) {
+        switch (methodCall.method) {
+            case "map#waitForMap": {
+                if (naverMap != null) {
+                    result.success(null);
+                    return;
+                }
+                mapReadyResult = result;
+            }
+            break;
+            case "map#update": {
+                Convert.carveMapOptions(this, methodCall.argument("options"));
+                result.success(true);
+            }
+            break;
+            case "map#getVisibleRegion": {
+                if (naverMap != null) {
+                    LatLngBounds latLngBounds = naverMap.getContentBounds();
+                    result.success(Convert.latlngBoundsToJson(latLngBounds));
+                } else result.error("네이버맵 초기화 안됨.",
+                        "네이버 지도가 생성되기 전에 이 메서드를 사용할 수 없습니다.",
+                        null);
+            }
+            break;
+            case "map#getPosition": {
+                if (naverMap != null) {
+                    CameraPosition position = naverMap.getCameraPosition();
+                    result.success(Convert.cameraPositionToJson(position));
+                } else result.error("네이버맵 초기화 안됨.",
+                        "네이버 지도가 생성되기 전에 이 메서드를 사용할 수 없습니다.",
+                        null);
+            }
+            break;
+            case "map#getSize": {
+                if (naverMap != null) {
+                    Map<String, Integer> data = new HashMap<>();
+                    data.put("width", naverMap.getWidth());
+                    data.put("height", naverMap.getHeight());
+                    result.success(data);
+                } else result.error("네이버맵 초기화 안됨.",
+                        "네이버 지도가 생성되기 전에 이 메서드를 사용할 수 없습니다.",
+                        null);
+            }
+            break;
+            case "camera#move": {
+                if (naverMap != null) {
+                    CameraUpdate update = Convert.toCameraUpdate(methodCall.argument("cameraUpdate"), density);
+                    update.animate(CameraAnimation.Easing);
+                    naverMap.moveCamera(update);
+                    result.success(null);
+                } else result.error("네이버맵 초기화 안됨.",
+                        "네이버 지도가 생성되기 전에 이 메서드를 사용할 수 없습니다.",
+                        null);
+            }
+            break;
+            case "meter#dp": {
+                if (naverMap == null) {
+                    Log.e("getMeterPerDp", "네이버맵이 초기화되지 않았습니다.");
+                    result.success(null);
+                    break;
+                }
+                result.success(naverMap.getProjection().getMetersPerDp());
+            }
+            break;
+            case "meter#px": {
+                if (naverMap == null) {
+                    Log.e("getMeterPerDp", "네이버맵이 초기화되지 않았습니다.");
+                    result.success(null);
+                    break;
+                }
+                result.success(naverMap.getProjection().getMetersPerPixel());
+            }
+            break;
+            case "markers#update": {
+                List markersToAdd = methodCall.argument("markersToAdd");
+                markerController.add(markersToAdd);
+                List markersToChange = methodCall.argument("markersToChange");
+                markerController.modify(markersToChange);
+                List markerIdsToRemove = methodCall.argument("markerIdsToRemove");
+                markerController.remove(markerIdsToRemove);
+                result.success(null);
+            }
+            break;
+            case "pathOverlay#update": {
+                List pathToAddOrUpdate = methodCall.argument("pathToAddOrUpdate");
+                List pathToRemove = methodCall.argument("pathIdsToRemove");
+                pathsController.set(pathToAddOrUpdate);
+                pathsController.remove(pathToRemove);
+                result.success(null);
+            }
+            break;
+            case "polylineOverlay#update": {
+                List polylineToAddOrUpdate = methodCall.argument("polylineToAddOrUpdate");
+                List polylineToRemove = methodCall.argument("polylineToRemove");
+                polylineController.set(polylineToAddOrUpdate);
+                polylineController.remove(polylineToRemove);
+                result.success(null);
+            }
+            break;
+            case "tracking#mode": {
+                if (naverMap != null) {
+                    int mode = methodCall.argument("locationTrackingMode");
+                    switch (mode) {
+                        case 0:
+                            naverMap.setLocationTrackingMode(LocationTrackingMode.None);
+                            break;
+                        case 1:
+                            naverMap.setLocationTrackingMode(LocationTrackingMode.NoFollow);
+                            break;
+                        case 2:
+                            naverMap.setLocationTrackingMode(LocationTrackingMode.Follow);
+                            break;
+                        default:
+                            naverMap.setLocationTrackingMode(LocationTrackingMode.Face);
+                            break;
                     }
-                    mapReadyResult = result;
-                }
-                break;
-            case "map#update" :
-                {
-                    Convert.carveMapOptions(this, methodCall.argument("options"));
-                    result.success(true);
-                }
-                break;
-            case "map#getVisibleRegion":
-                {
-                    if (naverMap != null) {
-                        LatLngBounds latLngBounds = naverMap.getContentBounds();
-                        result.success(Convert.latlngBoundsToJson(latLngBounds));
-                    } else result.error("네이버맵 초기화 안됨.",
-                            "네이버 지도가 생성되기 전에 이 메서드를 사용할 수 없습니다.",
-                            null);
-                }
-                break;
-            case "map#getPosition":
-                {
-                    if (naverMap != null) {
-                        CameraPosition position = naverMap.getCameraPosition();
-                        result.success(Convert.cameraPositionToJson(position));
-                    } else result.error("네이버맵 초기화 안됨.",
-                            "네이버 지도가 생성되기 전에 이 메서드를 사용할 수 없습니다.",
-                            null);
-                }
-                break;
-            case "map#getSize" :
-                {
-                    if(naverMap != null){
-                        Map<String, Integer> data = new HashMap<>();
-                        data.put("width" , naverMap.getWidth());
-                        data.put("height", naverMap.getHeight());
-                        result.success(data);
-                    }else result.error("네이버맵 초기화 안됨.",
-                            "네이버 지도가 생성되기 전에 이 메서드를 사용할 수 없습니다.",
-                            null);
-                }
-                break;
-            case "camera#move" :
-                {
-                    if (naverMap != null) {
-                        CameraUpdate update = Convert.toCameraUpdate(methodCall.argument("cameraUpdate"), density);
-                        update.animate(CameraAnimation.Easing);
-                        naverMap.moveCamera(update);
-                        result.success(null);
-                    } else result.error("네이버맵 초기화 안됨.",
-                            "네이버 지도가 생성되기 전에 이 메서드를 사용할 수 없습니다.",
-                            null);
-                }
-                break;
-            case "meter#dp" :
-                {
-                    if (naverMap == null) {
-                        Log.e("getMeterPerDp", "네이버맵이 초기화되지 않았습니다.");
-                        result.success(null);
-                        break;
-                    }
-                    result.success(naverMap.getProjection().getMetersPerDp());
-                }
-                break;
-            case "meter#px" :
-                {
-                    if (naverMap == null) {
-                        Log.e("getMeterPerDp", "네이버맵이 초기화되지 않았습니다.");
-                        result.success(null);
-                        break;
-                    }
-                    result.success(naverMap.getProjection().getMetersPerPixel());
-                }
-                break;
-            case "markers#update":
-                {
-                    List markersToAdd = methodCall.argument("markersToAdd");
-                    markerController.add(markersToAdd);
-                    List markersToChange = methodCall.argument("markersToChange");
-                    markerController.modify(markersToChange);
-                    List markerIdsToRemove = methodCall.argument("markerIdsToRemove");
-                    markerController.remove(markerIdsToRemove);
                     result.success(null);
-                }
-                break;
-            case "pathOverlay#update":
-                {
-                    List pathToAddOrUpdate = methodCall.argument("pathToAddOrUpdate");
-                    List pathToRemove = methodCall.argument("pathIdsToRemove");
-                    pathsController.set(pathToAddOrUpdate);
-                    pathsController.remove(pathToRemove);
-                    result.success(null);
-                }
-                break;
-            case "tracking#mode":
-                {
-                    if(naverMap != null){
-                        int mode = methodCall.argument("locationTrackingMode");
-                        switch (mode){
-                            case 0:
-                                naverMap.setLocationTrackingMode(LocationTrackingMode.None);
-                                break;
-                            case 1:
-                                naverMap.setLocationTrackingMode(LocationTrackingMode.NoFollow);
-                                break;
-                            case 2:
-                                naverMap.setLocationTrackingMode(LocationTrackingMode.Follow);
-                                break;
-                            default:
-                                naverMap.setLocationTrackingMode(LocationTrackingMode.Face);
-                                break;
-                        }
-                        result.success(null);
-                    } else result.error("네이버맵 초기화 안됨.",
-                            "네이버 지도가 생성되기 전에 이 메서드를 사용할 수 없습니다.",
-                            null);
-                }
-                break;
-            case "map#padding" :
-                {
-                    if (naverMap == null) result.success(null);
-                    float left = Convert.toFloat(methodCall.argument("left"));
-                    float right = Convert.toFloat(methodCall.argument("right"));
-                    float top = Convert.toFloat(methodCall.argument("top"));
-                    float bottom = Convert.toFloat(methodCall.argument("bottom"));
-                    naverMap.setContentPadding(
-                            Math.round(left*density),
-                            Math.round(top*density),
-                            Math.round(right*density),
-                            Math.round(bottom*density));
-                    result.success(null);
-                }
-                break;
-            case "map#capture" :
-                {
-                    if (naverMap == null) result.success(null);
-                    naverMap.takeSnapshot(this::treatCapture);
-                    result.success(null);
-                }
-                break;
-            case "circleOverlay#update":
-                {
-                    List circlesToAdd = methodCall.argument("circlesToAdd");
-                    List circleIdsToRemove = methodCall.argument("circleIdsToRemove");
-                    List circlesToChange = methodCall.argument("circlesToChange");
-                    circleController.add(circlesToAdd);
-                    circleController.remove(circleIdsToRemove);
-                    circleController.modify(circlesToChange);
-                    result.success(null);
-                }
-                break;
+                } else result.error("네이버맵 초기화 안됨.",
+                        "네이버 지도가 생성되기 전에 이 메서드를 사용할 수 없습니다.",
+                        null);
+            }
+            break;
+            case "map#padding": {
+                if (naverMap == null) result.success(null);
+                float left = Convert.toFloat(methodCall.argument("left"));
+                float right = Convert.toFloat(methodCall.argument("right"));
+                float top = Convert.toFloat(methodCall.argument("top"));
+                float bottom = Convert.toFloat(methodCall.argument("bottom"));
+                naverMap.setContentPadding(
+                        Math.round(left * density),
+                        Math.round(top * density),
+                        Math.round(right * density),
+                        Math.round(bottom * density));
+                result.success(null);
+            }
+            break;
+            case "map#capture": {
+                if (naverMap == null) result.success(null);
+                naverMap.takeSnapshot(this::treatCapture);
+                result.success(null);
+            }
+            break;
+            case "circleOverlay#update": {
+                List circlesToAdd = methodCall.argument("circlesToAdd");
+                List circleIdsToRemove = methodCall.argument("circleIdsToRemove");
+                List circlesToChange = methodCall.argument("circlesToChange");
+                circleController.add(circlesToAdd);
+                circleController.remove(circleIdsToRemove);
+                circleController.modify(circlesToChange);
+                result.success(null);
+            }
+            break;
         }
     }
 
-    private void treatCapture(Bitmap snapshot){
+    private void treatCapture(Bitmap snapshot) {
         String result = null;
         try {
             File file = File.createTempFile("road", ".jpg", activity.getApplicationContext().getCacheDir());
@@ -511,18 +512,22 @@ public class NaverMapController implements
     public void setRotationGestureEnable(boolean rotationGestureEnable) {
         naverMap.getUiSettings().setRotateGesturesEnabled(rotationGestureEnable);
     }
+
     @Override
     public void setScrollGestureEnable(boolean scrollGestureEnable) {
         naverMap.getUiSettings().setScrollGesturesEnabled(scrollGestureEnable);
     }
+
     @Override
     public void setTiltGestureEnable(boolean tiltGestureEnable) {
         naverMap.getUiSettings().setTiltGesturesEnabled(tiltGestureEnable);
     }
+
     @Override
     public void setZoomGestureEnable(boolean zoomGestureEnable) {
         naverMap.getUiSettings().setZoomControlEnabled(zoomGestureEnable);
     }
+
     @Override
     public void setLocationButtonEnable(boolean locationButtonEnable) {
         naverMap.getUiSettings().setLocationButtonEnabled(locationButtonEnable);
@@ -530,11 +535,11 @@ public class NaverMapController implements
 
     @Override
     public void setLocationTrackingMode(int locationTrackingMode) {
-        if(naverMap == null) {
+        if (naverMap == null) {
             this.locationTrackingMode = locationTrackingMode;
             return;
         }
-        switch (locationTrackingMode){
+        switch (locationTrackingMode) {
             case 0:
                 naverMap.setLocationTrackingMode(LocationTrackingMode.None);
                 break;

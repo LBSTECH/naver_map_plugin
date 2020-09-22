@@ -35,7 +35,7 @@ public class NaverMapFactory extends PlatformViewFactory {
 
         if (params.containsKey("initialCameraPosition")) {
             Map<String, Object> initPosition = (Map<String, Object>) params.get("initialCameraPosition");
-            if(initPosition != null) builder.setInitialCameraPosition(initPosition);
+            if (initPosition != null) builder.setInitialCameraPosition(initPosition);
         }
         if (params.containsKey("options")) {
             Map<String, Object> options = (Map<String, Object>) params.get("options");
@@ -50,6 +50,9 @@ public class NaverMapFactory extends PlatformViewFactory {
         }
         if (params.containsKey("paths")) {
             builder.setInitialPaths((List) params.get("paths"));
+        }
+        if (params.containsKey("polylines")) {
+            builder.setInitialPolylines((List) params.get("polylines"));
         }
         if (params.containsKey("circles")) {
             builder.setInitialCircles((List) params.get("circles"));

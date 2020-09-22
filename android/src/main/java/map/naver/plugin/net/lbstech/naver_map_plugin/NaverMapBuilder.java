@@ -30,13 +30,14 @@ public class NaverMapBuilder implements NaverMapOptionSink {
     private List initialMarkers;
     private List initialPaths;
     private List initialCircles;
+    private List initialPolylines;
 
     NaverMapController build(
             int id,
             Context context,
             AtomicInteger state,
             BinaryMessenger binaryMessenger,
-            Activity activity){
+            Activity activity) {
 
         final NaverMapController controller = new NaverMapController(
                 id,
@@ -47,6 +48,7 @@ public class NaverMapBuilder implements NaverMapOptionSink {
                 options,
                 initialMarkers,
                 initialPaths,
+                initialPolylines,
                 initialCircles);
         controller.init();
         controller.setLocationTrackingMode(locationTrackingMode);
@@ -98,7 +100,7 @@ public class NaverMapBuilder implements NaverMapOptionSink {
     }
 
     @Override
-    public void setSymbolPerspectiveRatio (double symbolPerspectiveRatio){
+    public void setSymbolPerspectiveRatio(double symbolPerspectiveRatio) {
         options.symbolPerspectiveRatio((float) symbolPerspectiveRatio);
     }
 
@@ -196,7 +198,7 @@ public class NaverMapBuilder implements NaverMapOptionSink {
         this.locationTrackingMode = locationTrackingMode;
     }
 
-    void setInitialCameraPosition(Map<String, Object> cameraPosition){
+    void setInitialCameraPosition(Map<String, Object> cameraPosition) {
         options.camera(Convert.toCameraPosition(cameraPosition));
     }
 
@@ -209,10 +211,15 @@ public class NaverMapBuilder implements NaverMapOptionSink {
         this.initialMarkers = initialMarkers;
     }
 
-    void setInitialCircles(List initialCircles) { this.initialCircles = initialCircles; }
+    void setInitialCircles(List initialCircles) {
+        this.initialCircles = initialCircles;
+    }
 
     void setInitialPaths(List<Object> initialPaths) {
         this.initialPaths = initialPaths;
     }
 
+    void setInitialPolylines(List<Object> initialPolylines) {
+        this.initialPolylines = initialPolylines;
+    }
 }
