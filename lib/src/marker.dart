@@ -1,8 +1,7 @@
 part of naver_map_plugin;
 
 /// 아이콘과 캡션을 이용해 지도 위의 한 지점을 표시하는 오버레이.
-class Marker{
-
+class Marker {
   /// 마커의 고유 식별자로 사용되는 값입니다.
   ///
   /// 또한 마커들의 클릭이벤트에서 여러 마커들을 구분하는데에 사용됩니다.
@@ -164,35 +163,36 @@ class Marker{
   /// 기본값은 DEFAULT_GLOBAL_Z_INDEX입니다
   final int globalZIndex;
 
-  Marker({
-    @required this.markerId,
-    @required this.position,
-    this.infoWindow,
-    this.alpha,
-    this.flat,
-    this.onMarkerTab,
-    this.icon,
-    this.captionText,
-    this.captionTextSize,
-    this.captionColor,
-    this.captionHaloColor,
-    this.width, this.height,
-    this.maxZoom, this.minZoom,
-    this.angle,
-    this.captionRequestedWidth,
-    this.captionMaxZoom,
-    this.captionMinZoom,
-    this.captionOffset,
-    this.captionPerspectiveEnabled,
-    this.zIndex,
-    this.globalZIndex,
-    this.iconTintColor,
-    this.subCaptionText,
-    this.subCaptionTextSize,
-    this.subCaptionColor,
-    this.subCaptionHaloColor,
-    this.subCaptionRequestedWidth
-  });
+  Marker(
+      {@required this.markerId,
+      @required this.position,
+      this.infoWindow,
+      this.alpha,
+      this.flat,
+      this.onMarkerTab,
+      this.icon,
+      this.captionText,
+      this.captionTextSize,
+      this.captionColor,
+      this.captionHaloColor,
+      this.width,
+      this.height,
+      this.maxZoom,
+      this.minZoom,
+      this.angle,
+      this.captionRequestedWidth,
+      this.captionMaxZoom,
+      this.captionMinZoom,
+      this.captionOffset,
+      this.captionPerspectiveEnabled,
+      this.zIndex,
+      this.globalZIndex,
+      this.iconTintColor,
+      this.subCaptionText,
+      this.subCaptionTextSize,
+      this.subCaptionColor,
+      this.subCaptionHaloColor,
+      this.subCaptionRequestedWidth});
 
   Map<String, dynamic> _toJson() {
     assert(markerId != null);
@@ -232,7 +232,7 @@ class Marker{
     addIfPresent('subCaptionColor', subCaptionColor?.value);
     addIfPresent('subCaptionHaloColor', subCaptionHaloColor?.value);
     addIfPresent('subCaptionRequestedWidth', subCaptionRequestedWidth);
-    addIfPresent('icon', icon?._toJson());
+    addIfPresent('icon', icon?.key?.name);
     addIfPresent('infoWindow', infoWindow);
 
     return json;
@@ -270,7 +270,7 @@ class Marker{
   int get hashCode => markerId.hashCode;
 
   /// 같은 값을 가진 새로운 Maker 객체를 반환한다.
-  Marker clone(){
+  Marker clone() {
     return Marker(
       position: position,
       markerId: markerId,
@@ -310,15 +310,13 @@ class Marker{
         'flat: $flat, position: $position, zIndex: $zIndex, '
         'onMarkerTab: $onMarkerTab, infowindow : $infoWindow}';
   }
-
 }
 
 List<Map<String, dynamic>> _serializeMarkerSet(Iterable<Marker> markers) {
   if (markers == null) {
     return null;
   }
-  return markers
-      .map<Map<String, dynamic>>((Marker m) => m._toJson()).toList();
+  return markers.map<Map<String, dynamic>>((Marker m) => m._toJson()).toList();
 }
 
 Map<String, Marker> _keyByMarkerId(Iterable<Marker> markers) {
