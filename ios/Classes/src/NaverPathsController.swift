@@ -61,8 +61,9 @@ class NPathController: NSObject {
         if let passedOutlineColor = json["passedOutlineColor"] as? NSNumber{
             path.passedOutlineColor = toColor(colorNumber: passedOutlineColor)
         }
-        if let patternImage = json["patternImage"] as? Array<Any> {
-            path.patternIcon = toOverlayImage(data: patternImage, registrar: registrar)
+        if let patternImage = json["patternImage"] as? String,
+            let overlayImage = toOverlayImage(assetPath: patternImage, registrar: registrar) {
+            path.patternIcon = overlayImage
         }
         if let patternInterval = json["patternInterval"] as? UInt {
             path.patternInterval = patternInterval

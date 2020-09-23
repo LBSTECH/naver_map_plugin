@@ -68,13 +68,12 @@ public func pxFromPt(_ pt: CGFloat) -> Int {
     return Int(pt * resolutionFactor)
 }
 
-public func toOverlayImage(data: Array<Any>, registrar: FlutterPluginRegistrar) -> NMFOverlayImage? {
-    if let assetPath = data.first as? String {
-        let assetName = registrar.lookupKey(forAsset: assetPath)
-        if let image = UIImage(named: assetName) {
-            return NMFOverlayImage(image: image)
-        }
+public func toOverlayImage(assetPath: String, registrar: FlutterPluginRegistrar) -> NMFOverlayImage? {
+    let assetName = registrar.lookupKey(forAsset: assetPath)
+    if let image = UIImage(named: assetName) {
+        return NMFOverlayImage(image: image)
     }
+    
     return nil
 }
 
