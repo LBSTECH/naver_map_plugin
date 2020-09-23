@@ -137,8 +137,7 @@ class Convert {
     }
 
     static OverlayImage toOverlayImage(Object o) {
-        List data = (List) o;
-        String assetName = (String) data.get(0);
+        String assetName = (String) o;
         String key = FlutterMain.getLookupKeyForAsset(assetName);
         return OverlayImage.fromAsset(key);
     }
