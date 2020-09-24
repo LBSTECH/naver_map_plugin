@@ -41,6 +41,7 @@ import static map.naver.plugin.net.lbstech.naver_map_plugin.NaverMapPlugin.RESUM
 import static map.naver.plugin.net.lbstech.naver_map_plugin.NaverMapPlugin.STARTED;
 import static map.naver.plugin.net.lbstech.naver_map_plugin.NaverMapPlugin.STOPPED;
 
+@SuppressWarnings("rawtypes")
 public class NaverMapController implements
         PlatformView,
         OnMapReadyCallback,
@@ -101,6 +102,9 @@ public class NaverMapController implements
         // 제대로 동작하지 않는 컨트롤러 UI로 원인이 밝혀지기 전까진 강제 비활성화.
         this.naverMap.getUiSettings().setZoomControlEnabled(false);
         this.naverMap.getUiSettings().setIndoorLevelPickerEnabled(false);
+
+        // 네이버 로고 선택시 Crash 나는 현상 방지
+        this.naverMap.getUiSettings().setLogoClickEnabled(false);
 
         if (mapReadyResult != null) {
             mapReadyResult.success(null);

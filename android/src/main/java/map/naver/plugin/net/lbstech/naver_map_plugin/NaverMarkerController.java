@@ -74,7 +74,8 @@ class NaverMarkerController {
         for (Object json : jsonArray) {
             HashMap<String, Object> data = (HashMap<String, Object>) json;
             String id = (String) data.get("markerId");
-            idToController.get(id).interpret(data);
+            if (idToController.containsKey(id) && idToController.get(id) != null)
+                idToController.get(id).interpret(data);
         }
     }
 
