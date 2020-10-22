@@ -99,7 +99,7 @@ class NaverMarkerController {
             if (position != null) marker.setPosition(Convert.toLatLng(position));
 
             final Object alpha = json.get("alpha");
-            if (alpha != null) marker.setAlpha((float) alpha);
+            if (alpha != null) marker.setAlpha(Convert.toFloat(alpha));
 
             final Object flat = json.get("flat");
             if (flat != null) marker.setFlat((boolean) flat);
@@ -108,7 +108,7 @@ class NaverMarkerController {
             if (captionText != null) marker.setCaptionText((String) captionText);
 
             final Object captionTextSize = json.get("captionTextSize");
-            if (captionTextSize != null) marker.setCaptionTextSize((float) captionTextSize);
+            if (captionTextSize != null) marker.setCaptionTextSize(Convert.toFloat(captionTextSize));
 
             final Object captionColor = json.get("captionColor");
             if (captionColor != null) marker.setCaptionColor(Convert.toColorInt(captionColor));
@@ -160,7 +160,7 @@ class NaverMarkerController {
             if(subCaptionText != null) marker.setSubCaptionText((String) subCaptionText);
 
             final Object subCaptionTextSize = json.get("subCaptionTextSize");
-            if (subCaptionTextSize != null) marker.setSubCaptionTextSize((int) subCaptionTextSize);
+            if (subCaptionTextSize != null) marker.setSubCaptionTextSize(Convert.toFloat(subCaptionTextSize));
 
             final Object subCaptionColor = json.get("subCaptionColor");
             if (subCaptionColor != null) marker.setSubCaptionColor(Convert.toColorInt(subCaptionColor));

@@ -15,3 +15,6 @@ iOS camera onIdle delegate 수정,
 
 ## 0.8.5
 미터/dp 또는 미터/pixel, 지도 Content Padding, 안드로이드의 지도 touch event 추가
+
+## 0.8.6
+hotfix - Marker 속성중 captionTextSize, subCaptionTextSize, Alpha 의 android에서의 데이터 변환 오류 수정

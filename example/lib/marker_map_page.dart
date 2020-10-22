@@ -27,6 +27,8 @@ class _MarkerMapPageState extends State<MarkerMapPage> {
             position: LatLng(37.563600, 126.962370),
             captionText: "커스텀 아이콘",
             captionColor: Colors.indigo,
+            captionTextSize: 20.0,
+            alpha: 0.8,
             icon: image,
             width: 45,
             height: 45,
