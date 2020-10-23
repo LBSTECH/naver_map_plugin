@@ -7,6 +7,7 @@ class NaverMapController{
     this._naverMapState
   ) : assert(_channel != null)  {
     _channel.setMethodCallHandler(_handleMethodCall);
+    locationOverlay = LocationOverlay(this);
   }
 
   static Future<NaverMapController> init(
@@ -30,6 +31,11 @@ class NaverMapController{
   final _NaverMapState _naverMapState;
   
   void Function(String path) _onSnapShotDone;
+
+  /// <h2>위치 오버레이</h2>
+  /// <p>위치 오버레이는 사용자의 위치를 나타내는 데 특화된 오버레이이로, 지도상에 단 하나만
+  /// 존재합니다. 사용자가 바라보는 방향을 손쉽게 지정할 수 있고 그림자, 강조용 원도 나타낼 수 있습니다.</p>
+  LocationOverlay locationOverlay;
 
   Future<dynamic> _handleMethodCall(MethodCall call) async {
     switch (call.method){
@@ -152,12 +158,18 @@ class NaverMapController{
     };
   }
 
+  /// <h2>카메라 이동</h2>
+  /// <p>카메라를 이동시키는 가장 주요 메서드이다. [CameraUpdate]의 static 생성자를 이용해서
+  /// 인자를 전달한다.</p>
   Future<void> moveCamera(CameraUpdate cameraUpdate) async{
     await _channel.invokeMethod<void>('camera#move', <String, dynamic>{
       'cameraUpdate' : cameraUpdate._toJson(),
     });
   }
 
+  /// <h2>카메라 추적모드 변경</h2>
+  /// <p>[NaverMap]을 생성할 때 주어진 [initialLocationTrackingMode]의 인자로 전달된 값이
+  /// 기본값으로 설정되어 있으며, 이후 controller 를 이용해서 변경하는 메서드이다.</p>
   Future<void> setLocationTrackingMode(LocationTrackingMode mode) async{
     if(mode == null) return;
     await _channel.invokeMethod('tracking#mode', <String, dynamic>{
@@ -197,5 +209,20 @@ class NaverMapController{
     final result = await _channel.invokeMethod<double>('meter#px');
     return result ?? 0.0;
   }
+
+}
+
+
+
+/// <h2>위치 오버레이</h2>
+/// <p>위치 오버레이는 사용자의 위치를 나타내는 데 특화된 오버레이이로, 지도상에 단 하나만
+/// 존재합니다. 사용자가 바라보는 방향을 손쉽게 지정할 수 있고 그림자, 강조용 원도 나타낼 수 있습니다.</p>
+class LocationOverlay{
+  final MethodChannel _channel;
+
+  LocationOverlay(NaverMapController controller)
+      : _channel = controller._channel;
+
+
 
 }
