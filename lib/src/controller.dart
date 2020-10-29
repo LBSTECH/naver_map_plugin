@@ -220,9 +220,31 @@ class NaverMapController{
 class LocationOverlay{
   final MethodChannel _channel;
 
+  /// 해당 객체를 참조하기 위햐서 [NaverMapController]의 맵버변수를 참조하거나,
+  /// [NaverMapController]객체를 인자로 넘겨서 새롭게 생성하여 참조한다.
   LocationOverlay(NaverMapController controller)
       : _channel = controller._channel;
 
+  /// 위치 오버레이의 좌표를 변경할 수 있습니다.
+  /// 처음 생성된 위치 오버레이는 카메라의 초기 좌표에 위치해 있습니다.
+  Future<void> setPosition(LatLng position) async {
+    _channel.invokeMethod("LO#set#position", {
+      'position' : position._toJson(),
+    });
+  }
+
+  /// __setBearing__ 을 이용하면 위치 오버레이의 베어링을 변경할 수 있습니다.
+  /// flat이 true인 마커의 andgle속성과 유사하게 아이콘이 지도를 기준으로 회전합니다.
+  ///
+  /// 다음은 위치 오버레이의 베어링을 동쪽으로 변경하는 예제입니다.
+  /// ```
+  /// locaionOverlay.setBearing(90.0);
+  /// ```
+  Future<void> setBearing(double bearing) async{
+    _channel.invokeMethod("LO#set#bearing", {
+      'bearing' : bearing
+    });
+  }
 
 
 }

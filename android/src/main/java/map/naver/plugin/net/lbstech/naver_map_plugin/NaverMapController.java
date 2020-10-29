@@ -9,6 +9,7 @@ import android.view.View;
 
 import androidx.annotation.NonNull;
 
+import com.naver.maps.geometry.LatLng;
 import com.naver.maps.geometry.LatLngBounds;
 import com.naver.maps.map.CameraAnimation;
 import com.naver.maps.map.CameraPosition;
@@ -18,6 +19,7 @@ import com.naver.maps.map.MapView;
 import com.naver.maps.map.NaverMap;
 import com.naver.maps.map.NaverMapOptions;
 import com.naver.maps.map.OnMapReadyCallback;
+import com.naver.maps.map.overlay.LocationOverlay;
 import com.naver.maps.map.util.FusedLocationSource;
 
 import java.io.File;
@@ -59,6 +61,7 @@ public class NaverMapController implements
     private List initialCircles;
 
     private NaverMap naverMap;
+    private LocationOverlay locationOverlay;
     private boolean disposed = false;
     private MethodChannel.Result mapReadyResult;
     private int locationTrackingMode;
@@ -98,6 +101,7 @@ public class NaverMapController implements
     @Override
     public void onMapReady(@NonNull NaverMap naverMap) {
         this.naverMap = naverMap;
+        locationOverlay = naverMap.getLocationOverlay();
 
         // 제대로 동작하지 않는 컨트롤러 UI로 원인이 밝혀지기 전까진 강제 비활성화.
         this.naverMap.getUiSettings().setZoomControlEnabled(false);
@@ -346,6 +350,27 @@ public class NaverMapController implements
                     circleController.remove(circleIdsToRemove);
                     circleController.modify(circlesToChange);
                     result.success(null);
+                }
+                break;
+            case "LO#set#position":
+                {
+                    if(naverMap != null) {
+                        LatLng position = Convert.toLatLng(methodCall.argument("position"));
+                        naverMap.getLocationOverlay().setPosition(position);
+                        result.success(null);
+                    }else result.error("네이버맵 초기화 안됨.",
+                            "네이버 지도가 생성되기 전에 이 메서드를 사용할 수 없습니다.",
+                            null);
+                }
+                break;
+            case "LO#set#bearing" :
+                {
+                    if (naverMap != null) {
+                        naverMap.getLocationOverlay().setBearing(Convert.toFloat(methodCall.argument("bearing")));
+                        result.success(null);
+                    }else result.error("네이버맵 초기화 안됨.",
+                            "네이버 지도가 생성되기 전에 이 메서드를 사용할 수 없습니다.",
+                            null);
                 }
                 break;
         }
