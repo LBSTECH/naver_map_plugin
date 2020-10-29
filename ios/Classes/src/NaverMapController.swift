@@ -216,6 +216,19 @@ class NaverMapController: NSObject, FlutterPlatformView, NaverMapOptionSink, NMF
             }
             result(nil)
             break
+        case "LO#set#position" :
+            if let arg = call.arguments as? NSDictionary, let data = arg["position"] {
+                let latLng = toLatLng(json: data)
+                mapView.locationOverlay.location = latLng
+            }
+            result(nil)
+            break
+        case "LO#set#bearing" :
+            if let arg = call.arguments as? NSDictionary, let bearing = arg["bearing"] as? NSNumber {
+                mapView.locationOverlay.heading = CGFloat(bearing.floatValue)
+            }
+            result(nil)
+            break
         default:
             print("지정되지 않은 메서드콜 함수명이 들어왔습니다.\n함수명 : \(call.method)")
         }
