@@ -125,9 +125,9 @@ class NaverMapController: NSObject, FlutterPlatformView, NaverMapOptionSink, NMF
             let width = CGFloat(mapView.mapWidth)
             let height = CGFloat(mapView.mapHeight)
             let resolution = UIScreen.main.nativeBounds.width / UIScreen.main.bounds.width
-            let data = [
-                "width" : width * resolution,
-                "height" : height * resolution
+            let data : Dictionary<String, Int> = [
+                "width" : Int(round(width * resolution)),
+                "height" : Int(round(height * resolution))
             ]
             result(data)
             break
