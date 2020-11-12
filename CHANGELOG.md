@@ -36,3 +36,7 @@ fix iOS camera onIdle delegate,
         - ***0.0 means north***
 - fix Error
     - type conversion Error in NaverMapController's getSize()
+    
+## 0.8.8
+- fix Error!
+    - onCameraChange not work on IOS [LINK](https://github.com/LBSTECH/naver_map_plugin/issues/8)

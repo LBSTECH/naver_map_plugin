@@ -83,8 +83,9 @@ class _PaddingTestState extends State<PaddingTest> {
     if (!_controller.isCompleted) return;
 
     if (_padding < 300) {
-      setState(() {
+      setState(() async{
         _padding += 20;
+        final cont = await _controller.future;
         cont.setContentPadding(bottom: _padding);
       });
     }
