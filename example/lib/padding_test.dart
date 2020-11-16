@@ -82,15 +82,10 @@ class _PaddingTestState extends State<PaddingTest> {
   void _onTapUp() async{
     if (!_controller.isCompleted) return;
 
-    final cont = await _controller.future;
-    final meterPerDp = await cont.getMeterPerDp();
-    final meterPerPx = await cont.getMeterPerPx();
-
-    print("meterPerDp : $meterPerDp, meterPerPx : $meterPerPx");
-
     if (_padding < 300) {
-      setState(() {
+      setState(() async{
         _padding += 20;
+        final cont = await _controller.future;
         cont.setContentPadding(bottom: _padding);
       });
     }

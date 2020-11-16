@@ -125,9 +125,9 @@ class NaverMapController: NSObject, FlutterPlatformView, NaverMapOptionSink, NMF
             let width = CGFloat(mapView.mapWidth)
             let height = CGFloat(mapView.mapHeight)
             let resolution = UIScreen.main.nativeBounds.width / UIScreen.main.bounds.width
-            let data = [
-                "width" : width * resolution,
-                "height" : height * resolution
+            let data : Dictionary<String, Int> = [
+                "width" : Int(round(width * resolution)),
+                "height" : Int(round(height * resolution))
             ]
             result(data)
             break
@@ -216,15 +216,30 @@ class NaverMapController: NSObject, FlutterPlatformView, NaverMapOptionSink, NMF
             }
             result(nil)
             break
+        case "LO#set#position" :
+            if let arg = call.arguments as? NSDictionary, let data = arg["position"] {
+                let latLng = toLatLng(json: data)
+                mapView.locationOverlay.location = latLng
+            }
+            result(nil)
+            break
+        case "LO#set#bearing" :
+            if let arg = call.arguments as? NSDictionary, let bearing = arg["bearing"] as? NSNumber {
+                mapView.locationOverlay.heading = CGFloat(bearing.floatValue)
+            }
+            result(nil)
+            break
         default:
             print("지정되지 않은 메서드콜 함수명이 들어왔습니다.\n함수명 : \(call.method)")
         }
     }
     
     // ==================== naver map camera delegate ==================
-    func mapView(_ mapView: NMFMapView, cameraIsChangingByReason reason: Int) {
+    
+    // onCameraChange
+    func mapView(_ mapView: NMFMapView, cameraDidChangeByReason reason: Int, animated: Bool) {
         self.channel?.invokeMethod("camera#move",
-                                   arguments: ["position" : latlngToJson(latlng: mapView.cameraPosition.target)])
+                                        arguments: ["position" : latlngToJson(latlng: mapView.cameraPosition.target)])
     }
     
     func mapViewCameraIdle(_ mapView: NMFMapView) {

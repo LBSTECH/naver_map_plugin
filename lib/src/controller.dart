@@ -7,6 +7,7 @@ class NaverMapController{
     this._naverMapState
   ) : assert(_channel != null)  {
     _channel.setMethodCallHandler(_handleMethodCall);
+    locationOverlay = LocationOverlay(this);
   }
 
   static Future<NaverMapController> init(
@@ -30,6 +31,11 @@ class NaverMapController{
   final _NaverMapState _naverMapState;
   
   void Function(String path) _onSnapShotDone;
+
+  /// <h2>위치 오버레이</h2>
+  /// <p>위치 오버레이는 사용자의 위치를 나타내는 데 특화된 오버레이이로, 지도상에 단 하나만
+  /// 존재합니다. 사용자가 바라보는 방향을 손쉽게 지정할 수 있고 그림자, 강조용 원도 나타낼 수 있습니다.</p>
+  LocationOverlay locationOverlay;
 
   Future<dynamic> _handleMethodCall(MethodCall call) async {
     switch (call.method){
@@ -152,12 +158,18 @@ class NaverMapController{
     };
   }
 
+  /// <h2>카메라 이동</h2>
+  /// <p>카메라를 이동시키는 가장 주요 메서드이다. [CameraUpdate]의 static 생성자를 이용해서
+  /// 인자를 전달한다.</p>
   Future<void> moveCamera(CameraUpdate cameraUpdate) async{
     await _channel.invokeMethod<void>('camera#move', <String, dynamic>{
       'cameraUpdate' : cameraUpdate._toJson(),
     });
   }
 
+  /// <h2>카메라 추적모드 변경</h2>
+  /// <p>[NaverMap]을 생성할 때 주어진 [initialLocationTrackingMode]의 인자로 전달된 값이
+  /// 기본값으로 설정되어 있으며, 이후 controller 를 이용해서 변경하는 메서드이다.</p>
   Future<void> setLocationTrackingMode(LocationTrackingMode mode) async{
     if(mode == null) return;
     await _channel.invokeMethod('tracking#mode', <String, dynamic>{
@@ -197,5 +209,43 @@ class NaverMapController{
     final result = await _channel.invokeMethod<double>('meter#px');
     return result ?? 0.0;
   }
+
+}
+
+
+
+/// <h2>위치 오버레이</h2>
+/// <p>위치 오버레이는 사용자의 위치를 나타내는 데 특화된 오버레이이로, 지도상에 단 하나만
+/// 존재합니다. 사용자가 바라보는 방향을 손쉽게 지정할 수 있고 그림자, 강조용 원도 나타낼 수 있습니다.</p>
+class LocationOverlay{
+  final MethodChannel _channel;
+
+  /// 해당 객체를 참조하기 위햐서 [NaverMapController]의 맵버변수를 참조하거나,
+  /// [NaverMapController]객체를 인자로 넘겨서 새롭게 생성하여 참조한다.
+  LocationOverlay(NaverMapController controller)
+      : _channel = controller._channel;
+
+  /// 위치 오버레이의 좌표를 변경할 수 있습니다.
+  /// 처음 생성된 위치 오버레이는 카메라의 초기 좌표에 위치해 있습니다.
+  Future<void> setPosition(LatLng position) async {
+    _channel.invokeMethod("LO#set#position", {
+      'position' : position._toJson(),
+    });
+  }
+
+  /// __setBearing__ 을 이용하면 위치 오버레이의 베어링을 변경할 수 있습니다.
+  /// flat이 true인 마커의 andgle속성과 유사하게 아이콘이 지도를 기준으로 회전합니다.
+  /// > ***0.0은 정북쪽을 의미합니다.***
+  ///
+  /// 다음은 위치 오버레이의 베어링을 동쪽으로 변경하는 예제입니다.
+  /// ```
+  /// locaionOverlay.setBearing(90.0);
+  /// ```
+  Future<void> setBearing(double bearing) async{
+    _channel.invokeMethod("LO#set#bearing", {
+      'bearing' : bearing
+    });
+  }
+
 
 }
