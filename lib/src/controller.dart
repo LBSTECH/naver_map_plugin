@@ -124,6 +124,14 @@ class NaverMapController{
     );
   }
 
+  Future<void> _updatePolygonOverlay(_PolygonOverlayUpdate polygonOverlayUpdate) async{
+    assert(polygonOverlayUpdate != null);
+    await _channel.invokeMethod(
+      'polygonOverlay#update',
+      polygonOverlayUpdate._toMap(),
+    );
+  }
+
   /// 현제 지도에 보여지는 영역에 대한 [LatLngBounds] 객체를 리턴.
   Future<LatLngBounds> getVisibleRegion() async {
     final Map<String, dynamic> latLngBounds =

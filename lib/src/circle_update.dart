@@ -52,7 +52,6 @@ class _CircleOverlayUpdate {
     addIfNonNull('circlesToAdd', _serializeCircleSet(circlesToAdd));
     addIfNonNull('circlesToChange', _serializeCircleSet(circlesToChange));
     addIfNonNull('circleIdsToRemove', circleIdsToRemove.map((e) => e.toString()).toList());
-
     return updateMap;
   }
 

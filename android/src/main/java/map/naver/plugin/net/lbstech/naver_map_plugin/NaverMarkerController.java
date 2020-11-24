@@ -18,7 +18,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 
-@SuppressWarnings({"unchecked", "ConstantConditions"})
+@SuppressWarnings({"unchecked", "ConstantConditions", "rawtypes"})
 class NaverMarkerController {
     private final NaverMap naverMap;
     private final Overlay.OnClickListener onClickListener;
@@ -31,7 +31,7 @@ class NaverMarkerController {
     private String markerIdOfInfoWindow;
 
     NaverMarkerController(NaverMap naverMap, Overlay.OnClickListener listener,
-                                 float density, Context context) {
+                          float density, Context context) {
         this.naverMap = naverMap;
         onClickListener = listener;
         this.density = density;

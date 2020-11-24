@@ -17,6 +17,7 @@ import java.util.Map;
 
 import io.flutter.view.FlutterMain;
 
+@SuppressWarnings("rawtypes")
 class Convert {
 
     @SuppressWarnings("ConstantConditions")
@@ -152,6 +153,17 @@ class Convert {
             points.add(new LatLng(toFloat(point.get(0)), toFloat(point.get(1))));
         }
         return points;
+    }
+
+    static List<List<LatLng>> toHoles(Object o) {
+        final List<?> data = (List) o;
+        final List<List<LatLng>> holes = new ArrayList<>(data.size());
+
+        for (Object ob: data) {
+            List<LatLng> hole = toCoords(ob);
+            holes.add(hole);
+        }
+        return holes;
     }
 
     @SuppressWarnings("MalformedFormatString")

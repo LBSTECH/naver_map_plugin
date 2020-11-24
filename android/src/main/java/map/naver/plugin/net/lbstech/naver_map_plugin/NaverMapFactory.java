@@ -12,6 +12,7 @@ import io.flutter.plugin.common.StandardMessageCodec;
 import io.flutter.plugin.platform.PlatformView;
 import io.flutter.plugin.platform.PlatformViewFactory;
 
+@SuppressWarnings("rawtypes")
 public class NaverMapFactory extends PlatformViewFactory {
     private final AtomicInteger activityState;
     private final BinaryMessenger binaryMessenger;
@@ -53,6 +54,9 @@ public class NaverMapFactory extends PlatformViewFactory {
         }
         if (params.containsKey("circles")) {
             builder.setInitialCircles((List) params.get("circles"));
+        }
+        if (params.containsKey("polygons")) {
+            builder.setInitialPolygon((List) params.get("polygons"));
         }
 
         return builder.build(

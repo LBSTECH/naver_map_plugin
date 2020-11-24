@@ -33,6 +33,7 @@ class NaverMap extends StatefulWidget {
     this.initLocationTrackingMode = LocationTrackingMode.NoFollow,
     this.markers = const [],
     this.circles = const [],
+    this.polygons = const [],
   }) : super(key : key);
 
   /// 지도가 완전히 만들어진 후에 컨트롤러를 파라미터로 가지는 콜백.
@@ -178,6 +179,9 @@ class NaverMap extends StatefulWidget {
   /// 지도에 표시될 [CircleOverlay]의 [List]입니다.
   final List<CircleOverlay> circles;
 
+  /// 지도에 표시될 [PolygonOverlay]의 [List]입니다.
+  final List<PolygonOverlay> polygons;
+
   /// 지도가 더블탭될때 콜백되는 메서드. (Android only)
   final OnMapDoubleTap onMapDoubleTap;
 
@@ -204,6 +208,7 @@ class _NaverMapState extends State<NaverMap> {
   Map<String, Marker> _markers = <String, Marker>{};
   Map<String, CircleOverlay> _circles = <String, CircleOverlay>{};
   Map<PathOverlayId, PathOverlay> _paths = <PathOverlayId, PathOverlay>{};
+  Map<String, PolygonOverlay> _polygons = <String, PolygonOverlay>{};
 
   @override
   void initState() {
@@ -212,6 +217,7 @@ class _NaverMapState extends State<NaverMap> {
     _markers = _keyByMarkerId(widget.markers);
     _paths = _keyByPathOverlayId(widget.pathOverlays);
     _circles = _keyByCircleId(widget.circles);
+    _polygons = _keyByPolygonId(widget.polygons);
   }
 
   Future<void> onPlatformViewCreated(int id) async {
@@ -235,6 +241,7 @@ class _NaverMapState extends State<NaverMap> {
       'markers': _serializeMarkerSet(widget.markers) ?? [],
       'paths': _serializePathOverlaySet(widget.pathOverlays) ?? [],
       'circles' : _serializeCircleSet(widget.circles) ?? [],
+      'polygons' : _serializePolygonSet(widget.polygons) ?? [],
     };
 
     if (defaultTargetPlatform == TargetPlatform.android) {
@@ -266,6 +273,7 @@ class _NaverMapState extends State<NaverMap> {
     _updateMarkers();
     _updatePathOverlay();
     _updateCircleOverlay();
+    _updatePolygonOverlay();
   }
 
   void _updateOptions() async {
@@ -303,6 +311,15 @@ class _NaverMapState extends State<NaverMap> {
       widget.circles?.toSet(),
     ));
     _circles = _keyByCircleId(widget.circles);
+  }
+
+  void _updatePolygonOverlay() async{
+    final NaverMapController controller = await _controller.future;
+    controller._updatePolygonOverlay(_PolygonOverlayUpdate.from(
+      _polygons.values?.toSet(),
+      widget.polygons.toSet(),
+    ));
+    _polygons = _keyByPolygonId(widget.polygons);
   }
 
 

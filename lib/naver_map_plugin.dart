@@ -33,4 +33,8 @@ part 'src/path_overlay_updates.dart';
 
 part 'src/ui.dart';
 
+part 'src/polygon_overlay.dart';
+
+part 'src/polygon_update.dart';
+
 const String VIEW_TYPE = 'naver_map_plugin';

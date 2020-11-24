@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-@SuppressWarnings({"unchecked", "ConstantConditions"})
+@SuppressWarnings({"unchecked", "ConstantConditions", "rawtypes"})
 class NaverCircleController {
     private final NaverMap naverMap;
     private final Overlay.OnClickListener listener;

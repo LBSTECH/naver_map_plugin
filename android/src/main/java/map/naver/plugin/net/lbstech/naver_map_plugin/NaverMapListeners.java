@@ -12,6 +12,7 @@ import com.naver.maps.map.overlay.CircleOverlay;
 import com.naver.maps.map.overlay.Marker;
 import com.naver.maps.map.overlay.Overlay;
 import com.naver.maps.map.overlay.PathOverlay;
+import com.naver.maps.map.overlay.PolygonOverlay;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -123,6 +124,14 @@ NaverMap.OnMapTwoFingerTapListener,
             arguments.put("overlayId", controller.id);
             channel.invokeMethod("circle#onTap", arguments);
             return true;
+        } else if (overlay instanceof PolygonOverlay) {
+            NaverPolygonController.PolygonController controller =
+                    (NaverPolygonController.PolygonController) overlay.getTag();
+            if (controller == null) return true;
+
+            final Map<String, Object> argument = new HashMap<>(2);
+            argument.put("polygonOverlayId", controller.id);
+            channel.invokeMethod("polygon#onTap", argument);
         }
         return false;
     }

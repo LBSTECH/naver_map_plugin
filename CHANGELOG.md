@@ -40,3 +40,8 @@ fix iOS camera onIdle delegate,
 ## 0.8.8
 - fix Error!
     - onCameraChange not work on IOS [LINK](https://github.com/LBSTECH/naver_map_plugin/issues/8)
+    
+    
+## 0.9.0
+- new feature added!! : ___polygon overlay___
+- use polygon overlay to display polygon

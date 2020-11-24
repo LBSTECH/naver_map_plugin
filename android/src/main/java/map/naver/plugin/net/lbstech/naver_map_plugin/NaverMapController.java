@@ -59,9 +59,9 @@ public class NaverMapController implements
     private List initialMarkers;
     private List initialPaths;
     private List initialCircles;
+    private List initialPolygons;
 
     private NaverMap naverMap;
-    private LocationOverlay locationOverlay;
     private boolean disposed = false;
     private MethodChannel.Result mapReadyResult;
     private int locationTrackingMode;
@@ -71,6 +71,7 @@ public class NaverMapController implements
     private NaverPathsController pathsController;
     private NaverMarkerController markerController;
     private NaverCircleController circleController;
+    private NaverPolygonController polygonController;
 
     NaverMapController(
             int id,
@@ -81,7 +82,8 @@ public class NaverMapController implements
             NaverMapOptions options,
             List initialMarkers,
             List initialPaths,
-            List initialCircles
+            List initialCircles,
+            List initialPolygons
     ) {
         this.mapView = new MapView(context, options);
 
@@ -91,6 +93,7 @@ public class NaverMapController implements
         this.initialMarkers = initialMarkers;
         this.initialPaths = initialPaths;
         this.initialCircles = initialCircles;
+        this.initialPolygons = initialPolygons;
 
         methodChannel = new MethodChannel(binaryMessenger, "naver_map_plugin_"+ id);
         registrarActivityHashCode = activity.hashCode();
@@ -101,7 +104,6 @@ public class NaverMapController implements
     @Override
     public void onMapReady(@NonNull NaverMap naverMap) {
         this.naverMap = naverMap;
-        locationOverlay = naverMap.getLocationOverlay();
 
         // 제대로 동작하지 않는 컨트롤러 UI로 원인이 밝혀지기 전까진 강제 비활성화.
         this.naverMap.getUiSettings().setZoomControlEnabled(false);
@@ -132,11 +134,18 @@ public class NaverMapController implements
         pathsController = new NaverPathsController(naverMap, listeners, density);
         pathsController.set(initialPaths);
 
+        // - 마커
         markerController = new NaverMarkerController(naverMap, listeners, density, mapView.getContext());
         markerController.add(initialMarkers);
 
+        // - 원형 오버레이
         circleController = new NaverCircleController(naverMap, listeners, density);
         circleController.add(initialCircles);
+
+        // - 폴리곤 오버레이
+        polygonController = new NaverPolygonController(naverMap, listeners, density);
+        polygonController.add(initialPolygons);
+
     }
 
     @Override
@@ -349,6 +358,17 @@ public class NaverMapController implements
                     circleController.add(circlesToAdd);
                     circleController.remove(circleIdsToRemove);
                     circleController.modify(circlesToChange);
+                    result.success(null);
+                }
+                break;
+            case "polygonOverlay#update":
+                {
+                    List polygonToAdd = methodCall.argument("polygonToAdd");
+                    List polygonToRemove = methodCall.argument("polygonToRemove");
+                    List polygonToModify = methodCall.argument("polygonToChange");
+                    polygonController.add(polygonToAdd);
+                    polygonController.modify(polygonToModify);
+                    polygonController.remove(polygonToRemove);
                     result.success(null);
                 }
                 break;

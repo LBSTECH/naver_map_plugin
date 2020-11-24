@@ -23,6 +23,8 @@ import io.flutter.plugin.common.BinaryMessenger;
  * <p>
  * 릴리즈배포시에는 해당 값을 false로 바꿔주기 바란다!!
  */
+
+@SuppressWarnings("rawtypes")
 public class NaverMapBuilder implements NaverMapOptionSink {
     private final NaverMapOptions options = new NaverMapOptions();
     private int locationTrackingMode;
@@ -30,6 +32,7 @@ public class NaverMapBuilder implements NaverMapOptionSink {
     private List initialMarkers;
     private List initialPaths;
     private List initialCircles;
+    private List initialPolygon;
 
     NaverMapController build(
             int id,
@@ -47,7 +50,8 @@ public class NaverMapBuilder implements NaverMapOptionSink {
                 options,
                 initialMarkers,
                 initialPaths,
-                initialCircles);
+                initialCircles,
+                initialPolygon);
         controller.init();
         controller.setLocationTrackingMode(locationTrackingMode);
         return controller;
@@ -214,5 +218,7 @@ public class NaverMapBuilder implements NaverMapOptionSink {
     void setInitialPaths(List<Object> initialPaths) {
         this.initialPaths = initialPaths;
     }
+
+    void setInitialPolygon(List initialPolygon){ this.initialPolygon = initialPolygon; }
 
 }
