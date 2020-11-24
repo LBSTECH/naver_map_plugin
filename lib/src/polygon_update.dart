@@ -1,12 +1,12 @@
 part of naver_map_plugin;
 
 class _PolygonOverlayUpdate {
-
   Set<PolygonOverlay> polygonToAdd;
   Set<String> idToRemove;
   Set<PolygonOverlay> polygonToChange;
 
-  _PolygonOverlayUpdate.from(Set<PolygonOverlay> previous, Set<PolygonOverlay> current){
+  _PolygonOverlayUpdate.from(
+      Set<PolygonOverlay> previous, Set<PolygonOverlay> current) {
     previous ??= Set.identity();
     current ??= Set.identity();
 
@@ -18,7 +18,8 @@ class _PolygonOverlayUpdate {
 
     PolygonOverlay idToCurrentPolygon(String id) => currentPolygon[id];
 
-    final Set<String> _polygonIdToRemove = prevPolygonIds.difference(currentPolygonIds);
+    final Set<String> _polygonIdToRemove =
+        prevPolygonIds.difference(currentPolygonIds);
 
     bool hasChanged(PolygonOverlay current) =>
         current != prevPolygon[current.polygonOverlayId];
@@ -39,7 +40,7 @@ class _PolygonOverlayUpdate {
     polygonToChange = _polygonToChange;
   }
 
-  Map<String, dynamic> _toMap(){
+  Map<String, dynamic> _toMap() {
     final Map<String, dynamic> updateMap = <String, dynamic>{};
     void addIfNonNull(String fieldName, dynamic value) {
       if (value != null) {
@@ -49,7 +50,8 @@ class _PolygonOverlayUpdate {
 
     addIfNonNull('polygonToAdd', _serializePolygonSet(polygonToAdd));
     addIfNonNull('polygonToChange', _serializePolygonSet(polygonToChange));
-    addIfNonNull('polygonToRemove', idToRemove.map((e) => e.toString()).toList());
+    addIfNonNull(
+        'polygonToRemove', idToRemove.map((e) => e.toString()).toList());
     return updateMap;
   }
 

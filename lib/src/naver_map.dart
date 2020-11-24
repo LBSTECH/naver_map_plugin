@@ -1,4 +1,3 @@
-
 part of naver_map_plugin;
 
 /// <h2> 네이버 지도 </h2>
@@ -34,7 +33,7 @@ class NaverMap extends StatefulWidget {
     this.markers = const [],
     this.circles = const [],
     this.polygons = const [],
-  }) : super(key : key);
+  }) : super(key: key);
 
   /// 지도가 완전히 만들어진 후에 컨트롤러를 파라미터로 가지는 콜백.
   /// 해당 콜백이 호출되기 전에는 지도가 만들어지는 중이다.
@@ -175,7 +174,7 @@ class NaverMap extends StatefulWidget {
 
   /// 지도에 표시될 [PathOverlay]의 [Set] 입니다..
   final Set<PathOverlay> pathOverlays;
-  
+
   /// 지도에 표시될 [CircleOverlay]의 [List]입니다.
   final List<CircleOverlay> circles;
 
@@ -240,8 +239,8 @@ class _NaverMapState extends State<NaverMap> {
       'options': _naverMapOptions.toMap(),
       'markers': _serializeMarkerSet(widget.markers) ?? [],
       'paths': _serializePathOverlaySet(widget.pathOverlays) ?? [],
-      'circles' : _serializeCircleSet(widget.circles) ?? [],
-      'polygons' : _serializePolygonSet(widget.polygons) ?? [],
+      'circles': _serializeCircleSet(widget.circles) ?? [],
+      'polygons': _serializePolygonSet(widget.polygons) ?? [],
     };
 
     if (defaultTargetPlatform == TargetPlatform.android) {
@@ -252,7 +251,7 @@ class _NaverMapState extends State<NaverMap> {
         creationParamsCodec: const StandardMessageCodec(),
       );
       return view;
-    }else if (defaultTargetPlatform == TargetPlatform.iOS) {
+    } else if (defaultTargetPlatform == TargetPlatform.iOS) {
       final view = UiKitView(
         viewType: VIEW_TYPE,
         onPlatformViewCreated: onPlatformViewCreated,
@@ -278,9 +277,8 @@ class _NaverMapState extends State<NaverMap> {
 
   void _updateOptions() async {
     final _NaverMapOptions newOption = _NaverMapOptions.fromWidget(widget);
-    final Map<String, dynamic> updates =
-        _naverMapOptions.updatesMap(newOption);
-    if(updates.isEmpty) return;
+    final Map<String, dynamic> updates = _naverMapOptions.updatesMap(newOption);
+    if (updates.isEmpty) return;
     final NaverMapController controller = await _controller.future;
     controller._updateMapOptions(updates);
     _naverMapOptions = newOption;
@@ -298,13 +296,11 @@ class _NaverMapState extends State<NaverMap> {
   void _updatePathOverlay() async {
     final NaverMapController controller = await _controller.future;
     controller._updatePathOverlay(_PathOverlayUpdates.from(
-        _paths.values?.toSet(),
-        widget.pathOverlays?.toSet())
-    );
+        _paths.values?.toSet(), widget.pathOverlays?.toSet()));
     _paths = _keyByPathOverlayId(widget.pathOverlays);
   }
 
-  void _updateCircleOverlay() async{
+  void _updateCircleOverlay() async {
     final NaverMapController controller = await _controller.future;
     controller._updateCircleOverlay(_CircleOverlayUpdate.from(
       _circles.values?.toSet(),
@@ -313,7 +309,7 @@ class _NaverMapState extends State<NaverMap> {
     _circles = _keyByCircleId(widget.circles);
   }
 
-  void _updatePolygonOverlay() async{
+  void _updatePolygonOverlay() async {
     final NaverMapController controller = await _controller.future;
     controller._updatePolygonOverlay(_PolygonOverlayUpdate.from(
       _polygons.values?.toSet(),
@@ -322,28 +318,27 @@ class _NaverMapState extends State<NaverMap> {
     _polygons = _keyByPolygonId(widget.polygons);
   }
 
-
-  void _markerTapped(String markerId, int iconWidth, int iconHeight){
+  void _markerTapped(String markerId, int iconWidth, int iconHeight) {
     assert(markerId != null);
-    if(_markers[markerId]?.onMarkerTab != null) {
+    if (_markers[markerId]?.onMarkerTab != null) {
       _markers[markerId].onMarkerTab(
         _markers[markerId],
-        <String, int>{'width' : iconWidth, 'height' : iconHeight},
+        <String, int>{'width': iconWidth, 'height': iconHeight},
       );
     }
   }
 
-  void _pathOverlayTapped(String pathId){
+  void _pathOverlayTapped(String pathId) {
     assert(pathId != null);
     PathOverlayId pathOverlayId = PathOverlayId(pathId);
-    if (_paths[pathOverlayId]?.onPathOverlayTab != null){
+    if (_paths[pathOverlayId]?.onPathOverlayTab != null) {
       _paths[pathOverlayId].onPathOverlayTab(pathOverlayId);
     }
   }
 
-  void _circleOverlayTapped(String overlayId){
+  void _circleOverlayTapped(String overlayId) {
     assert(overlayId != null);
-    if (_circles[overlayId]?.onTap != null){
+    if (_circles[overlayId]?.onTap != null) {
       _circles[overlayId].onTap(overlayId);
     }
   }
@@ -373,16 +368,13 @@ class _NaverMapState extends State<NaverMap> {
     if (widget.onSymbolTap != null) widget.onSymbolTap(position, caption);
   }
 
-  void _cameraMove(LatLng position){
-    if(widget.onCameraChange != null)
-      widget.onCameraChange(position);
+  void _cameraMove(LatLng position) {
+    if (widget.onCameraChange != null) widget.onCameraChange(position);
   }
 
-  void _cameraIdle(){
-    if(widget.onCameraIdle != null)
-      widget.onCameraIdle();
+  void _cameraIdle() {
+    if (widget.onCameraIdle != null) widget.onCameraIdle();
   }
-
 }
 
 class _NaverMapOptions {
@@ -477,5 +469,4 @@ class _NaverMapOptions {
       ..removeWhere(
           (String key, dynamic value) => prevOptionsMap[key] == value);
   }
-
 }

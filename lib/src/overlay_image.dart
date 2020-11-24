@@ -1,7 +1,7 @@
 part of naver_map_plugin;
 
 /// 마커에 쓰일 비트맵 이미지를 정의한다.
-class OverlayImage{
+class OverlayImage {
   const OverlayImage._(this._json);
 
   Uint8List get blob => Uint8List.fromList([]);
@@ -23,11 +23,11 @@ class OverlayImage{
       ]);
     }
     final AssetImage assetImage = AssetImage(assetName);
-    final AssetBundleImageKey assetBundleImageKey = await assetImage.obtainKey(configuration);
+    final AssetBundleImageKey assetBundleImageKey =
+        await assetImage.obtainKey(configuration);
     return OverlayImage._(<dynamic>[
       assetBundleImageKey.name,
       assetBundleImageKey.scale,
     ]);
   }
-
 }

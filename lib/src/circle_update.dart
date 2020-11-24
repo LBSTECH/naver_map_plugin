@@ -1,12 +1,12 @@
 part of naver_map_plugin;
 
 class _CircleOverlayUpdate {
-
   Set<CircleOverlay> circlesToAdd;
   Set<String> circleIdsToRemove;
   Set<CircleOverlay> circlesToChange;
 
-  _CircleOverlayUpdate.from(Set<CircleOverlay> previous, Set<CircleOverlay> current){
+  _CircleOverlayUpdate.from(
+      Set<CircleOverlay> previous, Set<CircleOverlay> current) {
     previous ??= Set<CircleOverlay>.identity();
     current ??= Set<CircleOverlay>.identity();
 
@@ -19,7 +19,7 @@ class _CircleOverlayUpdate {
     CircleOverlay idToCurrentCircle(String id) => currentCircles[id];
 
     final Set<String> _circleIdsToRemove =
-      prevCircleIds.difference(currentCirclesIds);
+        prevCircleIds.difference(currentCirclesIds);
 
     final Set<CircleOverlay> _circlesToAdd = currentCirclesIds
         .difference(prevCircleIds)
@@ -51,7 +51,8 @@ class _CircleOverlayUpdate {
 
     addIfNonNull('circlesToAdd', _serializeCircleSet(circlesToAdd));
     addIfNonNull('circlesToChange', _serializeCircleSet(circlesToChange));
-    addIfNonNull('circleIdsToRemove', circleIdsToRemove.map((e) => e.toString()).toList());
+    addIfNonNull('circleIdsToRemove',
+        circleIdsToRemove.map((e) => e.toString()).toList());
     return updateMap;
   }
 
@@ -66,7 +67,8 @@ class _CircleOverlayUpdate {
   }
 
   @override
-  int get hashCode => hashValues(circlesToAdd, circlesToChange, circleIdsToRemove);
+  int get hashCode =>
+      hashValues(circlesToAdd, circlesToChange, circleIdsToRemove);
 
   @override
   String toString() {
@@ -74,5 +76,4 @@ class _CircleOverlayUpdate {
         'circleIdsToRemove: $circleIdsToRemove, '
         'circlesToChange: $circlesToChange}';
   }
-
 }

@@ -9,8 +9,7 @@ part of naver_map_plugin;
 /// - 면 색상
 /// - 테두리 두께
 /// - 테두리 색상
-class PolygonOverlay{
-
+class PolygonOverlay {
   /// ### 각각의 [PolygonOverlay]를 식별하기 위한 식별자
   /// ***값이 [null]일 경우 에러가 발생한다.***
   /// 같은 값을 가진 여러 객체가 추가될 경우 마지막으로 추가된 객체만 적용된다.
@@ -47,16 +46,16 @@ class PolygonOverlay{
   final List<List<LatLng>> holes;
 
   PolygonOverlay(
-      this.polygonOverlayId,
-      this.coordinates, {
-        this.color,
-        this.outlineColor,
-        this.outlineWidth,
-        this.globalZIndex,
-        this.holes = const [],
-  }) : assert(polygonOverlayId != null),
-       assert(coordinates != null),
-       assert(coordinates.length >= 3);
+    this.polygonOverlayId,
+    this.coordinates, {
+    this.color,
+    this.outlineColor,
+    this.outlineWidth,
+    this.globalZIndex,
+    this.holes = const [],
+  })  : assert(polygonOverlayId != null),
+        assert(coordinates != null),
+        assert(coordinates.length >= 3);
 
   /// 인자로 넘어오는 속성들이 적용된 새로운 [PolygonOverlay]객체를 생성합니다.
   PolygonOverlay copyWith({
@@ -78,7 +77,8 @@ class PolygonOverlay{
       );
 
   /// 완전히 같은 속성값을 가진 [PolygonOverlay]객체를 생성합니다.
-  PolygonOverlay clone() => copyWith(coordsParam: List<LatLng>.from(coordinates));
+  PolygonOverlay clone() =>
+      copyWith(coordsParam: List<LatLng>.from(coordinates));
 
   Map<String, dynamic> _toJson() {
     assert(polygonOverlayId != null);
@@ -121,13 +121,14 @@ class PolygonOverlay{
   int get hashCode => polygonOverlayId.hashCode;
 }
 
-Map<String, PolygonOverlay> _keyByPolygonId(Iterable<PolygonOverlay> polygons){
+Map<String, PolygonOverlay> _keyByPolygonId(Iterable<PolygonOverlay> polygons) {
   if (polygons == null || polygons.isEmpty) return {};
-  return Map<String, PolygonOverlay>.fromEntries(polygons.map((e) =>
-      MapEntry<String, PolygonOverlay>(e.polygonOverlayId, e.clone())));
+  return Map<String, PolygonOverlay>.fromEntries(polygons.map(
+      (e) => MapEntry<String, PolygonOverlay>(e.polygonOverlayId, e.clone())));
 }
 
-List<Map<String, dynamic>> _serializePolygonSet(Iterable<PolygonOverlay> polygons){
+List<Map<String, dynamic>> _serializePolygonSet(
+    Iterable<PolygonOverlay> polygons) {
   if (polygons == null || polygons.isEmpty) return null;
   return polygons.map<Map<String, dynamic>>((e) => e._toJson()).toList();
 }

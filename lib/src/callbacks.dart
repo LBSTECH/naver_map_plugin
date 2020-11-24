@@ -1,6 +1,5 @@
 part of naver_map_plugin;
 
-
 typedef void MapCreateCallback(NaverMapController controller);
 
 typedef void CameraPositionCallback(CameraPosition position);

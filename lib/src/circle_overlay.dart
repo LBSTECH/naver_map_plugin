@@ -2,7 +2,6 @@ part of naver_map_plugin;
 
 /// <p>원형 오버레이를 지도 위에 표시하기 위해 사용되는 객체</p>
 class CircleOverlay {
-
   /// <h3>원형 오버레이의 식별자로 사용됩니다.</h3>
   final String overlayId;
 
@@ -80,18 +79,18 @@ class CircleOverlay {
   String toString() => _toJson().toString();
 
   CircleOverlay clone() => CircleOverlay(
-    overlayId: overlayId,
-    center: center,
-    radius: radius,
-    color: color,
-    outlineColor: outlineColor,
-    outlineWidth: outlineWidth,
-    zIndex: zIndex,
-    globalZIndex: globalZIndex,
-    onTap: onTap,
-    minZoom: minZoom,
-    maxZoom: maxZoom,
-  );
+        overlayId: overlayId,
+        center: center,
+        radius: radius,
+        color: color,
+        outlineColor: outlineColor,
+        outlineWidth: outlineWidth,
+        zIndex: zIndex,
+        globalZIndex: globalZIndex,
+        onTap: onTap,
+        minZoom: minZoom,
+        maxZoom: maxZoom,
+      );
 
   Map<String, dynamic> _toJson() {
     assert(overlayId != null);
@@ -118,16 +117,16 @@ class CircleOverlay {
     addIfPresent('maxZoom', maxZoom);
     return json;
   }
-
 }
 
-List<Map<String, dynamic>> _serializeCircleSet(Iterable<CircleOverlay> circles){
+List<Map<String, dynamic>> _serializeCircleSet(
+    Iterable<CircleOverlay> circles) {
   if (circles == null) return null;
   return circles.map<Map<String, dynamic>>((e) => e._toJson()).toList();
 }
 
-Map<String, CircleOverlay> _keyByCircleId(Iterable<CircleOverlay> circles){
+Map<String, CircleOverlay> _keyByCircleId(Iterable<CircleOverlay> circles) {
   if (circles == null) return {};
-  return Map<String, CircleOverlay>.fromEntries(circles.map((e) =>
-      MapEntry<String, CircleOverlay>(e.overlayId, e.clone())));
+  return Map<String, CircleOverlay>.fromEntries(circles
+      .map((e) => MapEntry<String, CircleOverlay>(e.overlayId, e.clone())));
 }

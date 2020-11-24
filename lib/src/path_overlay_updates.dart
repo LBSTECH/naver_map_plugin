@@ -4,7 +4,6 @@ part of naver_map_plugin;
 ///
 /// Used in [NaverMapController] when the map is updated.
 class _PathOverlayUpdates {
-
   Set<PathOverlay> pathOverlaysToAddOrUpdate;
   Set<PathOverlayId> pathOverlayIdsToRemove;
 
@@ -36,14 +35,11 @@ class _PathOverlayUpdates {
         prevPathOverlayIds.difference(currentPathOverlayIds);
 
     final Set<PathOverlay> _pathOverlaysToAddOrModify =
-        currentPathOverlayIds
-            .map(idToCurrentPolylineOverlay)
-            .toSet();
+        currentPathOverlayIds.map(idToCurrentPolylineOverlay).toSet();
 
     pathOverlaysToAddOrUpdate = _pathOverlaysToAddOrModify;
     pathOverlayIdsToRemove = _pathOverlayIdsToRemove;
   }
-
 
   Map<String, dynamic> _toMap() {
     final Map<String, dynamic> updateMap = <String, dynamic>{};
@@ -70,14 +66,14 @@ class _PathOverlayUpdates {
     if (identical(this, other)) return true;
     if (other.runtimeType != runtimeType) return false;
     final _PathOverlayUpdates typedOther = other;
-    return setEquals(pathOverlaysToAddOrUpdate, typedOther.pathOverlaysToAddOrUpdate) &&
-        setEquals(pathOverlayIdsToRemove,
-            typedOther.pathOverlayIdsToRemove);
+    return setEquals(
+            pathOverlaysToAddOrUpdate, typedOther.pathOverlaysToAddOrUpdate) &&
+        setEquals(pathOverlayIdsToRemove, typedOther.pathOverlayIdsToRemove);
   }
 
   @override
-  int get hashCode => hashValues(pathOverlaysToAddOrUpdate,
-      pathOverlayIdsToRemove);
+  int get hashCode =>
+      hashValues(pathOverlaysToAddOrUpdate, pathOverlayIdsToRemove);
 
   @override
   String toString() {

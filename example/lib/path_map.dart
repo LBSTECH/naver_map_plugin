@@ -62,19 +62,18 @@ class _PathMapPageState extends State<PathMapPage> {
               onTap: () => setState(() => _currentMode = MODE_ADD),
               child: Container(
                 decoration: BoxDecoration(
-                    color: _currentMode == MODE_ADD
-                        ? Colors.black : Colors.white,
+                    color:
+                        _currentMode == MODE_ADD ? Colors.black : Colors.white,
                     borderRadius: BorderRadius.circular(6),
-                    border: Border.all(color: Colors.black)
-                ),
+                    border: Border.all(color: Colors.black)),
                 padding: EdgeInsets.all(8),
                 margin: EdgeInsets.only(right: 8),
                 child: Text(
                   '추가',
                   textAlign: TextAlign.center,
                   style: TextStyle(
-                    color: _currentMode == MODE_ADD
-                        ? Colors.white : Colors.black,
+                    color:
+                        _currentMode == MODE_ADD ? Colors.white : Colors.black,
                     fontWeight: FontWeight.w600,
                     fontSize: 14,
                   ),
@@ -90,10 +89,10 @@ class _PathMapPageState extends State<PathMapPage> {
               child: Container(
                 decoration: BoxDecoration(
                     color: _currentMode == MODE_REMOVE
-                        ? Colors.black : Colors.white,
+                        ? Colors.black
+                        : Colors.white,
                     borderRadius: BorderRadius.circular(6),
-                    border: Border.all(color: Colors.black)
-                ),
+                    border: Border.all(color: Colors.black)),
                 padding: EdgeInsets.all(8),
                 margin: EdgeInsets.only(right: 8),
                 child: Text(
@@ -101,7 +100,8 @@ class _PathMapPageState extends State<PathMapPage> {
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     color: _currentMode == MODE_REMOVE
-                        ? Colors.white : Colors.black,
+                        ? Colors.white
+                        : Colors.black,
                     fontWeight: FontWeight.w600,
                     fontSize: 14,
                   ),
@@ -115,16 +115,14 @@ class _PathMapPageState extends State<PathMapPage> {
             onTap: () => setState(() => _currentMode = MODE_NONE),
             child: Container(
               decoration: BoxDecoration(
-                  color: _currentMode == MODE_NONE
-                      ? Colors.black : Colors.white,
+                  color:
+                      _currentMode == MODE_NONE ? Colors.black : Colors.white,
                   borderRadius: BorderRadius.circular(6),
-                  border: Border.all(color: Colors.black)
-              ),
+                  border: Border.all(color: Colors.black)),
               padding: EdgeInsets.all(4),
               child: Icon(
                 Icons.clear,
-                color: _currentMode == MODE_NONE
-                    ? Colors.white : Colors.black,
+                color: _currentMode == MODE_NONE ? Colors.white : Colors.black,
               ),
             ),
           ),
@@ -141,34 +139,32 @@ class _PathMapPageState extends State<PathMapPage> {
             onMapCreated: _onMapCreated,
             onMapTap: _onMapTap,
             markers: _markers,
-            pathOverlays: {PathOverlay(
-              PathOverlayId('path'),
-              _coordinates,
-              width: _width,
-              color: Colors.red,
-              outlineColor: Colors.white,
-            )},
+            pathOverlays: {
+              PathOverlay(
+                PathOverlayId('path'),
+                _coordinates,
+                width: _width,
+                color: Colors.red,
+                outlineColor: Colors.white,
+              )
+            },
           ),
-
           Align(
             alignment: Alignment.bottomRight,
             child: Container(
               margin: EdgeInsets.symmetric(vertical: 40, horizontal: 36),
               padding: EdgeInsets.all(8),
-              height: MediaQuery.of(context).size.height*0.1,
+              height: MediaQuery.of(context).size.height * 0.1,
               decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(6),
-                boxShadow: [BoxShadow(
-                  color: Colors.black12,
-                  blurRadius: 3
-                )]
-              ),
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(6),
+                  boxShadow: [BoxShadow(color: Colors.black12, blurRadius: 3)]),
               child: Slider.adaptive(
                 value: _sliderValue,
                 onChanged: _onChangeSlider,
                 onChangeEnd: _onSliderChangeEnd,
-                min: 0.1, max: 2.0,
+                min: 0.1,
+                max: 2.0,
               ),
             ),
           ),
@@ -176,7 +172,6 @@ class _PathMapPageState extends State<PathMapPage> {
       ),
     );
   }
-
 
   // ================== method ==========================
 
@@ -201,7 +196,7 @@ class _PathMapPageState extends State<PathMapPage> {
   }
 
   void _onMarkerTap(Marker marker, Map<String, int> iconSize) {
-    if (_currentMode == MODE_REMOVE && _coordinates.length > 2){
+    if (_currentMode == MODE_REMOVE && _coordinates.length > 2) {
       setState(() {
         _coordinates.remove(marker.position);
         _markers.removeWhere((m) => m.markerId == marker.markerId);

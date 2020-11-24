@@ -23,7 +23,6 @@ class _PaddingTestState extends State<PaddingTest> {
             initLocationTrackingMode: LocationTrackingMode.Follow,
             locationButtonEnable: true,
           ),
-
           Align(
             alignment: Alignment.bottomCenter,
             child: AnimatedContainer(
@@ -41,14 +40,15 @@ class _PaddingTestState extends State<PaddingTest> {
                       alignment: Alignment.centerRight,
                       child: Container(
                         decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(6),
-                          boxShadow: [BoxShadow(
-                            color: Colors.black12,
-                            blurRadius: 3,
-                            spreadRadius: 1,
-                          )]
-                        ),
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(6),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.black12,
+                                blurRadius: 3,
+                                spreadRadius: 1,
+                              )
+                            ]),
                         padding: EdgeInsets.all(8),
                         margin: EdgeInsets.only(bottom: 16, right: 16),
                         child: Icon(
@@ -79,11 +79,11 @@ class _PaddingTestState extends State<PaddingTest> {
     _controller.complete(controller);
   }
 
-  void _onTapUp() async{
+  void _onTapUp() async {
     if (!_controller.isCompleted) return;
 
     if (_padding < 300) {
-      setState(() async{
+      setState(() async {
         _padding += 20;
         final cont = await _controller.future;
         cont.setContentPadding(bottom: _padding);
