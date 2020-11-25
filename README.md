@@ -26,6 +26,8 @@ dependencies:
 
 ## ANDROID GETTING START
 
+#### [Naver Cloud Platform - Android 시작 가이드](https://docs.ncloud.com/ko/naveropenapi_v3/maps/android-sdk/v3/start.html)
+
 > AndroidManifest.xml에 지정
 ``` xml
 <manifest>
@@ -54,6 +56,8 @@ if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
 ```
 
 ## iOS GETTING START
+
+#### [Naver Cloud Platform - iOS 시작 가이드](https://docs.ncloud.com/ko/naveropenapi_v3/maps/ios-sdk/v3/start.html)
 
 > 대용량 파일을 받기 위해 [git-lfs][L2] 설치가 필요합니다.
 
