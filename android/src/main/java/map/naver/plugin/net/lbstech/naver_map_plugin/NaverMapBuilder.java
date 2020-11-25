@@ -219,6 +219,8 @@ public class NaverMapBuilder implements NaverMapOptionSink {
         this.initialPaths = initialPaths;
     }
 
-    void setInitialPolygon(List initialPolygon){ this.initialPolygon = initialPolygon; }
+    void setInitialPolygon(List initialPolygon){
+        this.initialPolygon = initialPolygon;
+    }
 
 }

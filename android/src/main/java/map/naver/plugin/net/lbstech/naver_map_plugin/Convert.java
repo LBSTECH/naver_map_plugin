@@ -15,6 +15,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import io.flutter.Log;
 import io.flutter.view.FlutterMain;
 
 @SuppressWarnings("rawtypes")
@@ -169,7 +170,8 @@ class Convert {
     @SuppressWarnings("MalformedFormatString")
     static int toColorInt(Object value){
         if (value instanceof Long || value instanceof Integer) {
-            return Color.parseColor(String.format("#%08x", value));
+            String formed = String.format("#%08x", value);
+            return Color.parseColor(formed);
         }else {
             return 0;
         }

@@ -5,6 +5,7 @@ import 'package:naver_map_plugin_example/circle_map.dart';
 import 'package:naver_map_plugin_example/padding_test.dart';
 import 'package:naver_map_plugin_example/marker_map_page.dart';
 import 'package:naver_map_plugin_example/path_map.dart';
+import 'package:naver_map_plugin_example/polygon_map.dart';
 
 void main() {
   runApp(MyApp());
@@ -36,6 +37,7 @@ class _MainPageState extends State<MainPage> {
     '패스 예제',
     '원형 오버레이 예제',
     '컨트롤러 테스트',
+    '폴리곤 예제',
   ];
 
   @override
@@ -110,6 +112,13 @@ class _MainPageState extends State<MainPage> {
             MaterialPageRoute(
               builder: (context) => PaddingTest(),
             ));
+        break;
+      case 5:
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (_) => PolygonMap(),
+          ));
         break;
     }
   }

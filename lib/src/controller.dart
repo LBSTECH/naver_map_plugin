@@ -50,6 +50,10 @@ class NaverMapController {
         String overlayId = call.arguments['overlayId'];
         _naverMapState._circleOverlayTapped(overlayId);
         break;
+      case 'polygon#onTap':
+        String overlayId = call.arguments['polygonOverlayId'];
+        _naverMapState._polygonOverlayTapped(overlayId);
+        break;
       case 'map#onTap':
         LatLng latLng = LatLng._fromJson(call.arguments['position']);
         _naverMapState._mapTap(latLng);

@@ -45,6 +45,13 @@ class PolygonOverlay {
   /// ***각각의 좌표열 또한 다각형을 이루기 위해서 배열의 크기가 3이상이어야 한다.***
   final List<List<LatLng>> holes;
 
+  /// ### 다각형 오버레이에 대한 탭 이벤트
+  /// 각 [PolygonOverlay]의 아이디를 파라미터로 전달 한다.
+  final void Function(String polygonOverlayId) onTap;
+
+  /// ### 폴리곤 오버레이 생성
+  /// 기본적으로 [polygonOverlayId]와 [coordinates]는 필수적으로 필요하며,
+  /// 그 외의 속성은 optional parameter 로 전달한다.
   PolygonOverlay(
     this.polygonOverlayId,
     this.coordinates, {
@@ -53,6 +60,7 @@ class PolygonOverlay {
     this.outlineWidth,
     this.globalZIndex,
     this.holes = const [],
+    this.onTap,
   })  : assert(polygonOverlayId != null),
         assert(coordinates != null),
         assert(coordinates.length >= 3);
@@ -93,13 +101,16 @@ class PolygonOverlay {
       }
     }
 
+    List<List<double>> _serializeLatLngList(List<LatLng> list) =>
+        list.map<List<double>>((e) => e._toJson()).toList();
+
     addIfPresent('polygonOverlayId', polygonOverlayId);
-    addIfPresent('coords', coordinates);
-    addIfPresent('color', color);
-    addIfPresent('outlineColor', outlineColor);
+    addIfPresent('coords', _serializeLatLngList(coordinates));
+    addIfPresent('color', color?.value);
+    addIfPresent('outlineColor', outlineColor?.value);
     addIfPresent('outlineWidth', outlineWidth);
     addIfPresent('globalZIndex', globalZIndex);
-    addIfPresent('holes', holes);
+    addIfPresent('holes', holes.map((e) => _serializeLatLngList(e)).toList());
     return json;
   }
 
@@ -130,5 +141,5 @@ Map<String, PolygonOverlay> _keyByPolygonId(Iterable<PolygonOverlay> polygons) {
 List<Map<String, dynamic>> _serializePolygonSet(
     Iterable<PolygonOverlay> polygons) {
   if (polygons == null || polygons.isEmpty) return null;
-  return polygons.map<Map<String, dynamic>>((e) => e._toJson()).toList();
+  return polygons.map<Map<String, dynamic>>((e) => e?._toJson())?.toList();
 }

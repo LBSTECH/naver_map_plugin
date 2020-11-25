@@ -1,5 +1,6 @@
 package map.naver.plugin.net.lbstech.naver_map_plugin;
 
+import android.graphics.Color;
 import android.os.Handler;
 import android.os.Looper;
 
@@ -78,6 +79,7 @@ public class NaverPolygonController {
             polygon = new PolygonOverlay();
             this.id = (String) option.get("polygonOverlayId");
             interpret(option);
+            polygon.setTag(this);
         }
 
         void interpret(HashMap<String, Object> option) {
@@ -89,7 +91,8 @@ public class NaverPolygonController {
             if (color != null) polygon.setColor(Convert.toColorInt(color));
 
             final Object outlineColor = option.get("outlineColor");
-            if (outlineColor != null) polygon.setOutlineColor(Convert.toColorInt(outlineColor));
+            if (outlineColor != null)
+                polygon.setOutlineColor(Convert.toColorInt(outlineColor));
 
             final Object width = option.get("outlineWidth");
             if (width != null) polygon.setOutlineWidth(Math.round((int)width * density));

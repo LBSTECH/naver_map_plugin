@@ -343,6 +343,13 @@ class _NaverMapState extends State<NaverMap> {
     }
   }
 
+  void _polygonOverlayTapped(String overlayId) {
+    assert(overlayId != null);
+    if (_polygons[overlayId]?.onTap != null) {
+      _polygons[overlayId].onTap(overlayId);
+    }
+  }
+
   void _mapTap(LatLng position) {
     assert(position != null);
     widget.onMapTap?.call(position);
