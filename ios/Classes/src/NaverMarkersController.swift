@@ -23,10 +23,10 @@ class NMarkerController: NSObject {
         super.init()
         marker.userInfo = ["marker" : self]
         
-        interprete(json: json)
+        interpret(json: json)
     }
     
-    func interprete(json: NSDictionary) {
+    func interpret(json: NSDictionary) {
         if let positionData = json["position"] {
             marker.position = toLatLng(json: positionData)
         }
@@ -159,7 +159,7 @@ class NaverMarkersController: NSObject {
             DispatchQueue.main.async {
                 if let data = json as? NSDictionary {
                     let id = data["markerId"] as! String
-                    self.idToController[id]?.interprete(json: data)
+                    self.idToController[id]?.interpret(json: data)
                 }
             }
         }

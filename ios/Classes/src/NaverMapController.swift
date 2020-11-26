@@ -28,7 +28,7 @@ protocol NaverMapOptionSink {
 }
 
 
-class NaverMapController: NSObject, FlutterPlatformView, NaverMapOptionSink, NMFMapViewTouchDelegate, NMFMapViewCameraDelegate {
+class NaverMapController: NSObject, FlutterPlatformView, NaverMapOptionSink, NMFMapViewTouchDelegate, NMFMapViewCameraDelegate, NMFAuthManagerDelegate {
     var mapView : NMFMapView
     var naverMap : NMFNaverMapView
     let viewId : Int64
@@ -36,6 +36,7 @@ class NaverMapController: NSObject, FlutterPlatformView, NaverMapOptionSink, NMF
     var markersController: NaverMarkersController?
     var pathController: NaverPathController?
     var circleController: NaverCircleController?
+    var polygonController: NaverPolygonController?
     
     var channel : FlutterMethodChannel?
     var registrar : FlutterPluginRegistrar?
@@ -43,6 +44,9 @@ class NaverMapController: NSObject, FlutterPlatformView, NaverMapOptionSink, NMF
     init(viewId: Int64, frame: CGRect, registrar: FlutterPluginRegistrar, argument: NSDictionary?) {
         self.viewId = viewId
         self.registrar = registrar
+        
+        // need more http connections during getting map tile (default : 4)
+        URLSession.shared.configuration.httpMaximumConnectionsPerHost = 8
         
         // property set
         naverMap = NMFNaverMapView(frame: frame)
@@ -58,9 +62,13 @@ class NaverMapController: NSObject, FlutterPlatformView, NaverMapOptionSink, NMF
                                              touchHandler: overlayTouchHandler(overlay:))
         circleController = NaverCircleController(naverMap: naverMap,
                                                  touchHandler: overlayTouchHandler(overlay:))
+        polygonController = NaverPolygonController(naverMap: naverMap,
+                                                   touchHandler: overlayTouchHandler(overlay:))
         channel?.setMethodCallHandler(handle(call:result:))
         
         // map view 설정
+        NMFAuthManager.shared().delegate = self as NMFAuthManagerDelegate // for debug
+
         mapView.touchDelegate = self
         mapView.addCameraDelegate(delegate: self)
         if let arg = argument {
@@ -80,6 +88,9 @@ class NaverMapController: NSObject, FlutterPlatformView, NaverMapOptionSink, NMF
             }
             if let circleData = arg["circles"] as? Array<Any> {
                 circleController?.add(jsonArray: circleData)
+            }
+            if let polygonData = arg["polygons"] as? Array<Any> {
+                polygonController?.add(jsonArray: polygonData)
             }
         }
         
@@ -202,6 +213,19 @@ class NaverMapController: NSObject, FlutterPlatformView, NaverMapOptionSink, NMF
             }
             result(nil)
             break
+        case "polygonOverlay#update" :
+            if let arg = call.arguments as? NSDictionary {
+                if let dataToAdd = arg["polygonToAdd"] as? Array<Any> {
+                    polygonController?.add(jsonArray: dataToAdd)
+                }
+                if let dataToModify = arg["polygonToChange"] as? Array<Any> {
+                    polygonController?.modify(jsonArray: dataToModify)
+                }
+                if let dataToRemove = arg["polygonToRemove"] as? Array<Any>{
+                    polygonController?.remove(jsonArray: dataToRemove)
+                }
+            }
+            result(nil)
         case "markers#update" :
             if let arg = call.arguments as? NSDictionary {
                 if let dataToAdd = arg["markersToAdd"] as? Array<Any> {
@@ -319,6 +343,10 @@ class NaverMapController: NSObject, FlutterPlatformView, NaverMapOptionSink, NMF
             channel?.invokeMethod("circle#onTap",
                                   arguments: ["overlayId" : circle.id])
             return true
+        } else if let polygon = overlay.userInfo["polygon"] as? NPolygonController {
+            channel?.invokeMethod("polygon#onTap",
+                                  arguments: ["polygonOverlayId" : polygon.id])
+            return true
         }
         return false
     }
@@ -409,5 +437,28 @@ class NaverMapController: NSObject, FlutterPlatformView, NaverMapOptionSink, NMF
     
     func setLocationButtonEnable(_ locationButtonEnable: Bool) {
         naverMap.showLocationButton = locationButtonEnable
+    }
+    
+    // ===================== authManagerDelegate ========================
+    func authorized(_ state: NMFAuthState, error: Error?) {
+        switch state {
+        case .authorized:
+            print("네이버 지도 인증 완료")
+            break
+        case .authorizing:
+            print("네이버 지도 인증 진행중")
+            break
+        case .pending:
+            print("네이버 지도 인증 대기중")
+            break
+        case .unauthorized:
+            print("네이버 지도 인증 실패")
+            break
+        default:
+            break
+        }
+        if let e = error {
+            print("네이버 지도 인증 에러 발생 : \(e.localizedDescription)")
+        }
     }
 }

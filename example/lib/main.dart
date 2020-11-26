@@ -115,10 +115,10 @@ class _MainPageState extends State<MainPage> {
         break;
       case 5:
         Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (_) => PolygonMap(),
-          ));
+            context,
+            MaterialPageRoute(
+              builder: (_) => PolygonMap(),
+            ));
         break;
     }
   }

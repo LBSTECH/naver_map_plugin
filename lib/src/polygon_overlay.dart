@@ -19,6 +19,10 @@ class PolygonOverlay {
   /// ***배열의 길이가 3 미만인 경우 다각형을 이룰 수 없으므로, 에러가 발생한다.***
   ///
   /// 각각의 좌표([LatLng])로 이루어진 리스트이다.
+  /// #### 주의!!!
+  ///  - android 에서는 [LatLng]의 순서에 때라 선이 그려진다.
+  ///  - iOS 에서는 좌표의 순서가 시계 방향이 아닌 경우, 선이 제대로 그려지지 않거나, 이벤트를 못받는 경우가 있다.
+  ///     - 따라서 외곽선을 이루는 [coordinates]는 가능한 시계방향 순으로 입력해야 한다.
   final List<LatLng> coordinates;
 
   /// ### [polygonOverlay]의 면 색상
@@ -43,6 +47,11 @@ class PolygonOverlay {
   /// 각각의 구멍에 대한 좌표열들로 구성된 배열이다.
   ///
   /// ***각각의 좌표열 또한 다각형을 이루기 위해서 배열의 크기가 3이상이어야 한다.***
+  /// #### 주의!!!
+  ///  - android 에서는 [LatLng]의 순서에 때라 선이 그려진다.
+  ///  - iOS 에서는 좌표의 순서가 반 시계 방향이 아닌 경우, 선이 제대로 그려지지 않거나, 이벤트를 못받는 경우가 있다.
+  ///     - 따라서 외곽선을 이루는 [coordinates]는 가능한 반시계방향 순으로 입력해야 한다.
+  ///     - [coordinates]의 반대 방향으로!
   final List<List<LatLng>> holes;
 
   /// ### 다각형 오버레이에 대한 탭 이벤트
@@ -59,30 +68,28 @@ class PolygonOverlay {
     this.outlineColor,
     this.outlineWidth,
     this.globalZIndex,
-    this.holes = const [],
+    this.holes,
     this.onTap,
   })  : assert(polygonOverlayId != null),
         assert(coordinates != null),
         assert(coordinates.length >= 3);
 
   /// 인자로 넘어오는 속성들이 적용된 새로운 [PolygonOverlay]객체를 생성합니다.
-  PolygonOverlay copyWith({
-    List<LatLng> coordsParam,
-    Color colorParam,
-    Color outlineColorParam,
-    int outlineWidthParam,
-    int globalZIndexParam,
-    List<List<LatLng>> holesParam,
-  }) =>
-      PolygonOverlay(
-        polygonOverlayId,
-        coordsParam ?? coordinates,
-        color: colorParam ?? color,
-        outlineColor: outlineColorParam ?? outlineColor,
-        outlineWidth: outlineWidthParam ?? outlineWidth,
-        globalZIndex: globalZIndexParam ?? globalZIndex,
-        holes: holesParam ?? holes,
-      );
+  PolygonOverlay copyWith(
+          {List<LatLng> coordsParam,
+          Color colorParam,
+          Color outlineColorParam,
+          int outlineWidthParam,
+          int globalZIndexParam,
+          List<List<LatLng>> holesParam,
+          void Function(String polygonOverlayId) onTapParam}) =>
+      PolygonOverlay(polygonOverlayId, coordsParam ?? coordinates,
+          color: colorParam ?? color,
+          outlineColor: outlineColorParam ?? outlineColor,
+          outlineWidth: outlineWidthParam ?? outlineWidth,
+          globalZIndex: globalZIndexParam ?? globalZIndex,
+          holes: holesParam ?? holes,
+          onTap: onTapParam ?? onTap);
 
   /// 완전히 같은 속성값을 가진 [PolygonOverlay]객체를 생성합니다.
   PolygonOverlay clone() =>
@@ -110,7 +117,7 @@ class PolygonOverlay {
     addIfPresent('outlineColor', outlineColor?.value);
     addIfPresent('outlineWidth', outlineWidth);
     addIfPresent('globalZIndex', globalZIndex);
-    addIfPresent('holes', holes.map((e) => _serializeLatLngList(e)).toList());
+    addIfPresent('holes', holes?.map((e) => _serializeLatLngList(e))?.toList());
     return json;
   }
 
@@ -125,7 +132,8 @@ class PolygonOverlay {
         outlineColor == typedOther.outlineColor &&
         outlineWidth == typedOther.outlineWidth &&
         globalZIndex == typedOther.globalZIndex &&
-        listEquals(holes, typedOther.holes);
+        listEquals(holes, typedOther.holes) &&
+        onTap == typedOther.onTap;
   }
 
   @override
