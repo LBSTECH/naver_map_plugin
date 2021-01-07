@@ -119,3 +119,28 @@ class CameraUpdate {
     return CameraUpdate._(<dynamic>['fitBounds', bounds._toList(), padding]);
   }
 }
+
+/// ## 카메라의 변경 원인
+/// [NaverMap]의 onCameraChange 의 인자로 전달되는 값으로, 카메라가 움직이는 원인을 의미한다.
+/// 각각의 값은 다음과 같은 의미를 가진다.
+/// - [CameraChangeReason.developer]
+///     - 개발자가 API를 호출해 카메라가 움직였음을 나타낸다. (기본값)
+/// - [CameraChangeReason.gesture]
+///     - 사용자의 제스처로 인해 카메라가 움직였음을 나타낸다.
+/// - [CameraChangeReason.control]
+///     - 사용자의 버튼 선택으로 인해 카메라가 움직였음을 나타낸다.
+/// - [CameraChangeReason.location]
+///     - 위치 트래킹 기능으로 인해 카메라가 움직였음을 나타낸다.
+enum CameraChangeReason {
+  /// 개발자가 API를 호출해 카메라가 움직였음을 나타낸다. (기본값)
+  developer,
+
+  /// 사용자의 제스처로 인해 카메라가 움직였음을 나타낸다.
+  gesture,
+
+  /// 사용자의 버튼 선택으로 인해 카메라가 움직였음을 나타낸다.
+  control,
+
+  /// 위치 트래킹 기능으로 인해 카메라가 움직였음을 나타낸다.
+  location,
+}

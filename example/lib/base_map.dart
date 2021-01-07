@@ -200,8 +200,10 @@ class _BaseMapPageState extends State<BaseMapPage> {
     controller.setLocationTrackingMode(LocationTrackingMode.Follow);
   }
 
-  void _onCameraChange(LatLng latLng) {
-    print('카메라 움직임. (위치 : ${latLng.latitude}, ${latLng.longitude})');
+  void _onCameraChange(LatLng latLng,CameraChangeReason reason, bool isAnimated) {
+    print('카메라 움직임 >>> 위치 : ${latLng.latitude}, ${latLng.longitude}'
+        '\n원인: $reason'
+        '\n에니메이션 여부: $isAnimated');
   }
 
   void _onCameraIdle() {

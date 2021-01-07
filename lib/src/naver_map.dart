@@ -1,7 +1,7 @@
 part of naver_map_plugin;
 
-/// <h2> 네이버 지도 </h2>
-/// <p> </p>
+/// ### 네이버지도
+/// 네이버 지도는 네이버 SDK 를 flutter 에서 사용할 수 있게 하는 주요 widget 이다.
 class NaverMap extends StatefulWidget {
   const NaverMap({
     Key key,
@@ -45,8 +45,7 @@ class NaverMap extends StatefulWidget {
   /// 사용자가 선택한 지점의 [LatLng]을 파라미터로 가진다.
   final OnMapTap onMapTap;
 
-  /// 지도를 롱 탭했을때 호출되는 콜백함수. (Android only)
-  ///
+  /// ### 지도를 롱 탭했을때 호출되는 콜백함수. (Android only)
   ///
   /// 사용자가 선택한 지점의 [LatLng]을 파라미터로 가진다.
   final OnMapLongTap onMapLongTap;
@@ -375,8 +374,8 @@ class _NaverMapState extends State<NaverMap> {
     if (widget.onSymbolTap != null) widget.onSymbolTap(position, caption);
   }
 
-  void _cameraMove(LatLng position) {
-    if (widget.onCameraChange != null) widget.onCameraChange(position);
+  void _cameraMove(LatLng position, CameraChangeReason reason, bool isAnimated) {
+    if (widget.onCameraChange != null) widget.onCameraChange(position, reason, isAnimated);
   }
 
   void _cameraIdle() {
