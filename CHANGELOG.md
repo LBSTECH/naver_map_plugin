@@ -45,3 +45,13 @@ fix iOS camera onIdle delegate,
 ## 0.9.0
 - new feature added!! : ___polygon overlay___
 - use polygon overlay to display polygon
+
+## 0.9.1
+- ___Breaking Change!!___
+    - Changed onCameraChange()'s argument
+        - added ***CameraChangeReason*** and ***animated***
+    - ***CameraChangeReason*** is Enum. which means the reason of camera view changing
+        - CameraChangeReason.developer: moved by API(default)
+        - CameraChangeReason.gesture: moved by user's gesture
+        - CameraChangeReason.control: moved by button click event
+        - CameraChangeReason.location: moved by location tracking mode
