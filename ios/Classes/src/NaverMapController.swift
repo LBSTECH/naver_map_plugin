@@ -262,8 +262,24 @@ class NaverMapController: NSObject, FlutterPlatformView, NaverMapOptionSink, NMF
     
     // onCameraChange
     func mapView(_ mapView: NMFMapView, cameraDidChangeByReason reason: Int, animated: Bool) {
+        var r = 0;
+        switch reason {
+        case NMFMapChangedByGesture:
+            r = 1
+            break
+        case NMFMapChangedByControl:
+            r = 2
+            break
+        case NMFMapChangedByLocation:
+            r = 3
+            break;
+        default:
+            r = 0;
+        }
         self.channel?.invokeMethod("camera#move",
-                                        arguments: ["position" : latlngToJson(latlng: mapView.cameraPosition.target)])
+                                   arguments: ["position" : latlngToJson(latlng: mapView.cameraPosition.target),
+                                               "reason" : r,
+                                               "animated" : animated])
     }
     
     func mapViewCameraIdle(_ mapView: NMFMapView) {
