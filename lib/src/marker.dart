@@ -232,7 +232,7 @@ class Marker {
     addIfPresent('subCaptionColor', subCaptionColor?.value);
     addIfPresent('subCaptionHaloColor', subCaptionHaloColor?.value);
     addIfPresent('subCaptionRequestedWidth', subCaptionRequestedWidth);
-    addIfPresent('icon', icon?._toJson());
+    addIfPresent('icon', icon?.assetName);
     addIfPresent('infoWindow', infoWindow);
 
     return json;
