@@ -163,6 +163,13 @@ class Marker {
   /// 기본값은 DEFAULT_GLOBAL_Z_INDEX입니다
   final int globalZIndex;
 
+  /// ## 마커 아이콘의 앵커를 지정합니다.
+  /// 앵커로 지정된 지점이 정보창의 좌표에 위치합니다.
+  /// 값의 범위는 x, y 각각 0 ~ 1 이며, (0,0)일 경우 좌상단, (1,1)일 경우 우츨 하단을 의미합니다.
+  /// 기본값은 중앙 하단인 (0.5, 1)입니다.
+  /// > 앵커는 아이콘 이미지에서 기준이 되는 지점을 의미하는 값으로, 아이콘에서 앵커로 지정된 지점이 마커의 좌표에 위치하게 됩니다.
+  final AnchorPoint anchor;
+
   Marker(
       {@required this.markerId,
       @required this.position,
@@ -180,6 +187,7 @@ class Marker {
       this.maxZoom,
       this.minZoom,
       this.angle,
+      this.anchor,
       this.captionRequestedWidth,
       this.captionMaxZoom,
       this.captionMinZoom,
@@ -234,6 +242,7 @@ class Marker {
     addIfPresent('subCaptionRequestedWidth', subCaptionRequestedWidth);
     addIfPresent('icon', icon?.assetName);
     addIfPresent('infoWindow', infoWindow);
+    addIfPresent('anchor', anchor?._json);
 
     return json;
   }
@@ -263,6 +272,7 @@ class Marker {
         subCaptionText == typedOther.subCaptionText &&
         subCaptionTextSize == typedOther.subCaptionTextSize &&
         infoWindow == typedOther.infoWindow &&
+        anchor == typedOther.anchor &&
         onMarkerTab == typedOther.onMarkerTab;
   }
 
@@ -301,6 +311,7 @@ class Marker {
       zIndex: zIndex,
       icon: icon,
       infoWindow: infoWindow,
+      anchor: anchor
     );
   }
 
@@ -325,4 +336,24 @@ Map<String, Marker> _keyByMarkerId(Iterable<Marker> markers) {
   }
   return Map<String, Marker>.fromEntries(markers.map((Marker marker) =>
       MapEntry<String, Marker>(marker.markerId, marker.clone())));
+}
+
+
+/// ## [Marker]의 anchor 속성에 사용되는 클래스.
+/// ### 앵커는 아이콘 이미지에서 기준이 되는 지점을 의미하는 값으로, 아이콘에서 앵커로 지정된 지점이 마커의 좌표에 위치하게 됩니다.
+/// 앵커로 지정된 지점이 정보창의 좌표에 위치합니다.
+/// 값의 범위는 x, y 각각 0 ~ 1 이며, (0,0)일 경우 좌상단, (1,1)일 경우 우츨 하단을 의미합니다.
+/// 기본값은 중앙 하단인 (0.5, 1)입니다.
+class AnchorPoint {
+  final double x;
+  final double y;
+
+  /// ### AnchorPoint(x, y)
+  /// 첫번째 인자는 포인트의 x축 값,
+  /// 두번째 인자는 포인트의 y축 값을 의미한다.
+  AnchorPoint(this.x, this.y)
+      : assert(x >= 0 && x <= 1),
+        assert(y >= 0 && y <= 1);
+
+  List<double> get _json => [x, y];
 }

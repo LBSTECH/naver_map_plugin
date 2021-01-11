@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:math' show Point;
 
 import 'package:flutter/material.dart';
 import 'package:naver_map_plugin/naver_map_plugin.dart';
@@ -32,6 +33,7 @@ class _MarkerMapPageState extends State<MarkerMapPage> {
               captionTextSize: 20.0,
               alpha: 0.8,
               icon: image,
+              anchor: AnchorPoint(0, 0),
               width: 45,
               height: 45,
               infoWindow: '인포 윈도우',

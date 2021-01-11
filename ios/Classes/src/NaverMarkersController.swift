@@ -63,6 +63,9 @@ class NMarkerController: NSObject {
         if let angle = json["angle"] as? CGFloat {
             marker.angle = angle
         }
+        if let anchorList = json["anchor"] as? Array<Double> {
+            marker.anchor = CGPoint(x: anchorList[0], y: anchorList[1])
+        }
         if let captionRequestWidth = json["captionRequestedWidth"] as? CGFloat {
             marker.captionRequestedWidth = captionRequestWidth
         }

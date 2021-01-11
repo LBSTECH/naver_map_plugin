@@ -2,6 +2,7 @@ package map.naver.plugin.net.lbstech.naver_map_plugin;
 
 import android.annotation.SuppressLint;
 import android.graphics.Color;
+import android.graphics.PointF;
 
 import com.naver.maps.geometry.LatLng;
 import com.naver.maps.geometry.LatLngBounds;
@@ -59,6 +60,12 @@ class Convert {
     static LatLng toLatLng(Object o) {
         final List<Double> data = (List<Double>) o;
         return new LatLng(data.get(0), data.get(1));
+    }
+    
+    @SuppressWarnings("unchecked")
+    static PointF toPoint(Object o) {
+        final Double[] data = (Double[]) o;
+        return new PointF(toFloat(data[0]), toFloat(data[1]));
     }
 
     private static LatLngBounds toLatLngBounds(Object o) {

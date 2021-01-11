@@ -104,6 +104,9 @@ class NaverMarkerController {
             final Object flat = json.get("flat");
             if (flat != null) marker.setFlat((boolean) flat);
 
+            final Object anchor = json.get("anchor");
+            if (anchor != null) marker.setAnchor(Convert.toPoint(anchor));
+
             final Object captionText = json.get("captionText");
             if (captionText != null) marker.setCaptionText((String) captionText);
 
