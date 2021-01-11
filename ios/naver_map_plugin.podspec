@@ -15,7 +15,7 @@ flutter naver map plugin
   s.source           = { :path => '.' }
   s.source_files = 'Classes/**/*'
   s.dependency 'Flutter'
-  s.platform = :ios, '9.0'
+  s.platform = :ios, '13.0'
   s.dependency 'NMapsMap'
 
   # Flutter.framework does not contain a i386 slice. Only x86_64 simulators are supported.

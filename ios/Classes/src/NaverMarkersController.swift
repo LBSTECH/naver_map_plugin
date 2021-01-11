@@ -99,8 +99,8 @@ class NMarkerController: NSObject {
         if let subCaptionRequestedWidth = json["subCaptionRequestedWidth"] as? CGFloat {
             marker.subCaptionRequestedWidth = subCaptionRequestedWidth
         }
-        if let iconData = json["icon"] as? Array<Any>,
-           let overlayImage = toOverlayImage(data: iconData, registrar: registrar) {
+        if let assetName = json["icon"] as? String,
+           let overlayImage = toOverlayImage(assetName:assetName, registrar: registrar) {
             marker.iconImage = overlayImage
         }
         if let infoWindowText = json["infoWindow"] as? String {
