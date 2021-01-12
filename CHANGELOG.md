@@ -55,3 +55,6 @@ fix iOS camera onIdle delegate,
         - CameraChangeReason.gesture: moved by user's gesture
         - CameraChangeReason.control: moved by button click event
         - CameraChangeReason.location: moved by location tracking mode
+    - New Class ***AnchorPoint***
+        - use for Marker's anchor property.
+        - represent the point on which the icon is referenced.

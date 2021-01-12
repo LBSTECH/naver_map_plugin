@@ -24,14 +24,14 @@ class OverlayImage {
   static Future<OverlayImage> fromAssetImage({
     @required String assetName,
     @required BuildContext context,
-      }) async {
+  }) async {
     final _configuration = ImageConfiguration(
-          devicePixelRatio: MediaQuery.of(context).devicePixelRatio,
-          locale: context == null ? null : Localizations.localeOf(context),
-          textDirection: context == null ? null : Directionality.of(context),
-          platform: Platform.isIOS ? TargetPlatform.iOS : TargetPlatform.android,
-          bundle: PlatformAssetBundle(),
-        );
+      devicePixelRatio: MediaQuery.of(context).devicePixelRatio,
+      locale: context == null ? null : Localizations.localeOf(context),
+      textDirection: context == null ? null : Directionality.of(context),
+      platform: Platform.isIOS ? TargetPlatform.iOS : TargetPlatform.android,
+      bundle: PlatformAssetBundle(),
+    );
     final AssetImage assetImage = AssetImage(assetName);
     final AssetBundleImageKey key = await assetImage.obtainKey(_configuration);
 
