@@ -99,7 +99,6 @@ class _PolygonMapState extends State<PolygonMap>
               ),
             ),
           ),
-
           _toFullScreen(),
         ],
       ),
@@ -110,7 +109,7 @@ class _PolygonMapState extends State<PolygonMap>
   _toFullScreen() {
     if (_polygon.isEmpty) {
       return SizedBox();
-    }else {
+    } else {
       final current = _polygon.last;
       return Align(
         alignment: Alignment.bottomLeft,
@@ -119,19 +118,18 @@ class _PolygonMapState extends State<PolygonMap>
           child: GestureDetector(
             onTap: () => _onTapFullScreen(current),
             child: Container(
-              width: 60, height: 60,
+              width: 60,
+              height: 60,
               margin: EdgeInsets.only(left: 16),
               decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(30),
-                color: Theme.of(context).primaryColor,
-                boxShadow: [
-                  BoxShadow(
-                    offset: Offset(5, 5),
-                    blurRadius: 5,
-                    color: Colors.black26
-                  )
-                ]
-              ),
+                  borderRadius: BorderRadius.circular(30),
+                  color: Theme.of(context).primaryColor,
+                  boxShadow: [
+                    BoxShadow(
+                        offset: Offset(5, 5),
+                        blurRadius: 5,
+                        color: Colors.black26)
+                  ]),
               child: Center(
                 child: Icon(
                   Icons.fullscreen,
@@ -201,7 +199,7 @@ class _PolygonMapState extends State<PolygonMap>
   }
 
   /// 마지막 폴리곤으로 화면 맞춤
-  _onTapFullScreen(PolygonOverlay current) async{
+  _onTapFullScreen(PolygonOverlay current) async {
     final coordinates = current.coordinates;
     final controller = await _controller.future;
     controller.moveCamera(
@@ -211,5 +209,4 @@ class _PolygonMapState extends State<PolygonMap>
       ),
     );
   }
-
 }
