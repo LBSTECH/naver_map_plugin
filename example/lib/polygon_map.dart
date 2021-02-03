@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:naver_map_plugin/naver_map_plugin.dart';
@@ -100,9 +99,50 @@ class _PolygonMapState extends State<PolygonMap>
               ),
             ),
           ),
+
+          _toFullScreen(),
         ],
       ),
     );
+  }
+
+  // 마지막 폴리곤으로 영역잡는 버튼
+  _toFullScreen() {
+    if (_polygon.isEmpty) {
+      return SizedBox();
+    }else {
+      final current = _polygon.last;
+      return Align(
+        alignment: Alignment.bottomLeft,
+        child: SafeArea(
+          top: false,
+          child: GestureDetector(
+            onTap: () => _onTapFullScreen(current),
+            child: Container(
+              width: 60, height: 60,
+              margin: EdgeInsets.only(left: 16),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(30),
+                color: Theme.of(context).primaryColor,
+                boxShadow: [
+                  BoxShadow(
+                    offset: Offset(5, 5),
+                    blurRadius: 5,
+                    color: Colors.black26
+                  )
+                ]
+              ),
+              child: Center(
+                child: Icon(
+                  Icons.fullscreen,
+                  color: Colors.white,
+                ),
+              ),
+            ),
+          ),
+        ),
+      );
+    }
   }
 
   _fab() {
@@ -159,4 +199,17 @@ class _PolygonMapState extends State<PolygonMap>
   void _onPolygonTap(String polygonOverlayId) {
     print('$polygonOverlayId tapped!!');
   }
+
+  /// 마지막 폴리곤으로 화면 맞춤
+  _onTapFullScreen(PolygonOverlay current) async{
+    final coordinates = current.coordinates;
+    final controller = await _controller.future;
+    controller.moveCamera(
+      CameraUpdate.fitBounds(
+        LatLngBounds.fromLatLngList(coordinates),
+        padding: 16,
+      ),
+    );
+  }
+
 }

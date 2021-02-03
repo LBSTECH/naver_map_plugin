@@ -55,3 +55,8 @@ fix iOS camera onIdle delegate,
         - CameraChangeReason.gesture: moved by user's gesture
         - CameraChangeReason.control: moved by button click event
         - CameraChangeReason.location: moved by location tracking mode
+        
+## 0.9.2
+- changed iOS target version to 9.0
+- issue about how to display openGL (Android)
+    - see [README.md](https://github.com/LBSTECH/naver_map_plugin/blob/master/README.md)
