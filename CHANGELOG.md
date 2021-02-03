@@ -62,4 +62,5 @@ fix iOS camera onIdle delegate,
 ## 0.9.2
 - changed iOS target version to 9.0
 - issue about how to display openGL (Android)
+    - disappear ```isDevMode``` property of ```NaverMap``` 
     - see [README.md](https://github.com/LBSTECH/naver_map_plugin/blob/master/README.md)
