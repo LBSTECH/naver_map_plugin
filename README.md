@@ -24,14 +24,14 @@ dependencies:
  - android는 현 위치 버튼만 정상 작동
   
 ### NOTICE (Android) 
-- KR
+- 한국어
     - 네이버에서 제공하는 SDK의 경우 안드로이드에서 지도를 표시하기 위해 기본값으로 GLSurfaceView를 사용한다.
-    hot reload시에 GLSurfaceView는 flutter의 최초 생성된 VirtualView를 갱신하는 과정에서 app crash가 발생한다. 
+    hot reload시에 naver map SDK의 binary에서 정확하지 않은 이유로 app crash가 발생한다. 
     reload하지 않는 release version 에서는 성능이 더 좋은 GLSurfaceView를 사용하고, 아닌 경우 hot reload가 가능한 
     TextureView를 사용한다. 
-- EN
+- English
     - NaverMap SDK use GLSurfaceView as default to flush map view in Android. 
-    At hot reload, flutter engine experiences app crash while updating the existing VirtualView.
+    At hot reload, App crash occurs in binary file of naver map SDK caused by unclear reason.
     if you build released version, this plug-in use GLSurfaceView for better performance, 
     otherwise TextureView is used to make hot-reload available.
 

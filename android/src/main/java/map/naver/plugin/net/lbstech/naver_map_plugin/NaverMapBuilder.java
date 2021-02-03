@@ -41,6 +41,8 @@ public class NaverMapBuilder implements NaverMapOptionSink {
             BinaryMessenger binaryMessenger,
             Activity activity){
 
+
+
         final NaverMapController controller = new NaverMapController(
                 id,
                 context,
@@ -204,9 +206,9 @@ public class NaverMapBuilder implements NaverMapOptionSink {
         options.camera(Convert.toCameraPosition(cameraPosition));
     }
 
-    void setDevMode(boolean isDevMode) {
-        if (isDevMode) options.useTextureView(true);
-        else options.useTextureView(false);
+    void setViewType(boolean isReleaseMode) {
+        if (isReleaseMode) options.useTextureView(false);
+        else options.useTextureView(true);
     }
 
     void setInitialMarkers(List initialMarkers) {

@@ -27,7 +27,6 @@ class NaverMap extends StatefulWidget {
     this.scrollGestureEnable = true,
     this.tiltGestureEnable = true,
     this.zoomGestureEnable = true,
-    this.isDevMode = true,
     this.locationButtonEnable = false,
     this.initLocationTrackingMode = LocationTrackingMode.NoFollow,
     this.markers = const [],
@@ -151,17 +150,6 @@ class NaverMap extends StatefulWidget {
   /// 이 속성을 이용해서 지도의 확대를 불가능하게 할 수 있다.
   /// 기본값은 true이다.
   final bool zoomGestureEnable;
-
-  ///  <hr/>
-  ///  <h2>주의!! android platform</h2>
-  ///  <h3>이 값이 true인 경우에는 Naver Map 이 TextureView에서 작동하고,
-  ///  false 인 경우 Naver Map 이 GLSurfaceView 위에서 작동한다.</h3>
-  ///  <hr/>
-  /// <p>GLSurfaceView 가 물론 성능이 월등하지만 리로드시에 앱이 다운되는 문제가
-  /// 발생하므로 기본값으로 true 를 가지고 리로드에도 문제가 발생하지 않는다.</p>
-  /// 앱을 출시할때에는 값을 false 로 변경하기를 권장한다. 이 값 또한 setState()로
-  /// 변경해도 처라되지 않는다.
-  final bool isDevMode;
 
   /// <h2> Naver Map에서 기본적으로 제공하는 현위치 버튼을 활성화시킨다.</h2>
   /// <br/>
@@ -399,7 +387,6 @@ class _NaverMapOptions {
     this.tiltGestureEnable,
     this.scrollGestureEnable,
     this.rotationGestureEnable,
-    this.isDevMode,
     this.initLocationTrackingMode,
     this.locationButtonEnable,
   });
@@ -418,7 +405,6 @@ class _NaverMapOptions {
       scrollGestureEnable: map.scrollGestureEnable,
       tiltGestureEnable: map.tiltGestureEnable,
       zoomGestureEnable: map.zoomGestureEnable,
-      isDevMode: map.isDevMode,
       initLocationTrackingMode: map.initLocationTrackingMode,
       locationButtonEnable: map.locationButtonEnable,
     );
@@ -436,7 +422,6 @@ class _NaverMapOptions {
   final bool scrollGestureEnable;
   final bool tiltGestureEnable;
   final bool zoomGestureEnable;
-  final bool isDevMode;
   final LocationTrackingMode initLocationTrackingMode;
   final bool locationButtonEnable;
 
@@ -464,7 +449,8 @@ class _NaverMapOptions {
     addIfNonNull('zoomGestureEnable', zoomGestureEnable);
     addIfNonNull('rotationGestureEnable', rotationGestureEnable);
     addIfNonNull('tiltGestureEnable', tiltGestureEnable);
-    addIfNonNull('isDevMode', isDevMode);
+    // 릴리즈 모드인지 확인해서 전달
+    addIfNonNull('isReleaseMode', !kReleaseMode);
     addIfNonNull('locationTrackingMode', initLocationTrackingMode?.index);
     addIfNonNull('locationButtonEnable', locationButtonEnable);
     return optionsMap;
