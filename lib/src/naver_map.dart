@@ -374,8 +374,10 @@ class _NaverMapState extends State<NaverMap> {
     if (widget.onSymbolTap != null) widget.onSymbolTap(position, caption);
   }
 
-  void _cameraMove(LatLng position, CameraChangeReason reason, bool isAnimated) {
-    if (widget.onCameraChange != null) widget.onCameraChange(position, reason, isAnimated);
+  void _cameraMove(
+      LatLng position, CameraChangeReason reason, bool isAnimated) {
+    if (widget.onCameraChange != null)
+      widget.onCameraChange(position, reason, isAnimated);
   }
 
   void _cameraIdle() {

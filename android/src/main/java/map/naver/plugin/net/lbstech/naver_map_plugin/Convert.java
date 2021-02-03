@@ -64,8 +64,8 @@ class Convert {
     
     @SuppressWarnings("unchecked")
     static PointF toPoint(Object o) {
-        final Double[] data = (Double[]) o;
-        return new PointF(toFloat(data[0]), toFloat(data[1]));
+        final List data = (List) o;
+        return new PointF(toFloat(data.get(0)), toFloat(data.get(1)));
     }
 
     private static LatLngBounds toLatLngBounds(Object o) {

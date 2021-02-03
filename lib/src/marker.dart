@@ -282,37 +282,36 @@ class Marker {
   /// 같은 값을 가진 새로운 Maker 객체를 반환한다.
   Marker clone() {
     return Marker(
-      position: position,
-      markerId: markerId,
-      width: width,
-      height: height,
-      alpha: alpha,
-      angle: angle,
-      captionColor: captionColor,
-      captionHaloColor: captionHaloColor,
-      captionMaxZoom: captionMaxZoom,
-      captionMinZoom: captionMinZoom,
-      captionOffset: captionOffset,
-      captionPerspectiveEnabled: captionPerspectiveEnabled,
-      captionRequestedWidth: captionRequestedWidth,
-      captionText: captionText,
-      captionTextSize: captionTextSize,
-      flat: flat,
-      globalZIndex: globalZIndex,
-      iconTintColor: iconTintColor,
-      maxZoom: maxZoom,
-      minZoom: minZoom,
-      onMarkerTab: onMarkerTab,
-      subCaptionColor: subCaptionColor,
-      subCaptionHaloColor: subCaptionHaloColor,
-      subCaptionRequestedWidth: subCaptionRequestedWidth,
-      subCaptionText: subCaptionText,
-      subCaptionTextSize: subCaptionTextSize,
-      zIndex: zIndex,
-      icon: icon,
-      infoWindow: infoWindow,
-      anchor: anchor
-    );
+        position: position,
+        markerId: markerId,
+        width: width,
+        height: height,
+        alpha: alpha,
+        angle: angle,
+        captionColor: captionColor,
+        captionHaloColor: captionHaloColor,
+        captionMaxZoom: captionMaxZoom,
+        captionMinZoom: captionMinZoom,
+        captionOffset: captionOffset,
+        captionPerspectiveEnabled: captionPerspectiveEnabled,
+        captionRequestedWidth: captionRequestedWidth,
+        captionText: captionText,
+        captionTextSize: captionTextSize,
+        flat: flat,
+        globalZIndex: globalZIndex,
+        iconTintColor: iconTintColor,
+        maxZoom: maxZoom,
+        minZoom: minZoom,
+        onMarkerTab: onMarkerTab,
+        subCaptionColor: subCaptionColor,
+        subCaptionHaloColor: subCaptionHaloColor,
+        subCaptionRequestedWidth: subCaptionRequestedWidth,
+        subCaptionText: subCaptionText,
+        subCaptionTextSize: subCaptionTextSize,
+        zIndex: zIndex,
+        icon: icon,
+        infoWindow: infoWindow,
+        anchor: anchor);
   }
 
   @override
@@ -337,7 +336,6 @@ Map<String, Marker> _keyByMarkerId(Iterable<Marker> markers) {
   return Map<String, Marker>.fromEntries(markers.map((Marker marker) =>
       MapEntry<String, Marker>(marker.markerId, marker.clone())));
 }
-
 
 /// ## [Marker]의 anchor 속성에 사용되는 클래스.
 /// ### 앵커는 아이콘 이미지에서 기준이 되는 지점을 의미하는 값으로, 아이콘에서 앵커로 지정된 지점이 마커의 좌표에 위치하게 됩니다.
