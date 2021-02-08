@@ -450,7 +450,7 @@ class _NaverMapOptions {
     addIfNonNull('rotationGestureEnable', rotationGestureEnable);
     addIfNonNull('tiltGestureEnable', tiltGestureEnable);
     // 릴리즈 모드인지 확인해서 전달
-    addIfNonNull('isReleaseMode', !kReleaseMode);
+    addIfNonNull('isReleaseMode', kReleaseMode);
     addIfNonNull('locationTrackingMode', initLocationTrackingMode?.index);
     addIfNonNull('locationButtonEnable', locationButtonEnable);
     return optionsMap;

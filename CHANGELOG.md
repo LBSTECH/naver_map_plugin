@@ -64,3 +64,6 @@ fix iOS camera onIdle delegate,
 - issue about how to display openGL (Android)
     - disappear ```isDevMode``` property of ```NaverMap``` 
     - see [README.md](https://github.com/LBSTECH/naver_map_plugin/blob/master/README.md)
+    
+## 0.9.3
+- fix isDebugMode.
