@@ -22,6 +22,7 @@ class _PaddingTestState extends State<PaddingTest> {
             onMapCreated: _onMapCreated,
             initLocationTrackingMode: LocationTrackingMode.Follow,
             locationButtonEnable: true,
+            contentPadding: EdgeInsets.only(left: 150),
           ),
           Align(
             alignment: Alignment.bottomCenter,

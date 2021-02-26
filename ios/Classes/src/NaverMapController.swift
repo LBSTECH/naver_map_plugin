@@ -18,6 +18,7 @@ protocol NaverMapOptionSink {
     func setSymbolScale(_ symbolScale: CGFloat)
     func setSymbolPerspectiveRatio(_ symbolPerspectiveRatio: CGFloat)
     func setActiveLayers(_ activeLayers: Array<Any>)
+    func setContentPadding(_ paddingData: Array<CGFloat>)
     
     func setRotationGestureEnable(_ rotationGestureEnable: Bool)
     func setScrollGestureEnable(_ scrollGestureEnable: Bool)
@@ -29,6 +30,7 @@ protocol NaverMapOptionSink {
 
 
 class NaverMapController: NSObject, FlutterPlatformView, NaverMapOptionSink, NMFMapViewTouchDelegate, NMFMapViewCameraDelegate, NMFAuthManagerDelegate {
+    
     var mapView : NMFMapView
     var naverMap : NMFNaverMapView
     let viewId : Int64
@@ -330,6 +332,9 @@ class NaverMapController: NSObject, FlutterPlatformView, NaverMapOptionSink, NMF
         if let locationButtonEnable = option["locationButtonEnable"] as? Bool{
            sink.setLocationButtonEnable(locationButtonEnable)
         }
+        if let paddingData = option["contentPadding"] as? Array<CGFloat> {
+            sink.setContentPadding(paddingData)
+        }
     }
     
     // Naver touch Delegate method
@@ -449,6 +454,10 @@ class NaverMapController: NSObject, FlutterPlatformView, NaverMapOptionSink, NMF
     
     func setLocationTrackingMode(_ locationTrackingMode: UInt) {
         mapView.positionMode = NMFMyPositionMode(rawValue: locationTrackingMode)!
+    }
+    
+    func setContentPadding(_ paddingData: Array<CGFloat>) {
+        mapView.contentInset = UIEdgeInsets(top: paddingData[1], left: paddingData[0], bottom: paddingData[3], right: paddingData[2])
     }
     
     func setLocationButtonEnable(_ locationButtonEnable: Bool) {
