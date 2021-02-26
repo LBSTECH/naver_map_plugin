@@ -16,7 +16,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import io.flutter.Log;
 import io.flutter.view.FlutterMain;
 
 @SuppressWarnings("rawtypes")
@@ -54,6 +53,8 @@ class Convert {
             sink.setLocationButtonEnable((Boolean) options.get("locationButtonEnable"));
         if(options.containsKey("locationTrackingMode"))
             sink.setLocationTrackingMode((Integer) options.get("locationTrackingMode"));
+        if(options.containsKey("contentPadding"))
+            sink.setContentPadding(toDoubleList(options.get("contentPadding")));
     }
 
     @SuppressWarnings("unchecked")
@@ -61,11 +62,21 @@ class Convert {
         final List<Double> data = (List<Double>) o;
         return new LatLng(data.get(0), data.get(1));
     }
-    
-    @SuppressWarnings("unchecked")
+
     static PointF toPoint(Object o) {
         final List data = (List) o;
         return new PointF(toFloat(data.get(0)), toFloat(data.get(1)));
+    }
+
+    static List<Double> toDoubleList(Object o) {
+        final List data = (List) o;
+        ArrayList<Double> result = new ArrayList<>();
+        for(Object element : data) {
+            if (element instanceof Double) {
+                result.add((Double) element);
+            }
+        }
+        return result;
     }
 
     private static LatLngBounds toLatLngBounds(Object o) {

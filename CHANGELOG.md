@@ -67,3 +67,10 @@ fix iOS camera onIdle delegate,
     
 ## 0.9.3
 - fix isDebugMode.
+
+## 0.9.4
+- change maven repository url. (android)
+- new property of naver map: content padding
+    - at the previous version, you have to use ```NaverMapController``` to set content Padding.
+- allow attributes of overlays(marker, path, polygon, circle) be changed dynamically.
+    -  thanks to [#22](https://github.com/LBSTECH/naver_map_plugin/issues/22#issue-813219541)

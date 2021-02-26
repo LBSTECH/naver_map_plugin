@@ -23,25 +23,25 @@ class PolygonOverlay {
   ///  - android 에서는 [LatLng]의 순서에 때라 선이 그려진다.
   ///  - iOS 에서는 좌표의 순서가 시계 방향이 아닌 경우, 선이 제대로 그려지지 않거나, 이벤트를 못받는 경우가 있다.
   ///     - 따라서 외곽선을 이루는 [coordinates]는 가능한 시계방향 순으로 입력해야 한다.
-  final List<LatLng> coordinates;
+  List<LatLng> coordinates;
 
   /// ### [polygonOverlay]의 면 색상
   /// 아무 값도 없는 경우 기본 색상은 [Colors.white]이다.
-  final Color color;
+  Color color;
 
   /// ### [polygonOverlay]의 외곽선 색상
   /// 테두리의 색상을 지정합니다.
   /// 기본 색상은 [Colors.black]입니다.
-  final Color outlineColor;
+  Color outlineColor;
 
   /// ### [polygonOverlay]의 외곽선 두깨
   /// 테두리의 두께를 지정합니다. 0일 경우 테두리가 그려지지 않습니다.
   ///
   /// 단위는 dp 이며, 기본값은 0입니다.
-  final int outlineWidth;
+  int outlineWidth;
 
   /// ### [polygonOverlay]의 전역 z index
-  final int globalZIndex;
+  int globalZIndex;
 
   /// ### [polygonOverlay]의 내부 구멍
   /// 각각의 구멍에 대한 좌표열들로 구성된 배열이다.
@@ -52,11 +52,11 @@ class PolygonOverlay {
   ///  - iOS 에서는 좌표의 순서가 반 시계 방향이 아닌 경우, 선이 제대로 그려지지 않거나, 이벤트를 못받는 경우가 있다.
   ///     - 따라서 외곽선을 이루는 [coordinates]는 가능한 반시계방향 순으로 입력해야 한다.
   ///     - [coordinates]의 반대 방향으로!
-  final List<List<LatLng>> holes;
+  List<List<LatLng>> holes;
 
   /// ### 다각형 오버레이에 대한 탭 이벤트
   /// 각 [PolygonOverlay]의 아이디를 파라미터로 전달 한다.
-  final void Function(String polygonOverlayId) onTap;
+  void Function(String polygonOverlayId) onTap;
 
   /// ### 폴리곤 오버레이 생성
   /// 기본적으로 [polygonOverlayId]와 [coordinates]는 필수적으로 필요하며,

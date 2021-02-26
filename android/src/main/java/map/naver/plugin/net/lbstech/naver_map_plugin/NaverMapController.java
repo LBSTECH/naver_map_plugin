@@ -19,7 +19,6 @@ import com.naver.maps.map.MapView;
 import com.naver.maps.map.NaverMap;
 import com.naver.maps.map.NaverMapOptions;
 import com.naver.maps.map.OnMapReadyCallback;
-import com.naver.maps.map.overlay.LocationOverlay;
 import com.naver.maps.map.util.FusedLocationSource;
 
 import java.io.File;
@@ -335,11 +334,7 @@ public class NaverMapController implements
                     float right = Convert.toFloat(methodCall.argument("right"));
                     float top = Convert.toFloat(methodCall.argument("top"));
                     float bottom = Convert.toFloat(methodCall.argument("bottom"));
-                    naverMap.setContentPadding(
-                            Math.round(left*density),
-                            Math.round(top*density),
-                            Math.round(right*density),
-                            Math.round(bottom*density));
+                    setContentPadding(left, top, right, bottom);
                     result.success(null);
                 }
                 break;
@@ -575,6 +570,25 @@ public class NaverMapController implements
     @Override
     public void setLocationButtonEnable(boolean locationButtonEnable) {
         naverMap.getUiSettings().setLocationButtonEnabled(locationButtonEnable);
+    }
+
+    @Override
+    public void setContentPadding(List<Double> paddingData) {
+        if (naverMap == null || paddingData.size() < 4) return;
+        int left = Math.round(Convert.toFloat(paddingData.get(0)) * density);
+        int top = Math.round(Convert.toFloat(paddingData.get(1)) * density);
+        int right = Math.round(Convert.toFloat(paddingData.get(2)) * density);
+        int bottom = Math.round(Convert.toFloat(paddingData.get(3)) * density);
+        naverMap.setContentPadding(left, top, right, bottom);
+    }
+
+    public void setContentPadding(float leftDp, float topDp, float rightDp, float bottomDp) {
+        if (naverMap == null) return;
+        int left = Math.round(leftDp * density);
+        int top = Math.round(topDp * density);
+        int right = Math.round(rightDp * density);
+        int bottom = Math.round(bottomDp * density);
+        naverMap.setContentPadding(left, top, right, bottom);
     }
 
     @Override

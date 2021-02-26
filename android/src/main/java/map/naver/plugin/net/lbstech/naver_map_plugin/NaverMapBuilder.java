@@ -2,6 +2,7 @@ package map.naver.plugin.net.lbstech.naver_map_plugin;
 
 import android.app.Activity;
 import android.content.Context;
+import android.renderscript.Double3;
 
 import com.naver.maps.map.NaverMap;
 import com.naver.maps.map.NaverMapOptions;
@@ -28,6 +29,7 @@ import io.flutter.plugin.common.BinaryMessenger;
 public class NaverMapBuilder implements NaverMapOptionSink {
     private final NaverMapOptions options = new NaverMapOptions();
     private int locationTrackingMode;
+    private List<Double> paddingData;
 
     private List initialMarkers;
     private List initialPaths;
@@ -40,8 +42,6 @@ public class NaverMapBuilder implements NaverMapOptionSink {
             AtomicInteger state,
             BinaryMessenger binaryMessenger,
             Activity activity){
-
-
 
         final NaverMapController controller = new NaverMapController(
                 id,
@@ -56,6 +56,7 @@ public class NaverMapBuilder implements NaverMapOptionSink {
                 initialPolygon);
         controller.init();
         controller.setLocationTrackingMode(locationTrackingMode);
+        controller.setContentPadding(paddingData);
         return controller;
     }
 
@@ -200,6 +201,11 @@ public class NaverMapBuilder implements NaverMapOptionSink {
     @Override
     public void setLocationTrackingMode(int locationTrackingMode) {
         this.locationTrackingMode = locationTrackingMode;
+    }
+
+    @Override
+    public void setContentPadding(List<Double> paddingData) {
+        this.paddingData = paddingData;
     }
 
     void setInitialCameraPosition(Map<String, Object> cameraPosition){

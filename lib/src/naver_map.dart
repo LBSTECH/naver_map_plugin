@@ -29,6 +29,7 @@ class NaverMap extends StatefulWidget {
     this.zoomGestureEnable = true,
     this.locationButtonEnable = false,
     this.initLocationTrackingMode = LocationTrackingMode.NoFollow,
+    this.contentPadding,
     this.markers = const [],
     this.circles = const [],
     this.polygons = const [],
@@ -182,6 +183,11 @@ class NaverMap extends StatefulWidget {
   /// <h2>심볼 탭 이벤트</h2>
   /// <p>빌딩을 나타내는 심볼이나, 공공시설을 표시하는 심볼등을 선택했을 경우 호출된다.</p>
   final OnSymbolTap onSymbolTap;
+
+  /// ## 콘텐트 패딩
+  /// Stack 구조의 화면에서 지도 상에 UI요소가 지도의 일부를 덮을 경우, 카메라는 지도
+  /// 뷰의 중심에 위치하므로 실제 보이는 지도의 중심과 카메라의 위치가 불일치하게 됩니다.
+  final EdgeInsets contentPadding;
 
   @override
   _NaverMapState createState() => _NaverMapState();
@@ -389,6 +395,7 @@ class _NaverMapOptions {
     this.rotationGestureEnable,
     this.initLocationTrackingMode,
     this.locationButtonEnable,
+    this.contentPadding,
   });
 
   static _NaverMapOptions fromWidget(NaverMap map) {
@@ -407,6 +414,7 @@ class _NaverMapOptions {
       zoomGestureEnable: map.zoomGestureEnable,
       initLocationTrackingMode: map.initLocationTrackingMode,
       locationButtonEnable: map.locationButtonEnable,
+      contentPadding: map.contentPadding,
     );
   }
 
@@ -424,6 +432,7 @@ class _NaverMapOptions {
   final bool zoomGestureEnable;
   final LocationTrackingMode initLocationTrackingMode;
   final bool locationButtonEnable;
+  final EdgeInsets contentPadding;
 
   Map<String, dynamic> toMap() {
     final Map<String, dynamic> optionsMap = <String, dynamic>{};
@@ -449,10 +458,20 @@ class _NaverMapOptions {
     addIfNonNull('zoomGestureEnable', zoomGestureEnable);
     addIfNonNull('rotationGestureEnable', rotationGestureEnable);
     addIfNonNull('tiltGestureEnable', tiltGestureEnable);
-    // 릴리즈 모드인지 확인해서 전달
-    addIfNonNull('isReleaseMode', kReleaseMode);
     addIfNonNull('locationTrackingMode', initLocationTrackingMode?.index);
     addIfNonNull('locationButtonEnable', locationButtonEnable);
+    addIfNonNull(
+        'contentPadding',
+        contentPadding != null
+            ? [
+                contentPadding.left,
+                contentPadding.top,
+                contentPadding.right,
+                contentPadding.bottom,
+              ]
+            : null);
+    // 릴리즈 모드인지 확인해서 전달 안드로이드에만 전달
+    addIfNonNull('isReleaseMode', kReleaseMode);
     return optionsMap;
   }
 
