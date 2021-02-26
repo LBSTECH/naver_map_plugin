@@ -64,6 +64,7 @@ public class NaverMapController implements
     private boolean disposed = false;
     private MethodChannel.Result mapReadyResult;
     private int locationTrackingMode;
+    private List<Double> paddingData;
 
     private final Float density;
 
@@ -125,8 +126,10 @@ public class NaverMapController implements
         naverMap.addOnCameraChangeListener(listeners);
         naverMap.addOnCameraIdleListener(listeners);
         naverMap.setLocationSource(new FusedLocationSource(activity, 0xAAFF));
-        setLocationTrackingMode(locationTrackingMode);
 
+        /// 초기 설정값 빈영
+        setLocationTrackingMode(locationTrackingMode);
+        setContentPadding(paddingData);
 
         // 맵 완전히 만들어진 이후에 오버레이 추가.
         // - 패스
@@ -574,7 +577,11 @@ public class NaverMapController implements
 
     @Override
     public void setContentPadding(List<Double> paddingData) {
-        if (naverMap == null || paddingData.size() < 4) return;
+        if (paddingData == null || paddingData.size() < 4) return;
+        if (naverMap == null) {
+            this.paddingData = paddingData;
+            return;
+        }
         int left = Math.round(Convert.toFloat(paddingData.get(0)) * density);
         int top = Math.round(Convert.toFloat(paddingData.get(1)) * density);
         int right = Math.round(Convert.toFloat(paddingData.get(2)) * density);
