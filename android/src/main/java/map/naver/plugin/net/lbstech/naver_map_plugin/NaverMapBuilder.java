@@ -212,9 +212,8 @@ public class NaverMapBuilder implements NaverMapOptionSink {
         options.camera(Convert.toCameraPosition(cameraPosition));
     }
 
-    void setViewType(boolean isReleaseMode) {
-        if (isReleaseMode) options.useTextureView(false);
-        else options.useTextureView(true);
+    void setViewType(boolean useSurface) {
+        options.useTextureView(!useSurface);
     }
 
     void setInitialMarkers(List initialMarkers) {

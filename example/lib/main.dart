@@ -6,6 +6,7 @@ import 'package:naver_map_plugin_example/padding_test.dart';
 import 'package:naver_map_plugin_example/marker_map_page.dart';
 import 'package:naver_map_plugin_example/path_map.dart';
 import 'package:naver_map_plugin_example/polygon_map.dart';
+import 'package:naver_map_plugin_example/text_field_page.dart';
 
 void main() {
   runApp(MyApp());
@@ -38,6 +39,7 @@ class _MainPageState extends State<MainPage> {
     '원형 오버레이 예제',
     '컨트롤러 테스트',
     '폴리곤 예제',
+    'GLSurface Thread collision test',
   ];
 
   @override
@@ -120,6 +122,12 @@ class _MainPageState extends State<MainPage> {
               builder: (_) => PolygonMap(),
             ));
         break;
+      case 6:
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (_) => TextFieldPage(),
+          ));
     }
   }
 }
