@@ -40,9 +40,9 @@ public class NaverMapFactory extends PlatformViewFactory {
         }
         if (params.containsKey("options")) {
             Map<String, Object> options = (Map<String, Object>) params.get("options");
-            if (options.containsKey("isReleaseMode")) {
-                boolean isDevMode = (boolean) options.get("isReleaseMode");
-                builder.setViewType(isDevMode);
+            if (options.containsKey("useSurface")) {
+                boolean useSurface = (boolean) options.get("useSurface");
+                builder.setViewType(useSurface);
             }
             Convert.carveMapOptions(builder, options);
         }

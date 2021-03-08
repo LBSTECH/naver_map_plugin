@@ -28,6 +28,7 @@ class NaverMap extends StatefulWidget {
     this.tiltGestureEnable = true,
     this.zoomGestureEnable = true,
     this.locationButtonEnable = false,
+    this.useSurface = false,
     this.initLocationTrackingMode = LocationTrackingMode.NoFollow,
     this.contentPadding,
     this.markers = const [],
@@ -189,6 +190,33 @@ class NaverMap extends StatefulWidget {
   /// 뷰의 중심에 위치하므로 실제 보이는 지도의 중심과 카메라의 위치가 불일치하게 됩니다.
   final EdgeInsets contentPadding;
 
+  /// ## 안드로이드에서 GLSurfaceView 사용 여부
+  /// 값이 true인 경우, 안드로이드에서 naver map을 [GLSurfaceView]를 사용해서 렌더링하고,
+  /// 반대인 경우 [TextureView]를 사용해서 렌더링한다.
+  /// [GLSurfaceView]를 사용할 경우 지도의 속도는 원활해지나, android 기기에서 hot reload시,
+  /// naver map SDK 내부 binary 에서 발생하는 에러로 app crash 가 발생한다.
+  ///
+  /// > 또한 [GLSurfaceView]를 사용하여 지도가 렌더링 되는 동안, [TextField]에 포커스가
+  /// 이동하면 app crash가 발생한다. Flutter Engine에서 [TextField]의 변화를 업데이트할 때,
+  /// [GLThread]를 사용하는데, 이 과정에서 [DeadObjectException]이 발생한다.
+  ///
+  /// 만약 [GLSurfaceView]를 사용하는 [NaverMap]가 생성된 상태에서 [TextField]를 사용하지
+  /// 않는다면 다음과 같이 사용하면 release mode로 build된 app에서 더 좋은 성능을 기대할 수 있다.
+  ///
+  /// ```dart
+  /// import 'package:flutter/foundation.dart';
+  ///
+  /// @override
+  /// Widget build(BuildContext context) {
+  ///   return NaverMap(
+  ///     useSurface: kReleaseMode,
+  ///   );
+  /// }
+  /// ```
+  ///
+  /// - 기본값은 false 이다.
+  final bool useSurface;
+
   @override
   _NaverMapState createState() => _NaverMapState();
 }
@@ -244,6 +272,27 @@ class _NaverMapState extends State<NaverMap> {
         creationParamsCodec: const StandardMessageCodec(),
       );
       return view;
+
+      /// todo: waiting for most people use flutter version higher than 1.22.2
+      // return PlatformViewLink(
+      //   viewType: VIEW_TYPE,
+      //   surfaceFactory: (context, controller) => AndroidViewSurface(
+      //     controller: controller,
+      //     hitTestBehavior: PlatformViewHitTestBehavior.opaque,
+      //     gestureRecognizers: const <Factory<OneSequenceGestureRecognizer>>{},
+      //   ),
+      //   onCreatePlatformView: (params) {
+      //     return PlatformViewsService.initSurfaceAndroidView(
+      //       id: params.id,
+      //       viewType: params.viewType,
+      //       creationParams: createParams,
+      //       creationParamsCodec: const StandardMessageCodec(),
+      //       layoutDirection: TextDirection.ltr,
+      //     )
+      //       ..addOnPlatformViewCreatedListener(onPlatformViewCreated)
+      //       ..create();
+      //   },
+      // );
     } else if (defaultTargetPlatform == TargetPlatform.iOS) {
       final view = UiKitView(
         viewType: VIEW_TYPE,
@@ -396,6 +445,7 @@ class _NaverMapOptions {
     this.initLocationTrackingMode,
     this.locationButtonEnable,
     this.contentPadding,
+    this.useSurface,
   });
 
   static _NaverMapOptions fromWidget(NaverMap map) {
@@ -415,6 +465,7 @@ class _NaverMapOptions {
       initLocationTrackingMode: map.initLocationTrackingMode,
       locationButtonEnable: map.locationButtonEnable,
       contentPadding: map.contentPadding,
+      useSurface: map.useSurface,
     );
   }
 
@@ -433,6 +484,7 @@ class _NaverMapOptions {
   final LocationTrackingMode initLocationTrackingMode;
   final bool locationButtonEnable;
   final EdgeInsets contentPadding;
+  final bool useSurface;
 
   Map<String, dynamic> toMap() {
     final Map<String, dynamic> optionsMap = <String, dynamic>{};
@@ -460,6 +512,7 @@ class _NaverMapOptions {
     addIfNonNull('tiltGestureEnable', tiltGestureEnable);
     addIfNonNull('locationTrackingMode', initLocationTrackingMode?.index);
     addIfNonNull('locationButtonEnable', locationButtonEnable);
+    addIfNonNull('useSurface', useSurface);
     addIfNonNull(
         'contentPadding',
         contentPadding != null
@@ -470,8 +523,6 @@ class _NaverMapOptions {
                 contentPadding.bottom,
               ]
             : null);
-    // 릴리즈 모드인지 확인해서 전달 안드로이드에만 전달
-    addIfNonNull('isReleaseMode', kReleaseMode);
     return optionsMap;
   }
 

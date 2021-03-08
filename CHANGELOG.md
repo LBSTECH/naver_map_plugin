@@ -74,3 +74,11 @@ fix iOS camera onIdle delegate,
     - at the previous version, you have to use ```NaverMapController``` to set content Padding.
 - allow attributes of overlays(marker, path, polygon, circle) be changed dynamically.
     -  thanks to [#22](https://github.com/LBSTECH/naver_map_plugin/issues/22#issue-813219541)
+   
+## 0.9.5
+- add property of NaverMap - useSurface
+    - it decide whether using GLSurfaceView or not in Android.
+    - default value is false.
+- if you're using lower flutter SDK version than 1.22.2, use this version. 
+    - next version will use [hybrid composition](https://flutter.dev/docs/development/platform-integration/platform-views?tab=android-platform-views-java-tab#hybrid-composition)
+    - and it require higher flutter version than 1.22.2.
