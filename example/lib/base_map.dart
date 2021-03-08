@@ -51,7 +51,7 @@ class _BaseMapPageState extends State<BaseMapPage> {
     );
   }
 
-  _onMapTap(LatLng position) {
+  _onMapTap(LatLng position) async{
     scaffoldKey.currentState.showSnackBar(SnackBar(
       content:
           Text('[onTap] lat: ${position.latitude}, lon: ${position.longitude}'),

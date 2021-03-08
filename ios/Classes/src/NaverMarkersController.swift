@@ -179,9 +179,8 @@ class NaverMarkersController: NSObject {
                 infoWindow.open(with: marker.marker)
                 infoWindowMarkerId = marker.id
             }
-            return true
         }
-        return false
+        return true
     }
     
 }

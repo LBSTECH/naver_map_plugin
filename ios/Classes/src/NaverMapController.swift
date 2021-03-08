@@ -118,6 +118,11 @@ class NaverMapController: NSObject, FlutterPlatformView, NaverMapOptionSink, NMF
                 result(false)
             }
             break
+        case "map#type":
+            if let arg = call.arguments as! NSDictionary?, let type = arg["mapType"] as? Int {
+                setMapType(type)
+                result(nil)
+            }
         case "map#getVisibleRegion":
             let bounds = mapView.contentBounds
             result(latlngBoundToJson(bound: bounds))
