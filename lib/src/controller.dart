@@ -187,6 +187,8 @@ class NaverMapController {
     });
   }
 
+  /// ### 지도의 유형 변경
+  /// [MapType]을 전달하면 해당 유형으로 지도의 타일 유형이 변경된다.
   Future<void> setMapType(MapType type) async{
     if (type == null) return;
     await _channel.invokeMethod('map#type', {'mapType' : type.index});

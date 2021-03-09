@@ -14,10 +14,12 @@ Plug-in which shows naver map on flutter project support Android and iOS.
 - 등록한 애플리케이션을 선택해 Client ID값을 확인하고 변경 화면에서 Maps가 선택되어 있는지 확인한다.
 
 pubspec.yaml에 plug in dependencies에 작성
+
 ``` yaml
 dependencies:
-  naver_map_plugin: ^0.9.5
+  naver_map_plugin: ^0.9.6
 ```
+
 
 ### Warning
  - 지도에서 제공하는 기본 컨트롤러가 잘 작동하지 않는 문제 (이유를 찾지 못하고 있음)

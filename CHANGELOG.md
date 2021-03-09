@@ -82,3 +82,7 @@ fix iOS camera onIdle delegate,
 - if you're using lower flutter SDK version than 1.22.2, use this version. 
     - next version will use [hybrid composition](https://flutter.dev/docs/development/platform-integration/platform-views?tab=android-platform-views-java-tab#hybrid-composition)
     - and it require higher flutter version than 1.22.2.
+    
+## 0.9.6 (hotfix of 0.9.5)
+- in iOS small error. so fix it. 
+- new method of ```NaverMapController```: ```Future<void> setMapType(MapType type)```
