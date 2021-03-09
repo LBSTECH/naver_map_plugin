@@ -189,9 +189,9 @@ class NaverMapController {
 
   /// ### 지도의 유형 변경
   /// [MapType]을 전달하면 해당 유형으로 지도의 타일 유형이 변경된다.
-  Future<void> setMapType(MapType type) async{
+  Future<void> setMapType(MapType type) async {
     if (type == null) return;
-    await _channel.invokeMethod('map#type', {'mapType' : type.index});
+    await _channel.invokeMethod('map#type', {'mapType': type.index});
   }
 
   /// <h3>현재 지도의 모습을 캡쳐하여 cache file 에 저장하고 완료되면 [onSnapShotDone]을 통해 파일의 경로를 전달한다.</h3>
@@ -228,8 +228,6 @@ class NaverMapController {
     return result ?? 0.0;
   }
 }
-
-
 
 /// <h2>위치 오버레이</h2>
 /// <p>위치 오버레이는 사용자의 위치를 나타내는 데 특화된 오버레이이로, 지도상에 단 하나만
