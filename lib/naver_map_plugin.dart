@@ -1,6 +1,7 @@
 library naver_map_plugin;
 
 import 'dart:async';
+import 'dart:ui' show window;
 import 'dart:io' show Platform;
 
 import 'package:flutter/foundation.dart';
