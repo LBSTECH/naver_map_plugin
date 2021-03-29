@@ -1,12 +1,12 @@
 part of naver_map_plugin;
 
 class _CircleOverlayUpdate {
-  Set<CircleOverlay> circlesToAdd;
-  Set<String> circleIdsToRemove;
-  Set<CircleOverlay> circlesToChange;
+  Set<CircleOverlay?>? circlesToAdd;
+  Set<String>? circleIdsToRemove;
+  Set<CircleOverlay?>? circlesToChange;
 
   _CircleOverlayUpdate.from(
-      Set<CircleOverlay> previous, Set<CircleOverlay> current) {
+      Set<CircleOverlay>? previous, Set<CircleOverlay>? current) {
     previous ??= Set<CircleOverlay>.identity();
     current ??= Set<CircleOverlay>.identity();
 
@@ -16,20 +16,20 @@ class _CircleOverlayUpdate {
     final Set<String> prevCircleIds = previousCircles.keys.toSet();
     final Set<String> currentCirclesIds = currentCircles.keys.toSet();
 
-    CircleOverlay idToCurrentCircle(String id) => currentCircles[id];
+    CircleOverlay? idToCurrentCircle(String id) => currentCircles[id];
 
     final Set<String> _circleIdsToRemove =
         prevCircleIds.difference(currentCirclesIds);
 
-    final Set<CircleOverlay> _circlesToAdd = currentCirclesIds
+    final Set<CircleOverlay?> _circlesToAdd = currentCirclesIds
         .difference(prevCircleIds)
         .map(idToCurrentCircle)
         .toSet();
 
-    bool hasChanged(CircleOverlay current) =>
-        current != previousCircles[current.overlayId];
+    bool hasChanged(CircleOverlay? current) =>
+        current != previousCircles[current!.overlayId];
 
-    final Set<CircleOverlay> _circlesToChange = currentCirclesIds
+    final Set<CircleOverlay?> _circlesToChange = currentCirclesIds
         .intersection(prevCircleIds)
         .map(idToCurrentCircle)
         .where(hasChanged)
@@ -52,18 +52,18 @@ class _CircleOverlayUpdate {
     addIfNonNull('circlesToAdd', _serializeCircleSet(circlesToAdd));
     addIfNonNull('circlesToChange', _serializeCircleSet(circlesToChange));
     addIfNonNull('circleIdsToRemove',
-        circleIdsToRemove.map((e) => e.toString()).toList());
+        circleIdsToRemove!.map((e) => e.toString()).toList());
     return updateMap;
   }
 
   @override
   bool operator ==(other) {
     if (identical(this, other)) return true;
-    if (other.runtimeType != runtimeType) return false;
-    final _CircleOverlayUpdate typedOther = other;
-    return setEquals(circlesToAdd, typedOther.circlesToAdd) &&
-        setEquals(circlesToChange, typedOther.circlesToChange) &&
-        setEquals(circleIdsToRemove, typedOther.circleIdsToRemove);
+    return other is _CircleOverlayUpdate
+        ? setEquals(circlesToAdd, other.circlesToAdd) &&
+            setEquals(circlesToChange, other.circlesToChange) &&
+            setEquals(circleIdsToRemove, other.circleIdsToRemove)
+        : false;
   }
 
   @override

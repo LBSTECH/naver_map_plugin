@@ -1,3 +1,4 @@
+
 part of naver_map_plugin;
 
 /// [NaverMap]의 [PathOverlay]에 대한 유일 식별자
@@ -13,7 +14,7 @@ class PathOverlayId {
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
     if (other.runtimeType != runtimeType) return false;
-    final PathOverlayId typedOther = other;
+    final PathOverlayId typedOther = other as PathOverlayId;
     return value == typedOther.value;
   }
 
@@ -105,7 +106,7 @@ class PathOverlay {
   ///
   /// 패턴 이미지의 크기가 경로선의 두께보다 클 경우 경로선의 두께에 맞게 축소됩니다. null일 경우 패턴을 표시하지 않습니다.
   /// 기본값은 null입니다.
-  OverlayImage patternImage;
+  OverlayImage? patternImage;
 
   /// 패턴 이미지의 간격을 지정합니다.
   ///
@@ -128,7 +129,7 @@ class PathOverlay {
   /// <br/>
   ///
   /// 탭 이벤트를 먹은 [PathOverlayId]를 반환합니다.
-  OnPathOverlayTab onPathOverlayTab;
+  OnPathOverlayTab? onPathOverlayTab;
 
   Map<String, dynamic> get json => {
         'pathOverlayId': pathOverlayId.value,
@@ -171,22 +172,22 @@ class PathOverlay {
 
   /// 주어진 파라미터를 덮어씌운 새로운 [PathOverlay] 객체를 생성합니다.
   PathOverlay copyWith({
-    List<LatLng> coordsParam,
-    int globalZIndexParams,
-    bool hideCollidedCaptionsParams,
-    bool hideCollidedMarkersParams,
-    bool hideCollidedSymbolsParams,
-    bool visibleParams,
-    Color colorParams,
-    Color outlineColorParams,
-    int outlineWidthParams,
-    Color passedColorParams,
-    Color passedOutlineColorParams,
-    OverlayImage patternImageParams,
-    int patternIntervalParams,
-    double progressParams,
-    int widthParams,
-    OnPathOverlayTab onPathOverlayTabParams,
+    List<LatLng>? coordsParam,
+    int? globalZIndexParams,
+    bool? hideCollidedCaptionsParams,
+    bool? hideCollidedMarkersParams,
+    bool? hideCollidedSymbolsParams,
+    bool? visibleParams,
+    Color? colorParams,
+    Color? outlineColorParams,
+    int? outlineWidthParams,
+    Color? passedColorParams,
+    Color? passedOutlineColorParams,
+    OverlayImage? patternImageParams,
+    int? patternIntervalParams,
+    double? progressParams,
+    int? widthParams,
+    OnPathOverlayTab? onPathOverlayTabParams,
   }) =>
       PathOverlay(
         pathOverlayId,
@@ -215,7 +216,7 @@ class PathOverlay {
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
     if (other.runtimeType != runtimeType) return false;
-    final PathOverlay typedOther = other;
+    final PathOverlay typedOther = other as PathOverlay;
     return pathOverlayId == typedOther.pathOverlayId &&
         listEquals(coords, typedOther.coords) &&
         globalZIndex == typedOther.globalZIndex &&
@@ -238,7 +239,7 @@ class PathOverlay {
 }
 
 Map<PathOverlayId, PathOverlay> _keyByPathOverlayId(
-    Iterable<PathOverlay> pathOverlays) {
+    Iterable<PathOverlay>? pathOverlays) {
   if (pathOverlays == null) return {};
 
   return Map<PathOverlayId, PathOverlay>.fromEntries(pathOverlays.map(
@@ -246,11 +247,11 @@ Map<PathOverlayId, PathOverlay> _keyByPathOverlayId(
           pathOverlay.pathOverlayId, pathOverlay.clone())));
 }
 
-List<Map<String, dynamic>> _serializePathOverlaySet(
-    Set<PathOverlay> pathOverlays) {
+List<Map<String, dynamic>>? _serializePathOverlaySet(
+    Set<PathOverlay?>? pathOverlays) {
   if (pathOverlays == null) return null;
 
   return pathOverlays
-      .map<Map<String, dynamic>>((PathOverlay p) => p.json)
+      .map<Map<String, dynamic>>((PathOverlay? p) => p!.json)
       .toList();
 }

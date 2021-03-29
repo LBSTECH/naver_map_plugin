@@ -27,21 +27,21 @@ class PolygonOverlay {
 
   /// ### [polygonOverlay]의 면 색상
   /// 아무 값도 없는 경우 기본 색상은 [Colors.white]이다.
-  Color color;
+  Color? color;
 
   /// ### [polygonOverlay]의 외곽선 색상
   /// 테두리의 색상을 지정합니다.
   /// 기본 색상은 [Colors.black]입니다.
-  Color outlineColor;
+  Color? outlineColor;
 
   /// ### [polygonOverlay]의 외곽선 두깨
   /// 테두리의 두께를 지정합니다. 0일 경우 테두리가 그려지지 않습니다.
   ///
   /// 단위는 dp 이며, 기본값은 0입니다.
-  int outlineWidth;
+  int? outlineWidth;
 
   /// ### [polygonOverlay]의 전역 z index
-  int globalZIndex;
+  int? globalZIndex;
 
   /// ### [polygonOverlay]의 내부 구멍
   /// 각각의 구멍에 대한 좌표열들로 구성된 배열이다.
@@ -52,11 +52,11 @@ class PolygonOverlay {
   ///  - iOS 에서는 좌표의 순서가 반 시계 방향이 아닌 경우, 선이 제대로 그려지지 않거나, 이벤트를 못받는 경우가 있다.
   ///     - 따라서 외곽선을 이루는 [coordinates]는 가능한 반시계방향 순으로 입력해야 한다.
   ///     - [coordinates]의 반대 방향으로!
-  List<List<LatLng>> holes;
+  List<List<LatLng>>? holes;
 
   /// ### 다각형 오버레이에 대한 탭 이벤트
   /// 각 [PolygonOverlay]의 아이디를 파라미터로 전달 한다.
-  void Function(String polygonOverlayId) onTap;
+  void Function(String polygonOverlayId)? onTap;
 
   /// ### 폴리곤 오버레이 생성
   /// 기본적으로 [polygonOverlayId]와 [coordinates]는 필수적으로 필요하며,
@@ -70,19 +70,17 @@ class PolygonOverlay {
     this.globalZIndex,
     this.holes,
     this.onTap,
-  })  : assert(polygonOverlayId != null),
-        assert(coordinates != null),
-        assert(coordinates.length >= 3);
+  })  : assert(coordinates.length >= 3);
 
   /// 인자로 넘어오는 속성들이 적용된 새로운 [PolygonOverlay]객체를 생성합니다.
   PolygonOverlay copyWith(
-          {List<LatLng> coordsParam,
-          Color colorParam,
-          Color outlineColorParam,
-          int outlineWidthParam,
-          int globalZIndexParam,
-          List<List<LatLng>> holesParam,
-          void Function(String polygonOverlayId) onTapParam}) =>
+          {List<LatLng>? coordsParam,
+          Color? colorParam,
+          Color? outlineColorParam,
+          int? outlineWidthParam,
+          int? globalZIndexParam,
+          List<List<LatLng>>? holesParam,
+          void Function(String polygonOverlayId)? onTapParam}) =>
       PolygonOverlay(polygonOverlayId, coordsParam ?? coordinates,
           color: colorParam ?? color,
           outlineColor: outlineColorParam ?? outlineColor,
@@ -96,8 +94,6 @@ class PolygonOverlay {
       copyWith(coordsParam: List<LatLng>.from(coordinates));
 
   Map<String, dynamic> _toJson() {
-    assert(polygonOverlayId != null);
-    assert(coordinates != null);
     assert(coordinates.length >= 3);
 
     final Map<String, dynamic> json = {};
@@ -117,23 +113,23 @@ class PolygonOverlay {
     addIfPresent('outlineColor', outlineColor?.value);
     addIfPresent('outlineWidth', outlineWidth);
     addIfPresent('globalZIndex', globalZIndex);
-    addIfPresent('holes', holes?.map((e) => _serializeLatLngList(e))?.toList());
+    addIfPresent('holes', holes?.map((e) => _serializeLatLngList(e)).toList());
     return json;
   }
 
   @override
   bool operator ==(other) {
     if (identical(this, other)) return true;
-    if (other.runtimeType != runtimeType) return false;
-    final PolygonOverlay typedOther = other;
-    return polygonOverlayId == typedOther.polygonOverlayId &&
-        listEquals(coordinates, typedOther.coordinates) &&
-        color == typedOther.color &&
-        outlineColor == typedOther.outlineColor &&
-        outlineWidth == typedOther.outlineWidth &&
-        globalZIndex == typedOther.globalZIndex &&
-        listEquals(holes, typedOther.holes) &&
-        onTap == typedOther.onTap;
+    return other is PolygonOverlay
+        ? polygonOverlayId == other.polygonOverlayId &&
+            listEquals(coordinates, other.coordinates) &&
+            color == other.color &&
+            outlineColor == other.outlineColor &&
+            outlineWidth == other.outlineWidth &&
+            globalZIndex == other.globalZIndex &&
+            listEquals(holes, other.holes) &&
+            onTap == other.onTap
+        : false;
   }
 
   @override
@@ -141,13 +137,13 @@ class PolygonOverlay {
 }
 
 Map<String, PolygonOverlay> _keyByPolygonId(Iterable<PolygonOverlay> polygons) {
-  if (polygons == null || polygons.isEmpty) return {};
+  if (polygons.isEmpty) return {};
   return Map<String, PolygonOverlay>.fromEntries(polygons.map(
       (e) => MapEntry<String, PolygonOverlay>(e.polygonOverlayId, e.clone())));
 }
 
-List<Map<String, dynamic>> _serializePolygonSet(
-    Iterable<PolygonOverlay> polygons) {
+List<Map<String, dynamic>?>? _serializePolygonSet(
+    Iterable<PolygonOverlay?>? polygons) {
   if (polygons == null || polygons.isEmpty) return null;
-  return polygons.map<Map<String, dynamic>>((e) => e?._toJson())?.toList();
+  return polygons.map<Map<String, dynamic>?>((e) => e?._toJson()).toList();
 }

@@ -1,3 +1,5 @@
+
+
 part of naver_map_plugin;
 
 /// 지도 카에라의 위치를 나타낸다.
@@ -6,7 +8,7 @@ part of naver_map_plugin;
 class CameraPosition {
   const CameraPosition({
     this.bearing = 0.0,
-    @required this.target,
+    required this.target,
     this.tilt = 0.0,
     this.zoom = 15.0,
   })  : assert(bearing != null),
@@ -38,13 +40,13 @@ class CameraPosition {
         'zoom': zoom,
       };
 
-  static CameraPosition fromMap(dynamic json) {
+  static CameraPosition? fromMap(dynamic json) {
     if (json == null) {
       return null;
     }
     return CameraPosition(
       bearing: json['bearing'],
-      target: LatLng._fromJson(json['target']),
+      target: LatLng._fromJson(json['target'])!,
       tilt: json['tilt'],
       zoom: json['zoom'],
     );
