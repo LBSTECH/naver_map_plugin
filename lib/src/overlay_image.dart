@@ -24,7 +24,7 @@ class OverlayImage {
   /// - .../4.0x/image.png  ---> android xxxhdpi(4.0x)에서 기본
   static Future<OverlayImage> fromAssetImage({
     required String assetName,
-    required BuildContext context,
+    BuildContext? context,
   }) async {
     final _configuration = ImageConfiguration(
       devicePixelRatio: window.devicePixelRatio,
