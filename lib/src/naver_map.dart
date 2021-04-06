@@ -1,10 +1,11 @@
+
 part of naver_map_plugin;
 
 /// ### 네이버지도
 /// 네이버 지도는 네이버 SDK 를 flutter 에서 사용할 수 있게 하는 주요 widget 이다.
 class NaverMap extends StatefulWidget {
   const NaverMap({
-    Key key,
+    Key? key,
     this.onMapCreated,
     this.onMapTap,
     this.onMapLongTap,
@@ -38,29 +39,29 @@ class NaverMap extends StatefulWidget {
 
   /// 지도가 완전히 만들어진 후에 컨트롤러를 파라미터로 가지는 콜백.
   /// 해당 콜백이 호출되기 전에는 지도가 만들어지는 중이다.
-  final MapCreateCallback onMapCreated;
+  final MapCreateCallback? onMapCreated;
 
   /// 지도를 탭했을때 호출되는 콜백함수.
   ///
   ///
   /// 사용자가 선택한 지점의 [LatLng]을 파라미터로 가진다.
-  final OnMapTap onMapTap;
+  final OnMapTap? onMapTap;
 
   /// ### 지도를 롱 탭했을때 호출되는 콜백함수. (Android only)
   ///
   /// 사용자가 선택한 지점의 [LatLng]을 파라미터로 가진다.
-  final OnMapLongTap onMapLongTap;
+  final OnMapLongTap? onMapLongTap;
 
   /// 카메라가 움직일때 호출되는 콜백
-  final OnCameraChange onCameraChange;
+  final OnCameraChange? onCameraChange;
 
   /// 카메라의 움직임이 완료되었을때 호출되는 콜백
-  final VoidCallback onCameraIdle;
+  final VoidCallback? onCameraIdle;
 
   /// 카메라의 최초 포지션.
   /// </br>
   /// <p>initial tracking mode 가 [LocationTrackingMode.None]이거나 [LocationTrackingMode.NoFollow]인 경우에만 반영된디.</p>
-  final CameraPosition initialCameraPosition;
+  final CameraPosition? initialCameraPosition;
 
   /// 지도 타입 설정.
   final MapType mapType;
@@ -162,7 +163,7 @@ class NaverMap extends StatefulWidget {
   final List<Marker> markers;
 
   /// 지도에 표시될 [PathOverlay]의 [Set] 입니다..
-  final Set<PathOverlay> pathOverlays;
+  final Set<PathOverlay>? pathOverlays;
 
   /// 지도에 표시될 [CircleOverlay]의 [List]입니다.
   final List<CircleOverlay> circles;
@@ -171,7 +172,7 @@ class NaverMap extends StatefulWidget {
   final List<PolygonOverlay> polygons;
 
   /// 지도가 더블탭될때 콜백되는 메서드. (Android only)
-  final OnMapDoubleTap onMapDoubleTap;
+  final OnMapDoubleTap? onMapDoubleTap;
 
   /// 최초 지도 생성시에 위치추적모드를 선택할 수 있습니다.
   ///
@@ -179,16 +180,16 @@ class NaverMap extends StatefulWidget {
   final LocationTrackingMode initLocationTrackingMode;
 
   /// 지도가 두 손가락으로 탭 되었을때 호출되는 콜백 메서드. (Android only)
-  final OnMapTwoFingerTap onMapTwoFingerTap;
+  final OnMapTwoFingerTap? onMapTwoFingerTap;
 
   /// <h2>심볼 탭 이벤트</h2>
   /// <p>빌딩을 나타내는 심볼이나, 공공시설을 표시하는 심볼등을 선택했을 경우 호출된다.</p>
-  final OnSymbolTap onSymbolTap;
+  final OnSymbolTap? onSymbolTap;
 
   /// ## 콘텐트 패딩
   /// Stack 구조의 화면에서 지도 상에 UI요소가 지도의 일부를 덮을 경우, 카메라는 지도
   /// 뷰의 중심에 위치하므로 실제 보이는 지도의 중심과 카메라의 위치가 불일치하게 됩니다.
-  final EdgeInsets contentPadding;
+  final EdgeInsets? contentPadding;
 
   /// ## 안드로이드에서 GLSurfaceView 사용 여부
   /// 값이 true인 경우, 안드로이드에서 naver map을 [GLSurfaceView]를 사용해서 렌더링하고,
@@ -223,7 +224,7 @@ class NaverMap extends StatefulWidget {
 
 class _NaverMapState extends State<NaverMap> {
   Completer<NaverMapController> _controller = Completer<NaverMapController>();
-  _NaverMapOptions _naverMapOptions;
+  late _NaverMapOptions _naverMapOptions;
 
   Map<String, Marker> _markers = <String, Marker>{};
   Map<String, CircleOverlay> _circles = <String, CircleOverlay>{};
@@ -249,7 +250,7 @@ class _NaverMapState extends State<NaverMap> {
     if (_controller.isCompleted) _controller = Completer<NaverMapController>();
     _controller.complete(controller);
     if (widget.onMapCreated != null) {
-      widget.onMapCreated(controller);
+      widget.onMapCreated!(controller);
     }
   }
 
@@ -329,8 +330,8 @@ class _NaverMapState extends State<NaverMap> {
   void _updateMarkers() async {
     final NaverMapController controller = await _controller.future;
     controller._updateMarkers(_MarkerUpdates.from(
-      _markers.values?.toSet(),
-      widget.markers?.toSet(),
+      _markers.values.toSet(),
+      widget.markers.toSet(),
     ));
     _markers = _keyByMarkerId(widget.markers);
   }
@@ -338,15 +339,15 @@ class _NaverMapState extends State<NaverMap> {
   void _updatePathOverlay() async {
     final NaverMapController controller = await _controller.future;
     controller._updatePathOverlay(_PathOverlayUpdates.from(
-        _paths.values?.toSet(), widget.pathOverlays?.toSet()));
+        _paths.values.toSet(), widget.pathOverlays?.toSet()));
     _paths = _keyByPathOverlayId(widget.pathOverlays);
   }
 
   void _updateCircleOverlay() async {
     final NaverMapController controller = await _controller.future;
     controller._updateCircleOverlay(_CircleOverlayUpdate.from(
-      _circles.values?.toSet(),
-      widget.circles?.toSet(),
+      _circles.values.toSet(),
+      widget.circles.toSet(),
     ));
     _circles = _keyByCircleId(widget.circles);
   }
@@ -354,77 +355,69 @@ class _NaverMapState extends State<NaverMap> {
   void _updatePolygonOverlay() async {
     final NaverMapController controller = await _controller.future;
     controller._updatePolygonOverlay(_PolygonOverlayUpdate.from(
-      _polygons.values?.toSet(),
+      _polygons.values.toSet(),
       widget.polygons.toSet(),
     ));
     _polygons = _keyByPolygonId(widget.polygons);
   }
 
-  void _markerTapped(String markerId, int iconWidth, int iconHeight) {
-    assert(markerId != null);
+  void _markerTapped(String markerId, int? iconWidth, int? iconHeight) {
     if (_markers[markerId]?.onMarkerTab != null) {
-      _markers[markerId].onMarkerTab(
+      _markers[markerId]!.onMarkerTab!(
         _markers[markerId],
-        <String, int>{'width': iconWidth, 'height': iconHeight},
+        <String, int?>{'width': iconWidth, 'height': iconHeight},
       );
     }
   }
 
   void _pathOverlayTapped(String pathId) {
-    assert(pathId != null);
     PathOverlayId pathOverlayId = PathOverlayId(pathId);
     if (_paths[pathOverlayId]?.onPathOverlayTab != null) {
-      _paths[pathOverlayId].onPathOverlayTab(pathOverlayId);
+      _paths[pathOverlayId]!.onPathOverlayTab!(pathOverlayId);
     }
   }
 
   void _circleOverlayTapped(String overlayId) {
-    assert(overlayId != null);
     if (_circles[overlayId]?.onTap != null) {
-      _circles[overlayId].onTap(overlayId);
+      _circles[overlayId]!.onTap!(overlayId);
     }
   }
 
   void _polygonOverlayTapped(String overlayId) {
-    assert(overlayId != null);
     if (_polygons[overlayId]?.onTap != null) {
-      _polygons[overlayId].onTap(overlayId);
+      _polygons[overlayId]!.onTap!(overlayId);
     }
   }
 
   void _mapTap(LatLng position) {
-    assert(position != null);
     widget.onMapTap?.call(position);
   }
 
   void _mapLongTap(LatLng position) {
-    assert(position != null);
     widget.onMapLongTap?.call(position);
   }
 
   void _mapDoubleTap(LatLng position) {
-    assert(position != null);
     widget.onMapDoubleTap?.call(position);
   }
 
   void _mapTwoFingerTap(LatLng position) {
-    assert(position != null);
     widget.onMapTwoFingerTap?.call(position);
   }
 
-  void _symbolTab(LatLng position, String caption) {
+  void _symbolTab(LatLng? position, String? caption) {
     assert(position != null && caption != null);
-    if (widget.onSymbolTap != null) widget.onSymbolTap(position, caption);
+    if (widget.onSymbolTap != null) widget.onSymbolTap!(position, caption);
   }
 
   void _cameraMove(
-      LatLng position, CameraChangeReason reason, bool isAnimated) {
+      LatLng? position, CameraChangeReason reason, bool? isAnimated) {
     if (widget.onCameraChange != null)
-      widget.onCameraChange(position, reason, isAnimated);
+      widget.onCameraChange!(position, reason, isAnimated);
   }
 
   void _cameraIdle() {
-    if (widget.onCameraIdle != null) widget.onCameraIdle();
+    if (widget.onCameraIdle != null) widget.onCameraIdle!();
   }
 }
 
@@ -469,22 +462,22 @@ class _NaverMapOptions {
     );
   }
 
-  final MapType mapType;
-  final bool liteModeEnable;
-  final bool nightModeEnable;
-  final bool indoorEnable;
-  final List<MapLayer> activeLayers;
-  final double buildingHeight;
-  final double symbolScale;
-  final double symbolPerspectiveRatio;
-  final bool rotationGestureEnable;
-  final bool scrollGestureEnable;
-  final bool tiltGestureEnable;
-  final bool zoomGestureEnable;
-  final LocationTrackingMode initLocationTrackingMode;
-  final bool locationButtonEnable;
-  final EdgeInsets contentPadding;
-  final bool useSurface;
+  final MapType? mapType;
+  final bool? liteModeEnable;
+  final bool? nightModeEnable;
+  final bool? indoorEnable;
+  final List<MapLayer>? activeLayers;
+  final double? buildingHeight;
+  final double? symbolScale;
+  final double? symbolPerspectiveRatio;
+  final bool? rotationGestureEnable;
+  final bool? scrollGestureEnable;
+  final bool? tiltGestureEnable;
+  final bool? zoomGestureEnable;
+  final LocationTrackingMode? initLocationTrackingMode;
+  final bool? locationButtonEnable;
+  final EdgeInsets? contentPadding;
+  final bool? useSurface;
 
   Map<String, dynamic> toMap() {
     final Map<String, dynamic> optionsMap = <String, dynamic>{};
@@ -517,10 +510,10 @@ class _NaverMapOptions {
         'contentPadding',
         contentPadding != null
             ? [
-                contentPadding.left,
-                contentPadding.top,
-                contentPadding.right,
-                contentPadding.bottom,
+                contentPadding!.left,
+                contentPadding!.top,
+                contentPadding!.right,
+                contentPadding!.bottom,
               ]
             : null);
     return optionsMap;
