@@ -1,11 +1,8 @@
-
-
 part of naver_map_plugin;
 
 class NaverMapController {
-  NaverMapController._(
-      this._channel, CameraPosition? initialCameraPosition, this._naverMapState)
-      : assert(_channel != null) {
+  NaverMapController._(this._channel, CameraPosition? initialCameraPosition,
+      this._naverMapState) {
     _channel.setMethodCallHandler(_handleMethodCall);
     locationOverlay = LocationOverlay(this);
   }
@@ -14,7 +11,6 @@ class NaverMapController {
       int id,
       CameraPosition? initialCameraPosition,
       _NaverMapState naverMapState) async {
-    assert(id != null);
     final MethodChannel channel = MethodChannel(VIEW_TYPE + '_$id');
 
     await channel.invokeMethod<void>('map#waitForMap');
@@ -96,7 +92,6 @@ class NaverMapController {
   }
 
   Future<void> _updateMapOptions(Map<String, dynamic> optionsUpdate) async {
-    assert(optionsUpdate != null);
     await _channel.invokeMethod(
       'map#update',
       <String, dynamic>{
@@ -106,7 +101,6 @@ class NaverMapController {
   }
 
   Future<void> _updateMarkers(_MarkerUpdates markerUpdate) async {
-    assert(markerUpdate != null);
     await _channel.invokeMethod<void>(
       'markers#update',
       markerUpdate._toMap(),
@@ -115,7 +109,6 @@ class NaverMapController {
 
   Future<void> _updatePathOverlay(
       _PathOverlayUpdates pathOverlayUpdates) async {
-    assert(pathOverlayUpdates != null);
     await _channel.invokeMethod(
       'pathOverlay#update',
       pathOverlayUpdates._toMap(),
@@ -124,7 +117,6 @@ class NaverMapController {
 
   Future<void> _updateCircleOverlay(
       _CircleOverlayUpdate circleOverlayUpdate) async {
-    assert(circleOverlayUpdate != null);
     await _channel.invokeMethod(
       'circleOverlay#update',
       circleOverlayUpdate._toMap(),
@@ -133,7 +125,6 @@ class NaverMapController {
 
   Future<void> _updatePolygonOverlay(
       _PolygonOverlayUpdate polygonOverlayUpdate) async {
-    assert(polygonOverlayUpdate != null);
     await _channel.invokeMethod(
       'polygonOverlay#update',
       polygonOverlayUpdate._toMap(),
@@ -142,8 +133,8 @@ class NaverMapController {
 
   /// 현제 지도에 보여지는 영역에 대한 [LatLngBounds] 객체를 리턴.
   Future<LatLngBounds> getVisibleRegion() async {
-    final Map<String, dynamic> latLngBounds =
-        await (_channel.invokeMapMethod<String, dynamic>('map#getVisibleRegion') as FutureOr<Map<String, dynamic>>);
+    final Map<String, dynamic> latLngBounds = (await _channel
+        .invokeMapMethod<String, dynamic>('map#getVisibleRegion'))!;
     final LatLng southwest = LatLng._fromJson(latLngBounds['southwest'])!;
     final LatLng northeast = LatLng._fromJson(latLngBounds['northeast'])!;
 
@@ -152,7 +143,7 @@ class NaverMapController {
 
   /// 현제 지도의 중심점 좌표에 대한 [CameraPosition] 객체를 리턴.
   Future<CameraPosition> getCameraPosition() async {
-    final Map position = await (_channel.invokeMethod<Map>('map#getPosition') as FutureOr<Map<dynamic, dynamic>>);
+    final Map position = (await _channel.invokeMethod<Map>('map#getPosition'))!;
     return CameraPosition(
       target: LatLng._fromJson(position['target'])!,
       zoom: position['zoom'],
@@ -166,7 +157,7 @@ class NaverMapController {
   ///
   /// ['width' : 가로 pixel, 'height' : 세로 pixel]
   Future<Map<String, int?>> getSize() async {
-    final Map size = await (_channel.invokeMethod<Map>('map#getSize') as FutureOr<Map<dynamic, dynamic>>);
+    final Map size = (await _channel.invokeMethod<Map>('map#getSize'))!;
     return <String, int?>{'width': size['width'], 'height': size['height']};
   }
 
@@ -183,7 +174,6 @@ class NaverMapController {
   /// <p>[NaverMap]을 생성할 때 주어진 [initialLocationTrackingMode]의 인자로 전달된 값이
   /// 기본값으로 설정되어 있으며, 이후 controller 를 이용해서 변경하는 메서드이다.</p>
   Future<void> setLocationTrackingMode(LocationTrackingMode mode) async {
-    if (mode == null) return;
     await _channel.invokeMethod('tracking#mode', <String, dynamic>{
       'locationTrackingMode': mode.index,
     });
@@ -192,7 +182,6 @@ class NaverMapController {
   /// ### 지도의 유형 변경
   /// [MapType]을 전달하면 해당 유형으로 지도의 타일 유형이 변경된다.
   Future<void> setMapType(MapType type) async {
-    if (type == null) return;
     await _channel.invokeMethod('map#type', {'mapType': type.index});
   }
 
