@@ -19,6 +19,8 @@ protocol NaverMapOptionSink {
     func setSymbolPerspectiveRatio(_ symbolPerspectiveRatio: CGFloat)
     func setActiveLayers(_ activeLayers: Array<Any>)
     func setContentPadding(_ paddingData: Array<CGFloat>)
+    func setMaxZoom(_ maxZoom: Double)
+    func setMinZoom(_ minZoom: Double)
     
     func setRotationGestureEnable(_ rotationGestureEnable: Bool)
     func setScrollGestureEnable(_ scrollGestureEnable: Bool)
@@ -340,6 +342,12 @@ class NaverMapController: NSObject, FlutterPlatformView, NaverMapOptionSink, NMF
         if let paddingData = option["contentPadding"] as? Array<CGFloat> {
             sink.setContentPadding(paddingData)
         }
+        if let maxZoom = option["maxZoom"] as? Double{
+            sink.setMaxZoom(maxZoom)
+        }
+        if let minZoom = option["minZoom"] as? Double{
+            sink.setMinZoom(minZoom)
+        }
     }
     
     // Naver touch Delegate method
@@ -467,6 +475,14 @@ class NaverMapController: NSObject, FlutterPlatformView, NaverMapOptionSink, NMF
     
     func setLocationButtonEnable(_ locationButtonEnable: Bool) {
         naverMap.showLocationButton = locationButtonEnable
+    }
+    
+    func setMaxZoom(_ maxZoom: Double){
+        mapView.maxZoomLevel = maxZoom
+    }
+    
+    func setMinZoom(_ minZoom: Double){
+        mapView.minZoomLevel = minZoom
     }
     
     // ===================== authManagerDelegate ========================
