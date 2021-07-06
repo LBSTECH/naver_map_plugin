@@ -55,6 +55,10 @@ class Convert {
             sink.setLocationTrackingMode((Integer) options.get("locationTrackingMode"));
         if(options.containsKey("contentPadding"))
             sink.setContentPadding(toDoubleList(options.get("contentPadding")));
+        if(options.containsKey("maxZoom"))
+            sink.setMaxZoom((Double) options.get("maxZoom"));
+        if(options.containsKey("minZoom"))
+            sink.setMinZoom((Double) options.get("minZoom"));
     }
 
     @SuppressWarnings("unchecked")

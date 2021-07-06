@@ -35,6 +35,8 @@ class NaverMap extends StatefulWidget {
     this.markers = const [],
     this.circles = const [],
     this.polygons = const [],
+    this.minZoom = 0.0,
+    this.maxZoom = 21.0,
   }) : super(key: key);
 
   /// 지도가 완전히 만들어진 후에 컨트롤러를 파라미터로 가지는 콜백.
@@ -217,6 +219,14 @@ class NaverMap extends StatefulWidget {
   ///
   /// - 기본값은 false 이다.
   final bool useSurface;
+
+  /// ## 최소 줌 레벨 제한 ##
+  /// default 0.0
+  final double minZoom;
+
+  /// ## 최대 줌 레벨 제한 ##
+  /// default 21.0
+  final double maxZoom;
 
   @override
   _NaverMapState createState() => _NaverMapState();
@@ -439,6 +449,8 @@ class _NaverMapOptions {
     this.locationButtonEnable,
     this.contentPadding,
     this.useSurface,
+    this.maxZoom,
+    this.minZoom,
   });
 
   static _NaverMapOptions fromWidget(NaverMap map) {
@@ -459,6 +471,8 @@ class _NaverMapOptions {
       locationButtonEnable: map.locationButtonEnable,
       contentPadding: map.contentPadding,
       useSurface: map.useSurface,
+      maxZoom: map.maxZoom,
+      minZoom: map.minZoom,
     );
   }
 
@@ -478,6 +492,8 @@ class _NaverMapOptions {
   final bool? locationButtonEnable;
   final EdgeInsets? contentPadding;
   final bool? useSurface;
+  final double? maxZoom;
+  final double? minZoom;
 
   Map<String, dynamic> toMap() {
     final Map<String, dynamic> optionsMap = <String, dynamic>{};
@@ -506,6 +522,8 @@ class _NaverMapOptions {
     addIfNonNull('locationTrackingMode', initLocationTrackingMode?.index);
     addIfNonNull('locationButtonEnable', locationButtonEnable);
     addIfNonNull('useSurface', useSurface);
+    addIfNonNull('maxZoom', maxZoom);
+    addIfNonNull('minZoom', minZoom);
     addIfNonNull(
         'contentPadding',
         contentPadding != null

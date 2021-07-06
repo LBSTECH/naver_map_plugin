@@ -23,6 +23,10 @@ public interface NaverMapOptionSink {
 
     void setContentPadding(List<Double> paddingData);
 
+    void setMaxZoom(double maxZoom);
+
+    void setMinZoom(double minZoom);
+
     /**
      * flutter 에서 setState()로 값을 변경해도 반영되지 않는 method. 최초 생성시에만 값변경.
      */

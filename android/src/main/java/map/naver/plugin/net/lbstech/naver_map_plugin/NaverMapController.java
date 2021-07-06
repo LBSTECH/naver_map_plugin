@@ -65,6 +65,8 @@ public class NaverMapController implements
     private MethodChannel.Result mapReadyResult;
     private int locationTrackingMode;
     private List<Double> paddingData;
+    private double maxZoom;
+    private double minZoom;
 
     private final Float density;
 
@@ -628,5 +630,21 @@ public class NaverMapController implements
                 naverMap.setLocationTrackingMode(LocationTrackingMode.Face);
                 break;
         }
+    }
+
+    public void setMaxZoom(double maxZoom) {
+        if(naverMap == null) {
+            this.maxZoom = maxZoom;
+            return;
+        }
+        naverMap.setMaxZoom(maxZoom);
+    }
+
+    public void setMinZoom(double minZoom) {
+        if(naverMap == null) {
+            this.minZoom = minZoom;
+            return;
+        }
+        naverMap.setMinZoom(minZoom);
     }
 }

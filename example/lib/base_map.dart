@@ -40,6 +40,8 @@ class _BaseMapPageState extends State<BaseMapPage> {
             onMapDoubleTap: _onMapDoubleTap,
             onMapTwoFingerTap: _onMapTwoFingerTap,
             onSymbolTap: _onSymbolTap,
+            maxZoom: 17,
+            minZoom: 15,
           ),
           Padding(
             padding: EdgeInsets.all(16),
