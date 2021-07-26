@@ -356,4 +356,15 @@ class AnchorPoint {
         assert(y >= 0 && y <= 1);
 
   List<double> get _json => [x, y];
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is AnchorPoint &&
+          runtimeType == other.runtimeType &&
+          x == other.x &&
+          y == other.y;
+
+  @override
+  int get hashCode => x.hashCode ^ y.hashCode;
 }
