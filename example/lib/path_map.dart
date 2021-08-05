@@ -40,6 +40,7 @@ class _PathMapPageState extends State<PathMapPage> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
+        appBar: AppBar(),
         body: Column(
           children: <Widget>[
             _controlPanel(),

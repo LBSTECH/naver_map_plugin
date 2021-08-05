@@ -16,6 +16,7 @@ class _PaddingTestState extends State<PaddingTest> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(),
       body: Stack(
         children: <Widget>[
           NaverMap(

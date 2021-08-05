@@ -22,7 +22,6 @@ class _MarkerMapPageState extends State<MarkerMapPage> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       OverlayImage.fromAssetImage(
         assetName: 'icon/marker.png',
-        context: context,
       ).then((image) {
         setState(() {
           _markers.add(Marker(
@@ -32,6 +31,7 @@ class _MarkerMapPageState extends State<MarkerMapPage> {
               captionColor: Colors.indigo,
               captionTextSize: 20.0,
               alpha: 0.8,
+              captionOffset: 30,
               icon: image,
               anchor: AnchorPoint(0.5, 1),
               width: 45,
@@ -48,6 +48,7 @@ class _MarkerMapPageState extends State<MarkerMapPage> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
+        appBar: AppBar(),
         body: Column(
           children: <Widget>[
             _controlPanel(),

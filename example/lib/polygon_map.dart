@@ -63,6 +63,7 @@ class _PolygonMapState extends State<PolygonMap>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(),
       floatingActionButton: _fab(),
       body: Stack(
         children: <Widget>[

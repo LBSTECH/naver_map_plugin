@@ -19,6 +19,7 @@ class _CircleMapPageState extends State<CircleMapPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(),
       body: Stack(
         children: <Widget>[
           NaverMap(
