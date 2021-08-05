@@ -371,7 +371,7 @@ class NaverMapController: NSObject, FlutterPlatformView, NaverMapOptionSink, NMF
             return markersController!.toggleInfoWindow(marker)
         } else if let path = overlay.userInfo["path"] as? NPathController {
             channel?.invokeMethod("path#onTap",
-                                  arguments: ["pathId" , path.id])
+                                  arguments: ["pathId" : path.id])
             return true
         } else if let circle = overlay.userInfo["circle"] as? NCircleController{
             channel?.invokeMethod("circle#onTap",
