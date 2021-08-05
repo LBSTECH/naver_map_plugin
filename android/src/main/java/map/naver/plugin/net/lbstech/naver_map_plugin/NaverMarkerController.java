@@ -3,6 +3,8 @@ package map.naver.plugin.net.lbstech.naver_map_plugin;
 import android.content.Context;
 import android.os.Handler;
 import android.os.Looper;
+import android.util.DisplayMetrics;
+import android.view.WindowManager;
 
 import androidx.annotation.NonNull;
 
@@ -95,6 +97,12 @@ class NaverMarkerController {
         }
 
         void interpret(HashMap<String, Object> json) {
+            DisplayMetrics metrics = new DisplayMetrics();
+            WindowManager mgr = (WindowManager)context.getSystemService(Context.WINDOW_SERVICE);
+            mgr.getDefaultDisplay().getMetrics(metrics);
+
+            final float density = metrics.density;
+
             final Object position = json.get("position");
             if (position != null) marker.setPosition(Convert.toLatLng(position));
 
@@ -120,10 +128,10 @@ class NaverMarkerController {
             if (captionHaloColor != null) marker.setCaptionHaloColor(Convert.toColorInt(captionHaloColor));
 
             final Object width = json.get("width");
-            if (width != null) marker.setWidth(Math.round((int)width * density));
+            if (width != null) marker.setWidth(Math.round((int)width * NaverMarkerController.this.density));
 
             final Object height = json.get("height");
-            if (height != null) marker.setHeight(Math.round((int)height * density));
+            if (height != null) marker.setHeight(Math.round((int)height * NaverMarkerController.this.density));
 
             final Object maxZoom = json.get("maxZoom");
             if (maxZoom != null) marker.setMaxZoom((double)maxZoom);
@@ -144,7 +152,7 @@ class NaverMarkerController {
             if (captionMinZoom != null) marker.setCaptionMinZoom((double) captionMinZoom);
 
             final Object captionOffset = json.get("captionOffset");
-            if (captionOffset != null) marker.setCaptionOffset((int) captionOffset);
+            if (captionOffset != null) marker.setCaptionOffset(Math.round((int) captionOffset * density));
 
             final Object captionPerspectiveEnabled = json.get("captionPerspectiveEnabled");
             if (captionPerspectiveEnabled != null)
@@ -174,7 +182,7 @@ class NaverMarkerController {
 
             final Object subCaptionRequestedWidth = json.get("subCaptionRequestedWidth");
             if (subCaptionRequestedWidth != null)
-                marker.setSubCaptionRequestedWidth(Math.round((int)subCaptionRequestedWidth * density));
+                marker.setSubCaptionRequestedWidth(Math.round((int)subCaptionRequestedWidth * NaverMarkerController.this.density));
 
             final Object icon = json.get("icon");
             if (icon != null) marker.setIcon(Convert.toOverlayImage(icon));
