@@ -248,36 +248,73 @@ class Marker {
   }
 
   @override
-  bool operator ==(other) {
-    if (identical(this, other)) return true;
-    return other is Marker
-        ? markerId == other.markerId &&
-            alpha == other.alpha &&
-            flat == other.flat &&
-            position == other.position &&
-            zIndex == other.zIndex &&
-            globalZIndex == other.globalZIndex &&
-            captionText == other.captionText &&
-            captionTextSize == other.captionTextSize &&
-            captionColor == other.captionColor &&
-            captionHaloColor == other.captionHaloColor &&
-            width == other.width &&
-            height == other.height &&
-            angle == other.angle &&
-            maxZoom == other.maxZoom &&
-            minZoom == other.minZoom &&
-            icon == other.icon &&
-            iconTintColor == other.iconTintColor &&
-            subCaptionText == other.subCaptionText &&
-            subCaptionTextSize == other.subCaptionTextSize &&
-            infoWindow == other.infoWindow &&
-            anchor == other.anchor &&
-            onMarkerTab == other.onMarkerTab
-        : false;
-  }
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is Marker &&
+          runtimeType == other.runtimeType &&
+          markerId == other.markerId &&
+          infoWindow == other.infoWindow &&
+          alpha == other.alpha &&
+          flat == other.flat &&
+          onMarkerTab == other.onMarkerTab &&
+          position == other.position &&
+          captionText == other.captionText &&
+          captionTextSize == other.captionTextSize &&
+          captionMaxZoom == other.captionMaxZoom &&
+          captionMinZoom == other.captionMinZoom &&
+          captionColor == other.captionColor &&
+          captionHaloColor == other.captionHaloColor &&
+          captionRequestedWidth == other.captionRequestedWidth &&
+          captionOffset == other.captionOffset &&
+          subCaptionText == other.subCaptionText &&
+          subCaptionTextSize == other.subCaptionTextSize &&
+          subCaptionRequestedWidth == other.subCaptionRequestedWidth &&
+          subCaptionColor == other.subCaptionColor &&
+          subCaptionHaloColor == other.subCaptionHaloColor &&
+          width == other.width &&
+          height == other.height &&
+          maxZoom == other.maxZoom &&
+          minZoom == other.minZoom &&
+          angle == other.angle &&
+          icon == other.icon &&
+          captionPerspectiveEnabled == other.captionPerspectiveEnabled &&
+          iconTintColor == other.iconTintColor &&
+          zIndex == other.zIndex &&
+          globalZIndex == other.globalZIndex &&
+          anchor == other.anchor;
 
   @override
-  int get hashCode => markerId.hashCode;
+  int get hashCode =>
+      markerId.hashCode ^
+      infoWindow.hashCode ^
+      alpha.hashCode ^
+      flat.hashCode ^
+      onMarkerTab.hashCode ^
+      position.hashCode ^
+      captionText.hashCode ^
+      captionTextSize.hashCode ^
+      captionMaxZoom.hashCode ^
+      captionMinZoom.hashCode ^
+      captionColor.hashCode ^
+      captionHaloColor.hashCode ^
+      captionRequestedWidth.hashCode ^
+      captionOffset.hashCode ^
+      subCaptionText.hashCode ^
+      subCaptionTextSize.hashCode ^
+      subCaptionRequestedWidth.hashCode ^
+      subCaptionColor.hashCode ^
+      subCaptionHaloColor.hashCode ^
+      width.hashCode ^
+      height.hashCode ^
+      maxZoom.hashCode ^
+      minZoom.hashCode ^
+      angle.hashCode ^
+      icon.hashCode ^
+      captionPerspectiveEnabled.hashCode ^
+      iconTintColor.hashCode ^
+      zIndex.hashCode ^
+      globalZIndex.hashCode ^
+      anchor.hashCode;
 
   /// 같은 값을 가진 새로운 Maker 객체를 반환한다.
   Marker clone() {
