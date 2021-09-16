@@ -8,7 +8,9 @@ class _PathOverlayUpdates {
   Set<PathOverlayId>? pathOverlayIdsToRemove;
 
   _PathOverlayUpdates.from(
-      Set<PathOverlay>? previous, Set<PathOverlay>? current) {
+    Set<PathOverlay>? previous,
+    Set<PathOverlay>? current,
+  ) {
     previous ??= Set<PathOverlay>.identity();
     current ??= Set<PathOverlay>.identity();
 

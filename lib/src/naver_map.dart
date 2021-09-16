@@ -239,11 +239,11 @@ class _NaverMapState extends State<NaverMap> {
   Completer<NaverMapController> _controller = Completer<NaverMapController>();
   late _NaverMapOptions _naverMapOptions;
 
-  final _markers = <String, Marker>{};
-  final _circles = <String, CircleOverlay>{};
-  final _paths = <PathOverlayId, PathOverlay>{};
-  final _polylines = <PolylineOverlayId, PolylineOverlay>{};
-  final _polygons = <String, PolygonOverlay>{};
+  Map<String, Marker> _markers = {};
+  Map<String, CircleOverlay> _circles = {};
+  Map<PathOverlayId, PathOverlay> _paths = {};
+  Map<PolylineOverlayId, PolylineOverlay> _polylines = {};
+  Map<String, PolygonOverlay> _polygons = {};
 
   @override
   void initState() {
@@ -355,7 +355,7 @@ class _NaverMapState extends State<NaverMap> {
   void _updatePathOverlay() async {
     final NaverMapController controller = await _controller.future;
     controller._updatePathOverlay(_PathOverlayUpdates.from(
-        _paths.values.toSet(), widget.pathOverlays.toSet()));
+        _paths.values.toSet(), widget.pathOverlays?.toSet())) ;
     _paths = _keyByPathOverlayId(widget.pathOverlays);
   }
 

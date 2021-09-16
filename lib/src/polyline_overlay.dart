@@ -5,17 +5,16 @@ part of naver_map_plugin;
 /// 전역적으로 유일할 필요는 없으며 목록상에서 유일하면 된다.
 @immutable
 class PolylineOverlayId {
-  PolylineOverlayId(this.value) : assert(value != null);
+  PolylineOverlayId(this.value);
 
   final String value;
 
   @override
-  bool operator ==(Object other) {
-    if (identical(this, other)) return true;
-    if (other.runtimeType != runtimeType) return false;
-    final PolylineOverlayId typedOther = other;
-    return value == typedOther.value;
-  }
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is PolylineOverlayId &&
+          runtimeType == other.runtimeType &&
+          value == other.value;
 
   @override
   int get hashCode => value.hashCode;
@@ -151,7 +150,7 @@ class PolylineOverlay {
 }
 
 Map<PolylineOverlayId, PolylineOverlay> _keyByPolylineOverlayId(
-    Iterable<PolylineOverlay> polylineOverlays) {
+    Iterable<PolylineOverlay>? polylineOverlays) {
   if (polylineOverlays == null) return {};
 
   return Map<PolylineOverlayId, PolylineOverlay>.fromEntries(
@@ -164,8 +163,8 @@ Map<PolylineOverlayId, PolylineOverlay> _keyByPolylineOverlayId(
   );
 }
 
-List<Map<String, dynamic>> _serializePolylineOverlaySet(
-    Set<PolylineOverlay> polylineOverlays) {
+List<Map<String, dynamic>>? _serializePolylineOverlaySet(
+    Set<PolylineOverlay>? polylineOverlays) {
   if (polylineOverlays == null) return null;
 
   return polylineOverlays

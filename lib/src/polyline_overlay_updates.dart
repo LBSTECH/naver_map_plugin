@@ -7,8 +7,15 @@ class _PolylineOverlayUpdates {
   Set<PolylineOverlay> polylineOverlaysToAddOrUpdate;
   Set<PolylineOverlayId> polylineOverlayIdsToRemove;
 
-  _PolylineOverlayUpdates.from(
-      Set<PolylineOverlay> previous, Set<PolylineOverlay> current) {
+  _PolylineOverlayUpdates._(
+    this.polylineOverlaysToAddOrUpdate,
+    this.polylineOverlayIdsToRemove,
+  );
+
+  factory _PolylineOverlayUpdates.from(
+    Set<PolylineOverlay>? previous,
+    Set<PolylineOverlay>? current,
+  ) {
     if (previous == null) {
       previous = Set<PolylineOverlay>.identity();
     }
@@ -28,7 +35,7 @@ class _PolylineOverlayUpdates {
         currentPathOverlays.keys.toSet();
 
     PolylineOverlay idToCurrentPolylineOverlay(PolylineOverlayId id) {
-      return currentPathOverlays[id];
+      return currentPathOverlays[id]!;
     }
 
     final Set<PolylineOverlayId> _pathOverlayIdsToRemove =
@@ -37,8 +44,10 @@ class _PolylineOverlayUpdates {
     final Set<PolylineOverlay> _pathOverlaysToAddOrModify =
         currentPathOverlayIds.map(idToCurrentPolylineOverlay).toSet();
 
-    polylineOverlaysToAddOrUpdate = _pathOverlaysToAddOrModify;
-    polylineOverlayIdsToRemove = _pathOverlayIdsToRemove;
+    return _PolylineOverlayUpdates._(
+      _pathOverlaysToAddOrModify,
+      _pathOverlayIdsToRemove,
+    );
   }
 
   Map<String, dynamic> get _map => {
@@ -50,19 +59,18 @@ class _PolylineOverlayUpdates {
       };
 
   @override
-  bool operator ==(Object other) {
-    if (identical(this, other)) return true;
-    if (other.runtimeType != runtimeType) return false;
-    final _PolylineOverlayUpdates typedOther = other;
-    return setEquals(polylineOverlaysToAddOrUpdate,
-            typedOther.polylineOverlaysToAddOrUpdate) &&
-        setEquals(
-            polylineOverlayIdsToRemove, typedOther.polylineOverlayIdsToRemove);
-  }
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is _PolylineOverlayUpdates &&
+          runtimeType == other.runtimeType &&
+          polylineOverlaysToAddOrUpdate ==
+              other.polylineOverlaysToAddOrUpdate &&
+          polylineOverlayIdsToRemove == other.polylineOverlayIdsToRemove;
 
   @override
   int get hashCode =>
-      hashValues(polylineOverlaysToAddOrUpdate, polylineOverlayIdsToRemove);
+      polylineOverlaysToAddOrUpdate.hashCode ^
+      polylineOverlayIdsToRemove.hashCode;
 
   @override
   String toString() {
