@@ -2,7 +2,6 @@ part of naver_map_plugin;
 
 /// <p>원형 오버레이를 지도 위에 표시하기 위해 사용되는 객체</p>
 class CircleOverlay {
-
   /// <h3>원형 오버레이의 식별자로 사용됩니다.</h3>
   final String overlayId;
 
@@ -13,39 +12,39 @@ class CircleOverlay {
   double radius;
 
   /// <h3>원형 오버레이의 중심부의 색갈</h3>
-  Color color;
+  Color? color;
 
   /// <h3>원형 오버레이의 외곽선 색갈</h3>
-  Color outlineColor;
+  Color? outlineColor;
 
   /// <h3>원형 오버레이의 외곽선의 두께</h3>
-  int outlineWidth;
+  int? outlineWidth;
 
   /// <h3>원형 오버레이 z-index</h3>
-  int zIndex;
+  int? zIndex;
 
   /// <h3>원형 오버레이 전역 z-index</h3>
-  int globalZIndex;
+  int? globalZIndex;
 
   /// <h3>지도에 표시되는 최소 줌크기</h3>
   /// <p>[minZoom]이나 [maxZoom]이 설정되면 지도의 줌에 따라 원형 오버레이의 <br/>
   /// visible 상태가 변경된다.</p>
   /// <p>지도의 줌이 [minZoom]보다 크고 [maxZoom]보다 작을때 오버레이 표시</p>
-  double minZoom;
+  double? minZoom;
 
   /// <h3>지도에 표시되는 최대 줌크기</h3>
   /// <p>[minZoom]이나 [maxZoom]이 설정되면 지도의 줌에 따라 원형 오버레이의 <br/>
   /// visible 상태가 변경된다.</p>
   /// <p>지도의 줌이 [minZoom]보다 크고 [maxZoom]보다 작을때 오버레이 표시</p>
-  double maxZoom;
+  double? maxZoom;
 
   /// <h3>원형 오버레이가 눌러졌을 때</h3>
-  final void Function(String overlayId) onTap;
+  final void Function(String overlayId)? onTap;
 
   CircleOverlay({
-    @required this.overlayId,
-    @required this.center,
-    @required this.radius,
+    required this.overlayId,
+    required this.center,
+    required this.radius,
     this.color,
     this.outlineColor,
     this.outlineWidth,
@@ -62,36 +61,36 @@ class CircleOverlay {
   @override
   bool operator ==(other) {
     if (identical(this, other)) return true;
-    if (other.runtimeType != runtimeType) return false;
-    final CircleOverlay co = other;
-    return overlayId == co.overlayId &&
-        center == co.center &&
-        radius == co.radius &&
-        color == co.color &&
-        outlineColor == co.color &&
-        outlineWidth == co.outlineWidth &&
-        zIndex == co.zIndex &&
-        globalZIndex == co.globalZIndex &&
-        minZoom == co.minZoom &&
-        maxZoom == co.maxZoom;
+    return other is CircleOverlay
+        ? overlayId == other.overlayId &&
+            center == other.center &&
+            radius == other.radius &&
+            color == other.color &&
+            outlineColor == other.color &&
+            outlineWidth == other.outlineWidth &&
+            zIndex == other.zIndex &&
+            globalZIndex == other.globalZIndex &&
+            minZoom == other.minZoom &&
+            maxZoom == other.maxZoom
+        : false;
   }
 
   @override
   String toString() => _toJson().toString();
 
   CircleOverlay clone() => CircleOverlay(
-    overlayId: overlayId,
-    center: center,
-    radius: radius,
-    color: color,
-    outlineColor: outlineColor,
-    outlineWidth: outlineWidth,
-    zIndex: zIndex,
-    globalZIndex: globalZIndex,
-    onTap: onTap,
-    minZoom: minZoom,
-    maxZoom: maxZoom,
-  );
+        overlayId: overlayId,
+        center: center,
+        radius: radius,
+        color: color,
+        outlineColor: outlineColor,
+        outlineWidth: outlineWidth,
+        zIndex: zIndex,
+        globalZIndex: globalZIndex,
+        onTap: onTap,
+        minZoom: minZoom,
+        maxZoom: maxZoom,
+      );
 
   Map<String, dynamic> _toJson() {
     assert(overlayId != null);
@@ -118,16 +117,16 @@ class CircleOverlay {
     addIfPresent('maxZoom', maxZoom);
     return json;
   }
-
 }
 
-List<Map<String, dynamic>> _serializeCircleSet(Iterable<CircleOverlay> circles){
+List<Map<String, dynamic>>? _serializeCircleSet(
+    Iterable<CircleOverlay?>? circles) {
   if (circles == null) return null;
-  return circles.map<Map<String, dynamic>>((e) => e._toJson()).toList();
+  return circles.map<Map<String, dynamic>>((e) => e!._toJson()).toList();
 }
 
-Map<String, CircleOverlay> _keyByCircleId(Iterable<CircleOverlay> circles){
+Map<String, CircleOverlay> _keyByCircleId(Iterable<CircleOverlay> circles) {
   if (circles == null) return {};
-  return Map<String, CircleOverlay>.fromEntries(circles.map((e) =>
-      MapEntry<String, CircleOverlay>(e.overlayId, e.clone())));
+  return Map<String, CircleOverlay>.fromEntries(circles
+      .map((e) => MapEntry<String, CircleOverlay>(e.overlayId, e.clone())));
 }

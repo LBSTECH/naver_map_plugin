@@ -2,6 +2,7 @@ package map.naver.plugin.net.lbstech.naver_map_plugin;
 
 import android.app.Activity;
 import android.content.Context;
+import android.renderscript.Double3;
 
 import com.naver.maps.map.NaverMap;
 import com.naver.maps.map.NaverMapOptions;
@@ -23,13 +24,17 @@ import io.flutter.plugin.common.BinaryMessenger;
  * <p>
  * 릴리즈배포시에는 해당 값을 false로 바꿔주기 바란다!!
  */
+
+@SuppressWarnings("rawtypes")
 public class NaverMapBuilder implements NaverMapOptionSink {
     private final NaverMapOptions options = new NaverMapOptions();
     private int locationTrackingMode;
+    private List<Double> paddingData;
 
     private List initialMarkers;
     private List initialPaths;
     private List initialCircles;
+    private List initialPolygon;
     private List initialPolylines;
 
     NaverMapController build(
@@ -49,9 +54,12 @@ public class NaverMapBuilder implements NaverMapOptionSink {
                 initialMarkers,
                 initialPaths,
                 initialPolylines,
-                initialCircles);
+                initialCircles,
+                initialPolygon);
         controller.init();
         controller.setLocationTrackingMode(locationTrackingMode);
+        controller.setContentPadding(paddingData);
+
         return controller;
     }
 
@@ -198,13 +206,27 @@ public class NaverMapBuilder implements NaverMapOptionSink {
         this.locationTrackingMode = locationTrackingMode;
     }
 
+    @Override
+    public void setContentPadding(List<Double> paddingData) {
+        this.paddingData = paddingData;
+    }
+
+    @Override
+    public void setMaxZoom(double maxZoom) {
+        options.maxZoom(maxZoom);
+    }
+
+    @Override
+    public void setMinZoom(double minZoom) {
+        options.minZoom(minZoom);
+    }
+
     void setInitialCameraPosition(Map<String, Object> cameraPosition) {
         options.camera(Convert.toCameraPosition(cameraPosition));
     }
 
-    void setDevMode(boolean isDevMode) {
-        if (isDevMode) options.useTextureView(true);
-        else options.useTextureView(false);
+    void setViewType(boolean useSurface) {
+        options.useTextureView(!useSurface);
     }
 
     void setInitialMarkers(List initialMarkers) {
@@ -221,5 +243,9 @@ public class NaverMapBuilder implements NaverMapOptionSink {
 
     void setInitialPolylines(List<Object> initialPolylines) {
         this.initialPolylines = initialPolylines;
+    }
+    
+    void setInitialPolygon(List initialPolygon) {
+        this.initialPolygon = initialPolygon;
     }
 }

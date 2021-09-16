@@ -1,3 +1,4 @@
+
 part of naver_map_plugin;
 
 /// [NaverMap]의 [PathOverlay]에 대한 유일 식별자
@@ -13,7 +14,7 @@ class PathOverlayId {
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
     if (other.runtimeType != runtimeType) return false;
-    final PathOverlayId typedOther = other;
+    final PathOverlayId typedOther = other as PathOverlayId;
     return value == typedOther.value;
   }
 
@@ -47,88 +48,88 @@ class PathOverlay {
   /// 좌표열을 지정합니다.
   ///
   /// null이거나 [List.length]가 2 미만일 수 없습니다.
-  final List<LatLng> coords;
+  List<LatLng> coords;
 
   ///  전역 Z 인덱스를 지정합니다.
   ///
   ///  여러 오버레이가 화면에서 겹쳐지면 전역 Z 인덱스가 큰 오버레이가 작은 오버레이를 덮습니다. 또한 값이 0 이상이면 오버레이가 심벌 위에, 0 미만이면 심벌 아래에 그려집니다.
   ///  기본값은 [defaultGlobalZIndex]입니다.
-  final int globalZIndex;
+  int globalZIndex;
 
   /// 경로선과 마커의 캡션이 겹칠 경우 마커의 캡션을 숨길지 여부를 지정합니다.
   ///
   /// 기본값은 false입니다.
-  final bool hideCollidedCaptions;
+  bool hideCollidedCaptions;
 
   /// 경로선과 마커가 겹칠 경우 마커를 숨길지 여부를 지정합니다.
   ///
   /// 기본값은 false입니다.
-  final bool hideCollidedMarkers;
+  bool hideCollidedMarkers;
 
   /// 경로선과 지도 심벌이 겹칠 경우 지도 심벌을 숨길지 여부를 지정합니다.
   ///
   /// 기본값은 false입니다.
-  final bool hideCollidedSymbols;
+  bool hideCollidedSymbols;
 
   /// 경로선의 색상을 지정합니다.
   ///
   /// 경로선의 색상은 반투명일 수 없으며, 완전히 투명하거나 완전히 불투명해야 합니다. 색상의 알파가 0이 아닌 경우 완전히 불투명한 것으로 간주됩니다. 색상이 투명할 경우 테두리도 그려지지 않습니다.
   /// 기본값은 [Colors.white]입니다.
-  final Color color;
+  Color color;
 
   /// 경로선의 테두리 색상을 지정합니다.
   ///
   /// 경로선의 테두리 색상은 반투명일 수 없으며, 완전히 투명하거나 완전히 불투명해야 합니다. 색상의 알파가 0이 아닌 경우 완전히 불투명한 것으로 간주됩니다.
   /// 기본값은 [Colors.black]입니다.
-  final Color outlineColor;
+  Color outlineColor;
 
   /// 테두리의 두께를 지정합니다.
   ///
   /// 0일 경우 테두리가 그려지지 않습니다.
   /// 기본값은 2입니다.
   /// <p>단위는 상대크기 단위입니다.</p>
-  final int outlineWidth;
+  int outlineWidth;
 
   /// 지나온 경로선의 색상을 지정합니다.
   ///
   /// 지나온 경로선의 색상은 반투명일 수 없으며, 완전히 투명하거나 완전히 불투명해야 합니다. 색상의 알파가 0이 아닌 경우 완전히 불투명한 것으로 간주됩니다. 색상이 투명할 경우 테두리도 그려지지 않습니다.
   /// 기본값은 [Colors.white]입니다.
-  final Color passedColor;
+  Color passedColor;
 
   /// 지나온 경로선의 테두리 색상을 지정합니다.
   ///
   /// 지나온 경로선의 테두리 색상은 반투명일 수 없으며, 완전히 투명하거나 완전히 불투명해야 합니다. 색상의 알파가 0이 아닌 경우 완전히 불투명한 것으로 간주됩니다.
   /// 기본값은 [Colors.black]입니다.
-  final Color passedOutlineColor;
+  Color passedOutlineColor;
 
   /// 패턴 이미지를 지정합니다.
   ///
   /// 패턴 이미지의 크기가 경로선의 두께보다 클 경우 경로선의 두께에 맞게 축소됩니다. null일 경우 패턴을 표시하지 않습니다.
   /// 기본값은 null입니다.
-  final OverlayImage patternImage;
+  OverlayImage? patternImage;
 
   /// 패턴 이미지의 간격을 지정합니다.
   ///
   /// 0일 경우 패턴을 표시하지 않습니다.
   /// 기본값은 50입니다.
-  final int patternInterval;
+  int patternInterval;
 
   /// 진척률을 0.0 ~ 1.0으로 지정합니다.
   ///
   /// 경로선에서 0.0 ~ [progress]의 선형은 지나온 경로로 간주되어 [passedColor]와 [passedOutlineColor]가 사용됩니다. [progress] ~ 1.0의 선형은 지나갈 경로로 간주되어 [color]와 [outlineColor]가 사용됩니다.
   /// 기본값은 0.0입니다.
-  final double progress;
+  double progress;
 
   /// 두께를 지정합니다.
   /// <p>단위는 상대크기입니다. </p>
   /// 기본값은 10입니다.
-  final int width;
+  int width;
 
   /// 패스 오버레이를 탭했을 경우 호출되는 콜백입니다.
   /// <br/>
   ///
   /// 탭 이벤트를 먹은 [PathOverlayId]를 반환합니다.
-  final OnPathOverlayTab onPathOverlayTab;
+  OnPathOverlayTab? onPathOverlayTab;
 
   Map<String, dynamic> get json => {
         'pathOverlayId': pathOverlayId.value,
@@ -142,7 +143,7 @@ class PathOverlay {
         'outlineWidth': outlineWidth,
         'passedColor': passedColor.value,
         'passedOutlineColor': passedOutlineColor.value,
-        'patternImage': patternImage?._toJson(),
+        'patternImage': patternImage?.assetName,
         'patternInterval': patternInterval,
         'progress': progress,
         'width': width,
@@ -171,22 +172,22 @@ class PathOverlay {
 
   /// 주어진 파라미터를 덮어씌운 새로운 [PathOverlay] 객체를 생성합니다.
   PathOverlay copyWith({
-    List<LatLng> coordsParam,
-    int globalZIndexParams,
-    bool hideCollidedCaptionsParams,
-    bool hideCollidedMarkersParams,
-    bool hideCollidedSymbolsParams,
-    bool visibleParams,
-    Color colorParams,
-    Color outlineColorParams,
-    int outlineWidthParams,
-    Color passedColorParams,
-    Color passedOutlineColorParams,
-    OverlayImage patternImageParams,
-    int patternIntervalParams,
-    double progressParams,
-    int widthParams,
-    OnPathOverlayTab onPathOverlayTabParams,
+    List<LatLng>? coordsParam,
+    int? globalZIndexParams,
+    bool? hideCollidedCaptionsParams,
+    bool? hideCollidedMarkersParams,
+    bool? hideCollidedSymbolsParams,
+    bool? visibleParams,
+    Color? colorParams,
+    Color? outlineColorParams,
+    int? outlineWidthParams,
+    Color? passedColorParams,
+    Color? passedOutlineColorParams,
+    OverlayImage? patternImageParams,
+    int? patternIntervalParams,
+    double? progressParams,
+    int? widthParams,
+    OnPathOverlayTab? onPathOverlayTabParams,
   }) =>
       PathOverlay(
         pathOverlayId,
@@ -215,7 +216,7 @@ class PathOverlay {
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
     if (other.runtimeType != runtimeType) return false;
-    final PathOverlay typedOther = other;
+    final PathOverlay typedOther = other as PathOverlay;
     return pathOverlayId == typedOther.pathOverlayId &&
         listEquals(coords, typedOther.coords) &&
         globalZIndex == typedOther.globalZIndex &&
@@ -238,7 +239,7 @@ class PathOverlay {
 }
 
 Map<PathOverlayId, PathOverlay> _keyByPathOverlayId(
-    Iterable<PathOverlay> pathOverlays) {
+    Iterable<PathOverlay>? pathOverlays) {
   if (pathOverlays == null) return {};
 
   return Map<PathOverlayId, PathOverlay>.fromEntries(pathOverlays.map(
@@ -246,11 +247,11 @@ Map<PathOverlayId, PathOverlay> _keyByPathOverlayId(
           pathOverlay.pathOverlayId, pathOverlay.clone())));
 }
 
-List<Map<String, dynamic>> _serializePathOverlaySet(
-    Set<PathOverlay> pathOverlays) {
+List<Map<String, dynamic>>? _serializePathOverlaySet(
+    Set<PathOverlay?>? pathOverlays) {
   if (pathOverlays == null) return null;
 
   return pathOverlays
-      .map<Map<String, dynamic>>((PathOverlay p) => p.json)
+      .map<Map<String, dynamic>>((PathOverlay? p) => p!.json)
       .toList();
 }

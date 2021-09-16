@@ -19,6 +19,7 @@ class _CircleMapPageState extends State<CircleMapPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(),
       body: Stack(
         children: <Widget>[
           NaverMap(
@@ -27,7 +28,6 @@ class _CircleMapPageState extends State<CircleMapPage> {
             initLocationTrackingMode: LocationTrackingMode.Follow,
             onMapTap: _onMapTap,
           ),
-
           Align(
             alignment: Alignment.bottomCenter,
             child: Container(
@@ -35,29 +35,30 @@ class _CircleMapPageState extends State<CircleMapPage> {
               padding: EdgeInsets.symmetric(vertical: 40, horizontal: 32),
               child: Container(
                 padding: EdgeInsets.all(8),
-                height: MediaQuery.of(context).size.height*0.1,
+                height: MediaQuery.of(context).size.height * 0.1,
                 decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(6),
-                  boxShadow: [BoxShadow(
-                    color: Colors.black12,
-                    blurRadius: 3,
-                  )]
-                ),
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(6),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black12,
+                        blurRadius: 3,
+                      )
+                    ]),
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: <Widget>[
-                    Text(
-                      "반지름"
+                    Text("반지름"),
+                    SizedBox(
+                      width: 8,
                     ),
-                    SizedBox(width: 8,),
-
                     Expanded(
                       child: Slider.adaptive(
                         value: _sliderValue,
                         onChanged: _onSliderChange,
                         onChangeEnd: _onSliderChangeEnd,
-                        min: 1.0, max: 100.0,
+                        min: 1.0,
+                        max: 100.0,
                       ),
                     ),
                   ],
@@ -70,13 +71,9 @@ class _CircleMapPageState extends State<CircleMapPage> {
     );
   }
 
-
-
-
   void _onMapCreated(NaverMapController controller) {
     _controller.complete(controller);
   }
-
 
   void _onMapTap(LatLng latLng) {
     if (_selectedCircleIndex != null) {
@@ -92,8 +89,8 @@ class _CircleMapPageState extends State<CircleMapPage> {
       outlineColor: Colors.black,
       outlineWidth: 1,
     ));
-    _selectedCircleIndex = _circles.length -1;
-    setState(() {  });
+    _selectedCircleIndex = _circles.length - 1;
+    setState(() {});
   }
 
   void _onSliderChange(double value) {
@@ -107,7 +104,7 @@ class _CircleMapPageState extends State<CircleMapPage> {
       _circles[_selectedCircleIndex].color = Colors.black.withOpacity(0.3);
     }
 
-    for(int i = 0; i < _circles.length; i++) {
+    for (int i = 0; i < _circles.length; i++) {
       if (_circles[i].overlayId == overlayId) {
         _selectedCircleIndex = i;
         setState(() {

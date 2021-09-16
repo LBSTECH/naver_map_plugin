@@ -20,29 +20,35 @@ class _MarkerMapPageState extends State<MarkerMapPage> {
   @override
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      OverlayImage.fromAssetImage(ImageConfiguration(), 'icon/marker.png').then((image) {
+      OverlayImage.fromAssetImage(
+        assetName: 'icon/marker.png',
+      ).then((image) {
         setState(() {
           _markers.add(Marker(
-            markerId: 'id',
-            position: LatLng(37.563600, 126.962370),
-            captionText: "커스텀 아이콘",
-            captionColor: Colors.indigo,
-            icon: image,
-            width: 45,
-            height: 45,
-            infoWindow: '인포 윈도우',
-            onMarkerTab: _onMarkerTap
-          ));
+              markerId: 'id',
+              position: LatLng(37.563600, 126.962370),
+              captionText: "커스텀 아이콘",
+              captionColor: Colors.indigo,
+              captionTextSize: 20.0,
+              alpha: 0.8,
+              captionOffset: 30,
+              icon: image,
+              anchor: AnchorPoint(0.5, 1),
+              width: 45,
+              height: 45,
+              infoWindow: '인포 윈도우',
+              onMarkerTab: _onMarkerTap));
         });
       });
     });
     super.initState();
   }
-  
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
+        appBar: AppBar(),
         body: Column(
           children: <Widget>[
             _controlPanel(),
@@ -65,19 +71,18 @@ class _MarkerMapPageState extends State<MarkerMapPage> {
               onTap: () => setState(() => _currentMode = MODE_ADD),
               child: Container(
                 decoration: BoxDecoration(
-                  color: _currentMode == MODE_ADD
-                      ? Colors.black : Colors.white,
-                  borderRadius: BorderRadius.circular(6),
-                  border: Border.all(color: Colors.black)
-                ),
+                    color:
+                        _currentMode == MODE_ADD ? Colors.black : Colors.white,
+                    borderRadius: BorderRadius.circular(6),
+                    border: Border.all(color: Colors.black)),
                 padding: EdgeInsets.all(8),
                 margin: EdgeInsets.only(right: 8),
                 child: Text(
                   '추가',
                   textAlign: TextAlign.center,
                   style: TextStyle(
-                    color: _currentMode == MODE_ADD
-                        ? Colors.white : Colors.black,
+                    color:
+                        _currentMode == MODE_ADD ? Colors.white : Colors.black,
                     fontWeight: FontWeight.w600,
                     fontSize: 14,
                   ),
@@ -93,10 +98,10 @@ class _MarkerMapPageState extends State<MarkerMapPage> {
               child: Container(
                 decoration: BoxDecoration(
                     color: _currentMode == MODE_REMOVE
-                        ? Colors.black : Colors.white,
+                        ? Colors.black
+                        : Colors.white,
                     borderRadius: BorderRadius.circular(6),
-                    border: Border.all(color: Colors.black)
-                ),
+                    border: Border.all(color: Colors.black)),
                 padding: EdgeInsets.all(8),
                 margin: EdgeInsets.only(right: 8),
                 child: Text(
@@ -104,7 +109,8 @@ class _MarkerMapPageState extends State<MarkerMapPage> {
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     color: _currentMode == MODE_REMOVE
-                        ? Colors.white : Colors.black,
+                        ? Colors.white
+                        : Colors.black,
                     fontWeight: FontWeight.w600,
                     fontSize: 14,
                   ),
@@ -118,16 +124,14 @@ class _MarkerMapPageState extends State<MarkerMapPage> {
             onTap: () => setState(() => _currentMode = MODE_NONE),
             child: Container(
               decoration: BoxDecoration(
-                  color: _currentMode == MODE_NONE
-                      ? Colors.black : Colors.white,
+                  color:
+                      _currentMode == MODE_NONE ? Colors.black : Colors.white,
                   borderRadius: BorderRadius.circular(6),
-                  border: Border.all(color: Colors.black)
-              ),
+                  border: Border.all(color: Colors.black)),
               padding: EdgeInsets.all(4),
               child: Icon(
                 Icons.clear,
-                  color: _currentMode == MODE_NONE
-                      ? Colors.white : Colors.black,
+                color: _currentMode == MODE_NONE ? Colors.white : Colors.black,
               ),
             ),
           ),
@@ -151,7 +155,6 @@ class _MarkerMapPageState extends State<MarkerMapPage> {
     );
   }
 
-  
   // ================== method ==========================
 
   void _onMapCreated(NaverMapController controller) {
@@ -171,7 +174,11 @@ class _MarkerMapPageState extends State<MarkerMapPage> {
   }
 
   void _onMarkerTap(Marker marker, Map<String, int> iconSize) {
-    if (_currentMode == MODE_REMOVE){
+    int pos = _markers.indexWhere((m) => m.markerId == marker.markerId);
+    setState(() {
+      _markers[pos].captionText = '선택됨';
+    });
+    if (_currentMode == MODE_REMOVE) {
       setState(() {
         _markers.removeWhere((m) => m.markerId == marker.markerId);
       });

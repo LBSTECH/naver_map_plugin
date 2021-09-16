@@ -3,6 +3,8 @@ package map.naver.plugin.net.lbstech.naver_map_plugin;
 import android.content.Context;
 import android.os.Handler;
 import android.os.Looper;
+import android.util.DisplayMetrics;
+import android.view.WindowManager;
 
 import androidx.annotation.NonNull;
 
@@ -18,7 +20,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 
-@SuppressWarnings({"unchecked", "ConstantConditions"})
+@SuppressWarnings({"unchecked", "ConstantConditions", "rawtypes"})
 class NaverMarkerController {
     private final NaverMap naverMap;
     private final Overlay.OnClickListener onClickListener;
@@ -31,7 +33,7 @@ class NaverMarkerController {
     private String markerIdOfInfoWindow;
 
     NaverMarkerController(NaverMap naverMap, Overlay.OnClickListener listener,
-                                 float density, Context context) {
+                          float density, Context context) {
         this.naverMap = naverMap;
         onClickListener = listener;
         this.density = density;
@@ -74,7 +76,8 @@ class NaverMarkerController {
         for (Object json : jsonArray) {
             HashMap<String, Object> data = (HashMap<String, Object>) json;
             String id = (String) data.get("markerId");
-            idToController.get(id).interpret(data);
+            if (idToController.containsKey(id) && idToController.get(id) != null)
+                idToController.get(id).interpret(data);
         }
     }
 
@@ -94,20 +97,29 @@ class NaverMarkerController {
         }
 
         void interpret(HashMap<String, Object> json) {
+            DisplayMetrics metrics = new DisplayMetrics();
+            WindowManager mgr = (WindowManager)context.getSystemService(Context.WINDOW_SERVICE);
+            mgr.getDefaultDisplay().getMetrics(metrics);
+
+            final float density = metrics.density;
+
             final Object position = json.get("position");
             if (position != null) marker.setPosition(Convert.toLatLng(position));
 
             final Object alpha = json.get("alpha");
-            if (alpha != null) marker.setAlpha((float) alpha);
+            if (alpha != null) marker.setAlpha(Convert.toFloat(alpha));
 
             final Object flat = json.get("flat");
             if (flat != null) marker.setFlat((boolean) flat);
+
+            final Object anchor = json.get("anchor");
+            if (anchor != null) marker.setAnchor(Convert.toPoint(anchor));
 
             final Object captionText = json.get("captionText");
             if (captionText != null) marker.setCaptionText((String) captionText);
 
             final Object captionTextSize = json.get("captionTextSize");
-            if (captionTextSize != null) marker.setCaptionTextSize((float) captionTextSize);
+            if (captionTextSize != null) marker.setCaptionTextSize(Convert.toFloat(captionTextSize));
 
             final Object captionColor = json.get("captionColor");
             if (captionColor != null) marker.setCaptionColor(Convert.toColorInt(captionColor));
@@ -116,10 +128,10 @@ class NaverMarkerController {
             if (captionHaloColor != null) marker.setCaptionHaloColor(Convert.toColorInt(captionHaloColor));
 
             final Object width = json.get("width");
-            if (width != null) marker.setWidth(Math.round((int)width * density));
+            if (width != null) marker.setWidth(Math.round((int)width * NaverMarkerController.this.density));
 
             final Object height = json.get("height");
-            if (height != null) marker.setHeight(Math.round((int)height * density));
+            if (height != null) marker.setHeight(Math.round((int)height * NaverMarkerController.this.density));
 
             final Object maxZoom = json.get("maxZoom");
             if (maxZoom != null) marker.setMaxZoom((double)maxZoom);
@@ -140,7 +152,7 @@ class NaverMarkerController {
             if (captionMinZoom != null) marker.setCaptionMinZoom((double) captionMinZoom);
 
             final Object captionOffset = json.get("captionOffset");
-            if (captionOffset != null) marker.setCaptionOffset((int) captionOffset);
+            if (captionOffset != null) marker.setCaptionOffset(Math.round((int) captionOffset * density));
 
             final Object captionPerspectiveEnabled = json.get("captionPerspectiveEnabled");
             if (captionPerspectiveEnabled != null)
@@ -159,7 +171,7 @@ class NaverMarkerController {
             if(subCaptionText != null) marker.setSubCaptionText((String) subCaptionText);
 
             final Object subCaptionTextSize = json.get("subCaptionTextSize");
-            if (subCaptionTextSize != null) marker.setSubCaptionTextSize((int) subCaptionTextSize);
+            if (subCaptionTextSize != null) marker.setSubCaptionTextSize(Convert.toFloat(subCaptionTextSize));
 
             final Object subCaptionColor = json.get("subCaptionColor");
             if (subCaptionColor != null) marker.setSubCaptionColor(Convert.toColorInt(subCaptionColor));
@@ -170,7 +182,7 @@ class NaverMarkerController {
 
             final Object subCaptionRequestedWidth = json.get("subCaptionRequestedWidth");
             if (subCaptionRequestedWidth != null)
-                marker.setSubCaptionRequestedWidth(Math.round((int)subCaptionRequestedWidth * density));
+                marker.setSubCaptionRequestedWidth(Math.round((int)subCaptionRequestedWidth * NaverMarkerController.this.density));
 
             final Object icon = json.get("icon");
             if (icon != null) marker.setIcon(Convert.toOverlayImage(icon));

@@ -9,6 +9,7 @@ import android.view.View;
 
 import androidx.annotation.NonNull;
 
+import com.naver.maps.geometry.LatLng;
 import com.naver.maps.geometry.LatLngBounds;
 import com.naver.maps.map.CameraAnimation;
 import com.naver.maps.map.CameraPosition;
@@ -41,6 +42,7 @@ import static map.naver.plugin.net.lbstech.naver_map_plugin.NaverMapPlugin.RESUM
 import static map.naver.plugin.net.lbstech.naver_map_plugin.NaverMapPlugin.STARTED;
 import static map.naver.plugin.net.lbstech.naver_map_plugin.NaverMapPlugin.STOPPED;
 
+@SuppressWarnings("rawtypes")
 public class NaverMapController implements
         PlatformView,
         OnMapReadyCallback,
@@ -57,11 +59,15 @@ public class NaverMapController implements
     private List initialPaths;
     private List initialPolylines;
     private List initialCircles;
+    private List initialPolygons;
 
     private NaverMap naverMap;
     private boolean disposed = false;
     private MethodChannel.Result mapReadyResult;
     private int locationTrackingMode;
+    private List<Double> paddingData;
+    private double maxZoom;
+    private double minZoom;
 
     private final Float density;
 
@@ -69,6 +75,7 @@ public class NaverMapController implements
     private NaverPolylineController polylineController;
     private NaverMarkerController markerController;
     private NaverCircleController circleController;
+    private NaverPolygonController polygonController;
 
     NaverMapController(
             int id,
@@ -80,7 +87,8 @@ public class NaverMapController implements
             List initialMarkers,
             List initialPaths,
             List initialPolylines,
-            List initialCircles
+            List initialCircles,
+            List initialPolygons
     ) {
         this.mapView = new MapView(context, options);
 
@@ -91,6 +99,7 @@ public class NaverMapController implements
         this.initialPaths = initialPaths;
         this.initialPolylines = initialPolylines;
         this.initialCircles = initialCircles;
+        this.initialPolygons = initialPolygons;
 
         methodChannel = new MethodChannel(binaryMessenger, "naver_map_plugin_" + id);
         registrarActivityHashCode = activity.hashCode();
@@ -106,6 +115,9 @@ public class NaverMapController implements
         this.naverMap.getUiSettings().setZoomControlEnabled(false);
         this.naverMap.getUiSettings().setIndoorLevelPickerEnabled(false);
 
+        // 네이버 로고 선택시 Crash 나는 현상 방지
+        this.naverMap.getUiSettings().setLogoClickEnabled(false);
+
         if (mapReadyResult != null) {
             mapReadyResult.success(null);
             mapReadyResult = null;
@@ -120,8 +132,10 @@ public class NaverMapController implements
         naverMap.addOnCameraChangeListener(listeners);
         naverMap.addOnCameraIdleListener(listeners);
         naverMap.setLocationSource(new FusedLocationSource(activity, 0xAAFF));
-        setLocationTrackingMode(locationTrackingMode);
 
+        /// 초기 설정값 빈영
+        setLocationTrackingMode(locationTrackingMode);
+        setContentPadding(paddingData);
 
         // 맵 완전히 만들어진 이후에 오버레이 추가.
         // - 패스
@@ -131,11 +145,18 @@ public class NaverMapController implements
         polylineController = new NaverPolylineController(naverMap, listeners, density);
         polylineController.set(initialPolylines);
 
+        // - 마커
         markerController = new NaverMarkerController(naverMap, listeners, density, mapView.getContext());
         markerController.add(initialMarkers);
 
+        // - 원형 오버레이
         circleController = new NaverCircleController(naverMap, listeners, density);
         circleController.add(initialCircles);
+
+        // - 폴리곤 오버레이
+        polygonController = new NaverPolygonController(naverMap, listeners, density);
+        polygonController.add(initialPolygons);
+
     }
 
     @Override
@@ -315,17 +336,24 @@ public class NaverMapController implements
                         null);
             }
             break;
+            case "map#type" :
+                {
+                    if (naverMap != null) {
+                        int type = methodCall.argument("mapType");
+                        setMapType(type);
+                    } else result.error("네이버맵 초기화 안됨.",
+                            "네이버 지도가 생성되기 전에 이 메서드를 사용할 수 없습니다.",
+                            null);
+                }
+                break;
             case "map#padding": {
                 if (naverMap == null) result.success(null);
                 float left = Convert.toFloat(methodCall.argument("left"));
                 float right = Convert.toFloat(methodCall.argument("right"));
                 float top = Convert.toFloat(methodCall.argument("top"));
                 float bottom = Convert.toFloat(methodCall.argument("bottom"));
-                naverMap.setContentPadding(
-                        Math.round(left * density),
-                        Math.round(top * density),
-                        Math.round(right * density),
-                        Math.round(bottom * density));
+                setContentPadding(
+                        left ,top ,right ,bottom );
                 result.success(null);
             }
             break;
@@ -344,7 +372,38 @@ public class NaverMapController implements
                 circleController.modify(circlesToChange);
                 result.success(null);
             }
-            break;
+            break;case "polygonOverlay#update":
+                {
+                    List polygonToAdd = methodCall.argument("polygonToAdd");
+                    List polygonToRemove = methodCall.argument("polygonToRemove");
+                    List polygonToModify = methodCall.argument("polygonToChange");
+                    polygonController.add(polygonToAdd);
+                    polygonController.modify(polygonToModify);
+                    polygonController.remove(polygonToRemove);
+                    result.success(null);
+                }
+                break;
+            case "LO#set#position":
+                {
+                    if(naverMap != null) {
+                        LatLng position = Convert.toLatLng(methodCall.argument("position"));
+                        naverMap.getLocationOverlay().setPosition(position);
+                        result.success(null);
+                    }else result.error("네이버맵 초기화 안됨.",
+                            "네이버 지도가 생성되기 전에 이 메서드를 사용할 수 없습니다.",
+                            null);
+                }
+                break;
+            case "LO#set#bearing" :
+                {
+                    if (naverMap != null) {
+                        naverMap.getLocationOverlay().setBearing(Convert.toFloat(methodCall.argument("bearing")));
+                        result.success(null);
+                    }else result.error("네이버맵 초기화 안됨.",
+                            "네이버 지도가 생성되기 전에 이 메서드를 사용할 수 없습니다.",
+                            null);
+                }
+                break;
         }
     }
 
@@ -534,6 +593,29 @@ public class NaverMapController implements
     }
 
     @Override
+    public void setContentPadding(List<Double> paddingData) {
+        if (paddingData == null || paddingData.size() < 4) return;
+        if (naverMap == null) {
+            this.paddingData = paddingData;
+            return;
+        }
+        int left = Math.round(Convert.toFloat(paddingData.get(0)) * density);
+        int top = Math.round(Convert.toFloat(paddingData.get(1)) * density);
+        int right = Math.round(Convert.toFloat(paddingData.get(2)) * density);
+        int bottom = Math.round(Convert.toFloat(paddingData.get(3)) * density);
+        naverMap.setContentPadding(left, top, right, bottom);
+    }
+
+    public void setContentPadding(float leftDp, float topDp, float rightDp, float bottomDp) {
+        if (naverMap == null) return;
+        int left = Math.round(leftDp * density);
+        int top = Math.round(topDp * density);
+        int right = Math.round(rightDp * density);
+        int bottom = Math.round(bottomDp * density);
+        naverMap.setContentPadding(left, top, right, bottom);
+    }
+
+    @Override
     public void setLocationTrackingMode(int locationTrackingMode) {
         if (naverMap == null) {
             this.locationTrackingMode = locationTrackingMode;
@@ -553,5 +635,21 @@ public class NaverMapController implements
                 naverMap.setLocationTrackingMode(LocationTrackingMode.Face);
                 break;
         }
+    }
+
+    public void setMaxZoom(double maxZoom) {
+        if(naverMap == null) {
+            this.maxZoom = maxZoom;
+            return;
+        }
+        naverMap.setMaxZoom(maxZoom);
+    }
+
+    public void setMinZoom(double minZoom) {
+        if(naverMap == null) {
+            this.minZoom = minZoom;
+            return;
+        }
+        naverMap.setMinZoom(minZoom);
     }
 }

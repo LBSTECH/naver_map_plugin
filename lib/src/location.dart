@@ -1,3 +1,4 @@
+
 part of naver_map_plugin;
 
 /// 위도와 경도가 한 쌍을 이루어서 저장되는 class.
@@ -18,7 +19,7 @@ class LatLng {
     return <double>[latitude, longitude];
   }
 
-  static LatLng _fromJson(dynamic json) {
+  static LatLng? _fromJson(dynamic json) {
     if (json == null) {
       return null;
     }
@@ -39,7 +40,7 @@ class LatLng {
 
 /// 북동쪽 위, 경도와 남서쪽 위,경도로 만들어진 사각형 영역이다.
 class LatLngBounds {
-  LatLngBounds({@required this.southwest, @required this.northeast})
+  LatLngBounds({required this.southwest, required this.northeast})
       : assert(southwest != null),
         assert(northeast != null),
         assert(southwest.latitude <= northeast.latitude),
@@ -103,13 +104,13 @@ class LatLngBounds {
   }
 
   @visibleForTesting
-  static LatLngBounds fromList(dynamic json) {
+  static LatLngBounds? fromList(dynamic json) {
     if (json == null) {
       return null;
     }
     return LatLngBounds(
-      southwest: LatLng._fromJson(json[0]),
-      northeast: LatLng._fromJson(json[1]),
+      southwest: LatLng._fromJson(json[0])!,
+      northeast: LatLng._fromJson(json[1])!,
     );
   }
 

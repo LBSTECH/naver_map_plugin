@@ -12,6 +12,7 @@ import io.flutter.plugin.common.StandardMessageCodec;
 import io.flutter.plugin.platform.PlatformView;
 import io.flutter.plugin.platform.PlatformViewFactory;
 
+@SuppressWarnings("rawtypes")
 public class NaverMapFactory extends PlatformViewFactory {
     private final AtomicInteger activityState;
     private final BinaryMessenger binaryMessenger;
@@ -39,9 +40,9 @@ public class NaverMapFactory extends PlatformViewFactory {
         }
         if (params.containsKey("options")) {
             Map<String, Object> options = (Map<String, Object>) params.get("options");
-            if (options.containsKey("isDevMode")) {
-                boolean isDevMode = (boolean) options.get("isDevMode");
-                builder.setDevMode(isDevMode);
+            if (options.containsKey("useSurface")) {
+                boolean useSurface = (boolean) options.get("useSurface");
+                builder.setViewType(useSurface);
             }
             Convert.carveMapOptions(builder, options);
         }
@@ -56,6 +57,9 @@ public class NaverMapFactory extends PlatformViewFactory {
         }
         if (params.containsKey("circles")) {
             builder.setInitialCircles((List) params.get("circles"));
+        }
+        if (params.containsKey("polygons")) {
+            builder.setInitialPolygon((List) params.get("polygons"));
         }
 
         return builder.build(

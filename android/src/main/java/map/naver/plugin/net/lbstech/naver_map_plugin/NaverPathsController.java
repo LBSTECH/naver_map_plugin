@@ -9,7 +9,7 @@ import com.naver.maps.map.overlay.PathOverlay;
 import java.util.HashMap;
 import java.util.List;
 
-@SuppressWarnings({"unchecked", "ConstantConditions"})
+@SuppressWarnings({"unchecked", "ConstantConditions", "rawtypes"})
 class NaverPathsController {
     private final NaverMap naverMap;
     private final Overlay.OnClickListener onClickListener;

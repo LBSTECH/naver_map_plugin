@@ -40,6 +40,8 @@ class _BaseMapPageState extends State<BaseMapPage> {
             onMapDoubleTap: _onMapDoubleTap,
             onMapTwoFingerTap: _onMapTwoFingerTap,
             onSymbolTap: _onSymbolTap,
+            maxZoom: 17,
+            minZoom: 15,
           ),
           Padding(
             padding: EdgeInsets.all(16),
@@ -51,7 +53,7 @@ class _BaseMapPageState extends State<BaseMapPage> {
     );
   }
 
-  _onMapTap(LatLng position) {
+  _onMapTap(LatLng position) async{
     scaffoldKey.currentState.showSnackBar(SnackBar(
       content:
           Text('[onTap] lat: ${position.latitude}, lon: ${position.longitude}'),
@@ -195,13 +197,16 @@ class _BaseMapPageState extends State<BaseMapPage> {
   }
 
   /// my location button
-  void _onTapLocation() async {
-    final controller = await _controller.future;
-    controller.setLocationTrackingMode(LocationTrackingMode.Follow);
-  }
+  // void _onTapLocation() async {
+  //   final controller = await _controller.future;
+  //   controller.setLocationTrackingMode(LocationTrackingMode.Follow);
+  // }
 
-  void _onCameraChange(LatLng latLng) {
-    print('카메라 움직임. (위치 : ${latLng.latitude}, ${latLng.longitude})');
+  void _onCameraChange(
+      LatLng latLng, CameraChangeReason reason, bool isAnimated) {
+    print('카메라 움직임 >>> 위치 : ${latLng.latitude}, ${latLng.longitude}'
+        '\n원인: $reason'
+        '\n에니메이션 여부: $isAnimated');
   }
 
   void _onCameraIdle() {

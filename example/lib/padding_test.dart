@@ -16,14 +16,15 @@ class _PaddingTestState extends State<PaddingTest> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(),
       body: Stack(
         children: <Widget>[
           NaverMap(
             onMapCreated: _onMapCreated,
             initLocationTrackingMode: LocationTrackingMode.Follow,
             locationButtonEnable: true,
+            contentPadding: EdgeInsets.only(left: 150),
           ),
-
           Align(
             alignment: Alignment.bottomCenter,
             child: AnimatedContainer(
@@ -41,14 +42,15 @@ class _PaddingTestState extends State<PaddingTest> {
                       alignment: Alignment.centerRight,
                       child: Container(
                         decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(6),
-                          boxShadow: [BoxShadow(
-                            color: Colors.black12,
-                            blurRadius: 3,
-                            spreadRadius: 1,
-                          )]
-                        ),
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(6),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.black12,
+                                blurRadius: 3,
+                                spreadRadius: 1,
+                              )
+                            ]),
                         padding: EdgeInsets.all(8),
                         margin: EdgeInsets.only(bottom: 16, right: 16),
                         child: Icon(
@@ -79,20 +81,15 @@ class _PaddingTestState extends State<PaddingTest> {
     _controller.complete(controller);
   }
 
-  void _onTapUp() async{
+  void _onTapUp() async {
     if (!_controller.isCompleted) return;
 
-    final cont = await _controller.future;
-    final meterPerDp = await cont.getMeterPerDp();
-    final meterPerPx = await cont.getMeterPerPx();
-
-    print("meterPerDp : $meterPerDp, meterPerPx : $meterPerPx");
-
     if (_padding < 300) {
-      setState(() {
-        _padding += 20;
-        cont.setContentPadding(bottom: _padding);
-      });
+      _padding += 20;
+      final cont = await _controller.future;
+      cont.setContentPadding(bottom: _padding);
+
+      setState(() {});
     }
   }
 }

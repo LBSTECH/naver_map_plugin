@@ -1,33 +1,32 @@
+
 part of naver_map_plugin;
 
 /// 마커에 쓰일 비트맵 이미지를 정의한다.
-class OverlayImage{
-  const OverlayImage._(this._json);
+class OverlayImage {
+  final AssetImage image;
+  final AssetBundleImageKey key;
 
-  Uint8List get blob => Uint8List.fromList([]);
+  get assetName => Platform.isIOS ? image.assetName : key.name;
 
-  final dynamic _json;
+  const OverlayImage._(this.image, this.key);
 
-  dynamic _toJson() => _json;
-
-  /// asset 이미지로 부터 [OverlayImage] 객체를 만든다.
+  /// ## [assetName] 이미지 중 [configuration]에 맞는 이미지를 찾아 [OverlayImage]객체를 만든다.
   ///
+  /// 이 때 [ImageConfiguration.bundle]은 [PlatformAssetBundle]이 된다.
+  /// [ImageConfiguration.textDirection]은 null이 된다.
   ///
-  /// 이 함수는 해상도를 고려해서 dpi에 따라 이미지를 올바른 해상도로 스케일링한다.
-  static Future<OverlayImage> fromAssetImage(
-      ImageConfiguration configuration, String assetName) async {
-    if (configuration.devicePixelRatio != null) {
-      return OverlayImage._(<dynamic>[
-        assetName,
-        configuration.devicePixelRatio,
-      ]);
-    }
+  /// - .../image.png  ---> android mdpi(1.0x)와 ios @1x 에서의 기본값
+  /// - .../1.5x/image.png  ---> android hdpi(1.5x) 에서 기본
+  /// - .../2.0x/image.png  ---> android xhdpi(2.0x)와 ios @2x 에서 기본
+  /// - .../3.0x/image.png  ---> android xxhdpi(3.0x)와 ios @3x 에서 기본
+  /// - .../4.0x/image.png  ---> android xxxhdpi(4.0x)에서 기본
+  static Future<OverlayImage> fromAssetImage({required String assetName}) async {
+    final _configuration = ImageConfiguration(
+      platform: Platform.isIOS ? TargetPlatform.iOS : TargetPlatform.android,
+    );
     final AssetImage assetImage = AssetImage(assetName);
-    final AssetBundleImageKey assetBundleImageKey = await assetImage.obtainKey(configuration);
-    return OverlayImage._(<dynamic>[
-      assetBundleImageKey.name,
-      assetBundleImageKey.scale,
-    ]);
-  }
+    final AssetBundleImageKey key = await assetImage.obtainKey(_configuration);
 
+    return OverlayImage._(assetImage, key);
+  }
 }

@@ -23,10 +23,10 @@ class NMarkerController: NSObject {
         super.init()
         marker.userInfo = ["marker" : self]
         
-        interprete(json: json)
+        interpret(json: json)
     }
     
-    func interprete(json: NSDictionary) {
+    func interpret(json: NSDictionary) {
         if let positionData = json["position"] {
             marker.position = toLatLng(json: positionData)
         }
@@ -62,6 +62,9 @@ class NMarkerController: NSObject {
         }
         if let angle = json["angle"] as? CGFloat {
             marker.angle = angle
+        }
+        if let anchorList = json["anchor"] as? Array<Double> {
+            marker.anchor = CGPoint(x: anchorList[0], y: anchorList[1])
         }
         if let captionRequestWidth = json["captionRequestedWidth"] as? CGFloat {
             marker.captionRequestedWidth = captionRequestWidth
@@ -99,8 +102,8 @@ class NMarkerController: NSObject {
         if let subCaptionRequestedWidth = json["subCaptionRequestedWidth"] as? CGFloat {
             marker.subCaptionRequestedWidth = subCaptionRequestedWidth
         }
-        if let iconData = json["icon"] as? Array<Any>,
-           let overlayImage = toOverlayImage(data: iconData, registrar: registrar) {
+        if let assetName = json["icon"] as? String,
+           let overlayImage = toOverlayImage(assetName:assetName, registrar: registrar) {
             marker.iconImage = overlayImage
         }
         if let infoWindowText = json["infoWindow"] as? String {
@@ -159,7 +162,7 @@ class NaverMarkersController: NSObject {
             DispatchQueue.main.async {
                 if let data = json as? NSDictionary {
                     let id = data["markerId"] as! String
-                    self.idToController[id]?.interprete(json: data)
+                    self.idToController[id]?.interpret(json: data)
                 }
             }
         }
@@ -176,9 +179,8 @@ class NaverMarkersController: NSObject {
                 infoWindow.open(with: marker.marker)
                 infoWindowMarkerId = marker.id
             }
-            return true
         }
-        return false
+        return true
     }
     
 }

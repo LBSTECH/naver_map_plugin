@@ -1,3 +1,4 @@
+
 part of naver_map_plugin;
 
 /// build 시에 새로운 마커들은 [NaverMap] 에 적용된다.
@@ -6,7 +7,7 @@ part of naver_map_plugin;
 class _MarkerUpdates {
   /// 업데이트 이전의 [Marker]와 새로운 [Marker]를 이용해서
   /// [_MarkerUpdates] 객체를 생성한다.
-  _MarkerUpdates.from(Set<Marker> previous, Set<Marker> current) {
+  _MarkerUpdates.from(Set<Marker>? previous, Set<Marker>? current) {
     previous ??= Set<Marker>.identity();
     current ??= Set<Marker>.identity();
 
@@ -16,25 +17,25 @@ class _MarkerUpdates {
     final Set<String> prevMarkerIds = previousMarkers.keys.toSet();
     final Set<String> currentMarkerIds = currentMarkers.keys.toSet();
 
-    Marker idToCurrentMarker(String id) {
+    Marker? idToCurrentMarker(String id) {
       return currentMarkers[id];
     }
 
     final Set<String> _markerIdsToRemove =
         prevMarkerIds.difference(currentMarkerIds);
 
-    final Set<Marker> _markersToAdd = currentMarkerIds
+    final Set<Marker?> _markersToAdd = currentMarkerIds
         .difference(prevMarkerIds)
         .map(idToCurrentMarker)
         .toSet();
 
     /// 새로운 마커의 아이디가 기존의 것과 다른 경우 true 리턴.
-    bool hasChanged(Marker current) {
-      final Marker previous = previousMarkers[current.markerId];
+    bool hasChanged(Marker? current) {
+      final Marker? previous = previousMarkers[current!.markerId];
       return current != previous;
     }
 
-    final Set<Marker> _markersToChange = currentMarkerIds
+    final Set<Marker?> _markersToChange = currentMarkerIds
         .intersection(prevMarkerIds)
         .map(idToCurrentMarker)
         .where(hasChanged)
@@ -45,9 +46,9 @@ class _MarkerUpdates {
     markersToChange = _markersToChange;
   }
 
-  Set<Marker> markersToAdd;
-  Set<String> markerIdsToRemove;
-  Set<Marker> markersToChange;
+  Set<Marker?>? markersToAdd;
+  Set<String>? markerIdsToRemove;
+  Set<Marker?>? markersToChange;
 
   Map<String, dynamic> _toMap() {
     final Map<String, dynamic> updateMap = <String, dynamic>{};
@@ -61,7 +62,7 @@ class _MarkerUpdates {
     addIfNonNull('markersToAdd', _serializeMarkerSet(markersToAdd));
     addIfNonNull('markersToChange', _serializeMarkerSet(markersToChange));
     addIfNonNull('markerIdsToRemove',
-        markerIdsToRemove.map<dynamic>((String m) => m.toString()).toList());
+        markerIdsToRemove!.map<dynamic>((String m) => m.toString()).toList());
 
     return updateMap;
   }
@@ -70,7 +71,7 @@ class _MarkerUpdates {
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
     if (other.runtimeType != runtimeType) return false;
-    final _MarkerUpdates typedOther = other;
+    final _MarkerUpdates typedOther = other as _MarkerUpdates;
     return setEquals(markersToAdd, typedOther.markersToAdd) &&
         setEquals(markerIdsToRemove, typedOther.markerIdsToRemove) &&
         setEquals(markersToChange, typedOther.markersToChange);

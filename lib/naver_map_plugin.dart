@@ -1,11 +1,15 @@
+
+
 library naver_map_plugin;
 
 import 'dart:async';
-import 'dart:typed_data';
+import 'dart:io' show Platform;
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter/rendering.dart';
+// import 'package:flutter/gestures.dart';
 
 part 'src/callbacks.dart';
 
@@ -36,5 +40,9 @@ part 'src/polyline_overlay.dart';
 part 'src/polyline_overlay_updates.dart';
 
 part 'src/ui.dart';
+
+part 'src/polygon_overlay.dart';
+
+part 'src/polygon_update.dart';
 
 const String VIEW_TYPE = 'naver_map_plugin';

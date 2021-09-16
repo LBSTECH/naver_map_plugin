@@ -2,6 +2,7 @@ package map.naver.plugin.net.lbstech.naver_map_plugin;
 
 import android.annotation.SuppressLint;
 import android.graphics.Color;
+import android.graphics.PointF;
 
 import com.naver.maps.geometry.LatLng;
 import com.naver.maps.geometry.LatLngBounds;
@@ -17,6 +18,7 @@ import java.util.Map;
 
 import io.flutter.view.FlutterMain;
 
+@SuppressWarnings("rawtypes")
 class Convert {
 
     @SuppressWarnings("ConstantConditions")
@@ -51,12 +53,34 @@ class Convert {
             sink.setLocationButtonEnable((Boolean) options.get("locationButtonEnable"));
         if(options.containsKey("locationTrackingMode"))
             sink.setLocationTrackingMode((Integer) options.get("locationTrackingMode"));
+        if(options.containsKey("contentPadding"))
+            sink.setContentPadding(toDoubleList(options.get("contentPadding")));
+        if(options.containsKey("maxZoom"))
+            sink.setMaxZoom((Double) options.get("maxZoom"));
+        if(options.containsKey("minZoom"))
+            sink.setMinZoom((Double) options.get("minZoom"));
     }
 
     @SuppressWarnings("unchecked")
     static LatLng toLatLng(Object o) {
         final List<Double> data = (List<Double>) o;
         return new LatLng(data.get(0), data.get(1));
+    }
+
+    static PointF toPoint(Object o) {
+        final List data = (List) o;
+        return new PointF(toFloat(data.get(0)), toFloat(data.get(1)));
+    }
+
+    static List<Double> toDoubleList(Object o) {
+        final List data = (List) o;
+        ArrayList<Double> result = new ArrayList<>();
+        for(Object element : data) {
+            if (element instanceof Double) {
+                result.add((Double) element);
+            }
+        }
+        return result;
     }
 
     private static LatLngBounds toLatLngBounds(Object o) {
@@ -137,8 +161,7 @@ class Convert {
     }
 
     static OverlayImage toOverlayImage(Object o) {
-        List data = (List) o;
-        String assetName = (String) data.get(0);
+        String assetName = (String) o;
         String key = FlutterMain.getLookupKeyForAsset(assetName);
         return OverlayImage.fromAsset(key);
     }
@@ -154,10 +177,22 @@ class Convert {
         return points;
     }
 
+    static List<List<LatLng>> toHoles(Object o) {
+        final List<?> data = (List) o;
+        final List<List<LatLng>> holes = new ArrayList<>(data.size());
+
+        for (Object ob: data) {
+            List<LatLng> hole = toCoords(ob);
+            holes.add(hole);
+        }
+        return holes;
+    }
+
     @SuppressWarnings("MalformedFormatString")
     static int toColorInt(Object value){
         if (value instanceof Long || value instanceof Integer) {
-            return Color.parseColor(String.format("#%08x", value));
+            String formed = String.format("#%08x", value);
+            return Color.parseColor(formed);
         }else {
             return 0;
         }
