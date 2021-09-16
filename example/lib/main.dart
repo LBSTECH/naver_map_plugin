@@ -7,6 +7,7 @@ import 'package:naver_map_plugin_example/marker_map_page.dart';
 import 'package:naver_map_plugin_example/path_map.dart';
 import 'package:naver_map_plugin_example/polygon_map.dart';
 import 'package:naver_map_plugin_example/text_field_page.dart';
+import 'package:naver_map_plugin_example/polyline_map.dart';
 
 void main() {
   runApp(MyApp());
@@ -36,6 +37,7 @@ class _MainPageState extends State<MainPage> {
     '기본 지도 예제',
     '마커 예제',
     '패스 예제',
+    '폴리라인 예제',
     '원형 오버레이 예제',
     '컨트롤러 테스트',
     '폴리곤 예제',
@@ -51,26 +53,27 @@ class _MainPageState extends State<MainPage> {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: menuText
-              .map((text) => GestureDetector(
-                    onTap: () => _onTapMenuItem(text),
-                    child: Container(
-                      margin: EdgeInsets.symmetric(vertical: 8),
-                      padding: EdgeInsets.all(16),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(6),
-                        border: Border.all(color: Colors.indigo),
-                      ),
-                      child: Text(
-                        text,
-                        style: TextStyle(
-                          color: Colors.indigo,
-                          fontSize: 12,
-                          fontWeight: FontWeight.w600,
-                        ),
-                        textAlign: TextAlign.center,
-                      ),
+              .map((text) =>
+              GestureDetector(
+                onTap: () => _onTapMenuItem(text),
+                child: Container(
+                  margin: EdgeInsets.symmetric(vertical: 8),
+                  padding: EdgeInsets.all(16),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(6),
+                    border: Border.all(color: Colors.indigo),
+                  ),
+                  child: Text(
+                    text,
+                    style: TextStyle(
+                      color: Colors.indigo,
+                      fontSize: 12,
+                      fontWeight: FontWeight.w600,
                     ),
-                  ))
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+              ))
               .toList(),
         ),
       ),
@@ -105,10 +108,15 @@ class _MainPageState extends State<MainPage> {
         Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => CircleMapPage(),
+              builder: (context) => PolylineMapPage(),
             ));
         break;
       case 4:
+        Navigator.push(context, MaterialPageRoute(
+          builder: (context) => CircleMapPage(),
+        ));
+        break;
+      case 5:
         Navigator.push(
             context,
             MaterialPageRoute(
@@ -124,10 +132,10 @@ class _MainPageState extends State<MainPage> {
         break;
       case 6:
         Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (_) => TextFieldPage(),
-          ));
+            context,
+            MaterialPageRoute(
+              builder: (_) => TextFieldPage(),
+            ));
     }
   }
 }

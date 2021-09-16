@@ -115,6 +115,15 @@ class NaverMapController {
     );
   }
 
+  Future<void> _updatePolylineOverlay(
+    _PolylineOverlayUpdates polylineOverlayUpdates,
+  ) async {
+    await _channel.invokeMethod(
+      'polylineOverlay#update',
+      polylineOverlayUpdates._map,
+    );
+  }
+
   Future<void> _updateCircleOverlay(
       _CircleOverlayUpdate circleOverlayUpdate) async {
     await _channel.invokeMethod(
@@ -172,7 +181,7 @@ class NaverMapController {
 
   /// <h2>카메라 추적모드 변경</h2>
   /// <p>[NaverMap]을 생성할 때 주어진 [initialLocationTrackingMode]의 인자로 전달된 값이
-  /// 기본값으로 설정되어 있으며, 이후 controller 를 이용해서 변경하는 메서드이다.</p>
+  /// 기본값으로 설정되어 있으며, 이후 controller 를 이용해서 변경하는 메서드이다.</p>Future<void> setLocationTrackingMode(LocationTrackingMode mode) async {
   Future<void> setLocationTrackingMode(LocationTrackingMode mode) async {
     await _channel.invokeMethod('tracking#mode', <String, dynamic>{
       'locationTrackingMode': mode.index,

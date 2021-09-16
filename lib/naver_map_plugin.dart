@@ -35,6 +35,10 @@ part 'src/path_overlay.dart';
 
 part 'src/path_overlay_updates.dart';
 
+part 'src/polyline_overlay.dart';
+
+part 'src/polyline_overlay_updates.dart';
+
 part 'src/ui.dart';
 
 part 'src/polygon_overlay.dart';

@@ -35,6 +35,7 @@ public class NaverMapBuilder implements NaverMapOptionSink {
     private List initialPaths;
     private List initialCircles;
     private List initialPolygon;
+    private List initialPolylines;
 
     NaverMapController build(
             int id,
@@ -52,6 +53,7 @@ public class NaverMapBuilder implements NaverMapOptionSink {
                 options,
                 initialMarkers,
                 initialPaths,
+                initialPolylines,
                 initialCircles,
                 initialPolygon);
         controller.init();
@@ -239,9 +241,11 @@ public class NaverMapBuilder implements NaverMapOptionSink {
         this.initialPaths = initialPaths;
     }
 
+    void setInitialPolylines(List<Object> initialPolylines) {
+        this.initialPolylines = initialPolylines;
+    }
+    
     void setInitialPolygon(List initialPolygon) {
         this.initialPolygon = initialPolygon;
     }
-
-
 }
