@@ -82,6 +82,12 @@ class NaverMapController {
         final isAnimated = call.arguments['animated'];
         _naverMapState._cameraMove(position, reason, isAnimated);
         break;
+      case 'camera#moveWithAnimate':
+        LatLng? position = LatLng._fromJson(call.arguments['position']);
+        final reason = CameraChangeReason.values[call.arguments['reason']];
+        final isAnimated = call.arguments['animated'];
+        _naverMapState._cameraMove(position, reason, isAnimated);
+        break;
       case 'camera#idle':
         _naverMapState._cameraIdle();
         break;
@@ -180,13 +186,14 @@ class NaverMapController {
       'cameraUpdate': cameraUpdate._toJson(),
     });
   }
-  
+
   Future<void> moveCameraWithAnimate(CameraUpdate cameraUpdate) async {
-    await _channel.invokeMethod<void>('camera#moveWithAnimate', <String, dynamic>{
+    await _channel
+        .invokeMethod<void>('camera#moveWithAnimate', <String, dynamic>{
       'cameraUpdate': cameraUpdate._toJson(),
     });
   }
-  
+
   /// <h2>카메라 추적모드 변경</h2>
   /// <p>[NaverMap]을 생성할 때 주어진 [initialLocationTrackingMode]의 인자로 전달된 값이
   /// 기본값으로 설정되어 있으며, 이후 controller 를 이용해서 변경하는 메서드이다.</p>
