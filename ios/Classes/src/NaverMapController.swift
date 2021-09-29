@@ -178,6 +178,13 @@ class NaverMapController: NSObject, FlutterPlatformView, NaverMapOptionSink, NMF
             }
             result(nil)
             break
+        case "camera#moveWithAnimate" :
+            if let arg = call.arguments as? NSDictionary {
+                let update = toCameraUpdate(json: arg["cameraUpdate"]!)
+                UIView.animate(withDuration: 0.6) { mapView!.moveCamera(update) }
+            }
+            result(nil)
+            break
         case "map#capture" :
             let dir = NSTemporaryDirectory()
             let fileName = "\(NSUUID().uuidString).jpg"
