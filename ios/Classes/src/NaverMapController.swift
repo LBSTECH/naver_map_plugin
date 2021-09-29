@@ -181,7 +181,10 @@ class NaverMapController: NSObject, FlutterPlatformView, NaverMapOptionSink, NMF
         case "camera#moveWithAnimate" :
             if let arg = call.arguments as? NSDictionary {
                 let update = toCameraUpdate(json: arg["cameraUpdate"]!)
-                UIView.animate(withDuration: 0.6) { self.mapView!.moveCamera(update) }
+                update.animation = .easeOut
+                update.animationDuration = 0.9
+
+                mapView!.moveCamera(cameraUpdate)
             }
             result(nil)
             break
