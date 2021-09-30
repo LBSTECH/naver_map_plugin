@@ -1,5 +1,3 @@
-
-
 part of naver_map_plugin;
 
 /// 지도 카에라의 위치를 나타낸다.
@@ -89,6 +87,17 @@ class CameraUpdate {
   /// 카메라를 position 위치로 이동하는 CameraUpdate 객체를 생성합니다.
   static CameraUpdate toCameraPosition(CameraPosition position) {
     return CameraUpdate._(<dynamic>['newCameraPosition', position.toMap()]);
+  }
+
+  static CameraUpdate moveTo(LatLng latLng, {double? zoom, double? duration}) {
+    dynamic cameraData = <String, dynamic>{
+      'scrollTo': latLng._toJson(),
+    };
+
+    if (zoom != null) cameraData['zoomTo'] = zoom;
+    if (duration != null) cameraData['duration'] = duration;
+
+    return cameraData;
   }
 
   /// 카메라의 줌이 1만큼 증가하는 카메라 업데이트를 반환합니다.

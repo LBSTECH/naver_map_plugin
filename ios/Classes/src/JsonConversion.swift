@@ -29,7 +29,9 @@ public func toCameraPosition(json: Any) -> NMFCameraPosition{
 
 public func toCameraUpdate(json: Any) -> NMFCameraUpdate{
     let data = json as! Array<Any>
+    print(data)
     let type = data[0] as! String
+    print(type)
     switch type {
     case "newCameraPosition":
         return NMFCameraUpdate(position: toCameraPosition(json: data[1]))
