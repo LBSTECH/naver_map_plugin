@@ -217,7 +217,7 @@ class Marker {
     addIfPresent('markerId', markerId);
     addIfPresent('alpha', alpha);
     addIfPresent('flat', flat);
-    addIfPresent('position', position?._toJson());
+    addIfPresent('position', position._toJson());
     addIfPresent('captionText', captionText);
     addIfPresent('captionTextSize', captionTextSize);
     addIfPresent('captionColor', captionColor?.value);
