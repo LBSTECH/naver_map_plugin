@@ -33,7 +33,7 @@ public func toCameraUpdate(json: Any) -> NMFCameraUpdate{
     let cameraUpdate: NMFCameraUpdate?
     
     if let position = data["newCameraPosition"] as? Array<Double>{
-        cameraUpdate = .init(position: toCameraPosition(json: position)
+        cameraUpdate = .init(position: toCameraPosition(json: position))
     }
 
     if let scrollTo = data["scrollTo"] as? Array<Double>{
@@ -49,13 +49,13 @@ public func toCameraUpdate(json: Any) -> NMFCameraUpdate{
 
     if let fitBounds = data["fitBounds"] as? Array<Any>{
         let pt = data[1] as! Int
-        cameraUpdate = .init(fit: toLatLngBounds(json: data[1]), padding: CGFloat(pt))
+        cameraUpdate = .init(fit: toLatLngBounds(json: data[0]), padding: CGFloat(pt))
     }
 
-    cameraUpdate?animation = .easeOut
+    cameraUpdate?.animation = .easeOut
     cameraUpdate?.animationDuration = data["duration"] as? Double ?? 0.0
 
-    return cameraUpdate
+    return cameraUpdate ?? NMFCameraUpdate()
     // switch type {
     // case "newCameraPosition":
     //     return NMFCameraUpdate(position: toCameraPosition(json: data[1]))
