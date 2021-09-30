@@ -81,20 +81,20 @@ class CameraUpdate {
   /// 카메라의 좌표를 target으로 변경하는 CameraUpdate 객체를 생성합니다.
   /// 줌 레벨, 기울기 각도, 베어링 각도 등 좌표 외의 다른 속성은 변하지 않습니다.
   static CameraUpdate scrollTo(LatLng latLng) {
-    return CameraUpdate._(<dynamic>['scrollTo', latLng._toJson()]);
+    return CameraUpdate._({'scrollTo': latLng._toJson()});
   }
 
   /// 카메라를 position 위치로 이동하는 CameraUpdate 객체를 생성합니다.
   static CameraUpdate toCameraPosition(CameraPosition position) {
-    return CameraUpdate._(<dynamic>['newCameraPosition', position.toMap()]);
+    return CameraUpdate._({'newCameraPosition': position.toMap()});
   }
 
   static CameraUpdate moveTo(LatLng latLng, {double? zoom, double? duration}) {
-    dynamic cameraData = ['scrollTo', latLng._toJson()];
-    if (zoom != null) cameraData.add(<dynamic>['zoomTo', zoom]);
-    if (duration != null) cameraData.add(<dynamic>['duration', duration]);
+    Map cameraData = {'scrollTo': latLng._toJson()};
+    if (zoom != null) cameraData['zoomTo'] = zoom;
+    if (duration != null) cameraData['duration'] = duration;
 
-    return cameraData;
+    return CameraUpdate._(cameraData);
   }
 
   /// 카메라의 줌이 1만큼 증가하는 카메라 업데이트를 반환합니다.
