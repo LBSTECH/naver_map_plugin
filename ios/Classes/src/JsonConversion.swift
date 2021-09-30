@@ -30,34 +30,30 @@ public func toCameraPosition(json: Any) -> NMFCameraPosition{
 public func toCameraUpdate(json: Any) -> NMFCameraUpdate{
     let data = json as! NSDictionary
     print(data)
-
-    let cameraUpdate = NMFCameraUpdate()
+    let cameraUpdate: NMFCameraUpdate?
     
     if let position = data["newCameraPosition"] as? Array<Double>{
-        cameraUpdate.position = toCameraPosition(json: position)
+        cameraUpdate = .init(position: toCameraPosition(json: position)
     }
 
     if let scrollTo = data["scrollTo"] as? Array<Double>{
-        cameraUpdate.scrollTo = toLatLng(json: scrollTo)
+        if let zoomTo = data["zoomTo"] as? Double{
+            cameraUpdate = .init(scrollTo: toLatLng(json: scrollTo), zoomTo: zoomTo)
+        } else {
+            cameraUpdate = .init(scrollTo: toLatLng(json: scrollTo))
+        }
     }
 
-    if data["zoomIn"] != nil{
-        return cameraUpdate.withZoomIn()
-    }
-
-    if data["zoomOut"] != nil{
-        return cameraUpdate.withZoomOut()
-    }
-
-    if let zoomTo = data["zoomTo"] as? Double{
-        cameraUpdate.zoomTo = zoomTo
-    }
+    if data["zoomIn"] != nil{ cameraUpdate = .withZoomIn() }
+    if data["zoomOut"] != nil{ cameraUpdate = .withZoomOut() }
 
     if let fitBounds = data["fitBounds"] as? Array<Any>{
         let pt = data[1] as! Int
-        cameraUpdate.fit = toLatLngBounds(json: data[1])
-        cameraUpdate.padding = CGFloat(pt)
+        cameraUpdate = .init(fit: toLatLngBounds(json: data[1]), padding: CGFloat(pt))
     }
+
+    cameraUpdate?animation = .easeOut
+    cameraUpdate?.animationDuration = data["duration"] as? Double ?? 0.0
 
     return cameraUpdate
     // switch type {
