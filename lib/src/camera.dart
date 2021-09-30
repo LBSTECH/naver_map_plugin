@@ -90,9 +90,7 @@ class CameraUpdate {
   }
 
   static CameraUpdate moveTo(LatLng latLng, {double? zoom, double? duration}) {
-    dynamic cameraData = [
-      ['scrollTo', latLng._toJson()],
-    ];
+    dynamic cameraData = ['scrollTo', latLng._toJson()];
     if (zoom != null) cameraData.add(<dynamic>['zoomTo', zoom]);
     if (duration != null) cameraData.add(<dynamic>['duration', duration]);
 
