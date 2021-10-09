@@ -82,12 +82,6 @@ class NaverMapController {
         final isAnimated = call.arguments['animated'];
         _naverMapState._cameraMove(position, reason, isAnimated);
         break;
-      case 'camera#moveWithAnimate':
-        LatLng? position = LatLng._fromJson(call.arguments['position']);
-        final reason = CameraChangeReason.values[call.arguments['reason']];
-        final isAnimated = call.arguments['animated'];
-        _naverMapState._cameraMove(position, reason, isAnimated);
-        break;
       case 'camera#idle':
         _naverMapState._cameraIdle();
         break;
@@ -183,13 +177,6 @@ class NaverMapController {
   /// 인자를 전달한다.</p>
   Future<void> moveCamera(CameraUpdate cameraUpdate) async {
     await _channel.invokeMethod<void>('camera#move', <String, dynamic>{
-      'cameraUpdate': cameraUpdate._toJson(),
-    });
-  }
-
-  Future<void> moveCameraWithAnimate(CameraUpdate cameraUpdate) async {
-    await _channel
-        .invokeMethod<void>('camera#moveWithAnimate', <String, dynamic>{
       'cameraUpdate': cameraUpdate._toJson(),
     });
   }
