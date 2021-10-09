@@ -89,7 +89,10 @@ class CameraUpdate {
     return CameraUpdate._({'newCameraPosition': position.toMap()});
   }
 
-  static CameraUpdate moveTo(LatLng latLng, {double? zoom, double? duration}) {
+  /// 카메라의 좌표, 줌 레벨, 애니메이션 시간을 이용하여 카메라를 이동하는 CameraUpdate 객체를 생성합니다.
+  /// 현재 안드로이드에서는 지원하지 않습니다.
+  static CameraUpdate scrollWithOptions(LatLng latLng,
+      {double? zoom, double? duration}) {
     Map cameraData = {'scrollTo': latLng._toJson()};
     if (zoom != null) cameraData['zoomTo'] = zoom;
     if (duration != null) cameraData['duration'] = duration;
@@ -101,21 +104,21 @@ class CameraUpdate {
   ///
   /// zooomBy(1.0) 을 실행하는 것과 동일한 효과를 가집니다.
   static CameraUpdate zoomIn() {
-    return CameraUpdate._(<dynamic>['zoomIn']);
+    return CameraUpdate._({'zoomIn': true});
   }
 
   /// 카메라의 줌이 1만큼 감소하는 카메라 업데이트를 반환합니다.
   ///
   /// zooomBy(-1.0) 을 실행하는 것과 동일한 효과를 가집니다.
   static CameraUpdate zoomOut() {
-    return CameraUpdate._(<dynamic>['zoomOut']);
+    return CameraUpdate._({'zoomOut': true});
   }
 
   /// 카메라의 줌을 zoom으로 변경하는 카메라 업테이트를 반환합니다.
   ///
   /// 좌표, 기울기 각도, 베어링등 다른 값은 변하지 않습니다.
   static CameraUpdate zoomTo(double zoom) {
-    return CameraUpdate._(<dynamic>['zoomTo', zoom]);
+    return CameraUpdate._({'zoomTo': zoom});
   }
 
   /// bounds가 화면에 온전히 보이는 좌표와 최대 줌 레벨로 카메라의 위치를
@@ -124,7 +127,9 @@ class CameraUpdate {
   /// 기울기 각도와 베어링 각도는 0으로 변경되며, 피봇 지점은 무시됩니다
   /// <h3>padding 은 바운더리에 맞는 영역에 대해 상하좌우 여백을 설정하며 상대크기 단위입니다.</h3>
   static CameraUpdate fitBounds(LatLngBounds bounds, {int padding = 0}) {
-    return CameraUpdate._(<dynamic>['fitBounds', bounds._toList(), padding]);
+    return CameraUpdate._({
+      'fitBounds': [bounds._toList(), padding]
+    });
   }
 }
 
