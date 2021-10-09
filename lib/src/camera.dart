@@ -90,7 +90,7 @@ class CameraUpdate {
   }
 
   /// 카메라의 좌표, 줌 레벨, 애니메이션 시간을 이용하여 카메라를 이동하는 CameraUpdate 객체를 생성합니다.
-  /// 현재 안드로이드에서는 지원하지 않습니다.
+  /// 현재 duration은 안드로이드에서는 지원하지 않습니다(기본 설정으로 작동됩니다)
   static CameraUpdate scrollWithOptions(LatLng latLng,
       {double? zoom, double? duration}) {
     Map cameraData = {'scrollTo': latLng._toJson()};
