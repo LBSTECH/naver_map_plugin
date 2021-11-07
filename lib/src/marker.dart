@@ -35,7 +35,7 @@ class Marker {
   /// -
   /// 만약 position이 유효하지 않은(LatLng.isValid()가 false인) 좌표라면
   /// InvalidCoordinateException이 발생합니다.
-  LatLng position;
+  LatLng? position;
 
   /// 캡션의 텍스트를 지정합니다. 빈 문자열일 경우 캡션이 그려지지 않습니다.
   /// -
