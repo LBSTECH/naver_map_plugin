@@ -48,8 +48,8 @@ public func toCameraUpdate(json: Any) -> NMFCameraUpdate{
     if data["zoomOut"] != nil{ cameraUpdate = .withZoomOut() }
 
     if let fitBounds = data["fitBounds"] as? Array<Any>{
-        let pt = data[1] as! Int
-        cameraUpdate = .init(fit: toLatLngBounds(json: data[0] as Any), padding: CGFloat(pt))
+        let pt = fitBounds[1] as! Int
+        cameraUpdate = .init(fit: toLatLngBounds(json: fitBounds[0] as Any), padding: CGFloat(pt))
     }
 
     cameraUpdate?.animation = .easeOut
