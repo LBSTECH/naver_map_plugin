@@ -60,10 +60,9 @@ class _PathOverlayUpdates {
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
     if (other.runtimeType != runtimeType) return false;
-    final _PathOverlayUpdates typedOther = other as _PathOverlayUpdates;
-    return setEquals(
-            pathOverlaysToAddOrUpdate, typedOther.pathOverlaysToAddOrUpdate) &&
-        setEquals(pathOverlayIdsToRemove, typedOther.pathOverlayIdsToRemove);
+    return other is _PathOverlayUpdates &&
+        setEquals(pathOverlaysToAddOrUpdate, other.pathOverlaysToAddOrUpdate) &&
+        setEquals(pathOverlayIdsToRemove, other.pathOverlayIdsToRemove);
   }
 
   @override

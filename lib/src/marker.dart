@@ -203,9 +203,6 @@ class Marker {
       this.subCaptionRequestedWidth});
 
   Map<String, dynamic> _toJson() {
-    assert(markerId != null);
-    assert(position != null);
-
     final Map<String, dynamic> json = <String, dynamic>{};
 
     void addIfPresent(String fieldName, dynamic value) {
@@ -217,7 +214,7 @@ class Marker {
     addIfPresent('markerId', markerId);
     addIfPresent('alpha', alpha);
     addIfPresent('flat', flat);
-    addIfPresent('position', position?._toJson());
+    addIfPresent('position', position._toJson());
     addIfPresent('captionText', captionText);
     addIfPresent('captionTextSize', captionTextSize);
     addIfPresent('captionColor', captionColor?.value);
@@ -369,9 +366,6 @@ List<Map<String, dynamic>>? _serializeMarkerSet(Iterable<Marker?>? markers) {
 }
 
 Map<String, Marker> _keyByMarkerId(Iterable<Marker> markers) {
-  if (markers == null) {
-    return <String, Marker>{};
-  }
   return Map<String, Marker>.fromEntries(markers.map((Marker marker) =>
       MapEntry<String, Marker>(marker.markerId, marker.clone())));
 }

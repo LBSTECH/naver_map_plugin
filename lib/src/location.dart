@@ -1,12 +1,9 @@
-
 part of naver_map_plugin;
 
 /// 위도와 경도가 한 쌍을 이루어서 저장되는 class.
 class LatLng {
   const LatLng(double latitude, double longitude)
-      : assert(latitude != null),
-        assert(longitude != null),
-        latitude =
+      : latitude =
             (latitude < -90.0 ? -90.0 : (90.0 < latitude ? 90.0 : latitude)),
         longitude = (longitude + 180.0) % 360.0 - 180.0;
 
@@ -41,9 +38,7 @@ class LatLng {
 /// 북동쪽 위, 경도와 남서쪽 위,경도로 만들어진 사각형 영역이다.
 class LatLngBounds {
   LatLngBounds({required this.southwest, required this.northeast})
-      : assert(southwest != null),
-        assert(northeast != null),
-        assert(southwest.latitude <= northeast.latitude);
+      : assert(southwest.latitude <= northeast.latitude);
 
   /// The southwest corner of the rectangle.
   final LatLng southwest;
@@ -56,7 +51,7 @@ class LatLngBounds {
   /// <p>list로 전달된 [LatLng]들의 배열들을 이용해서 south, north, east, west 를
   /// 계산하여 [LatLngBounds]를 생성한다.</p>
   factory LatLngBounds.fromLatLngList(List<LatLng> latLngs) {
-    if (latLngs == null || latLngs.length < 2) {
+    if (latLngs.length < 2) {
       throw ArgumentError('최소한 2개 이상의 리스트 길이가 있어야 LatLngBounds를 만들 수 있습니다.');
     }
     double south = 200, west = 200;

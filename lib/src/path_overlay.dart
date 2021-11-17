@@ -1,4 +1,3 @@
-
 part of naver_map_plugin;
 
 /// [NaverMap]의 [PathOverlay]에 대한 유일 식별자
@@ -6,7 +5,7 @@ part of naver_map_plugin;
 /// 전역적으로 유일할 필요는 없으며 목록상에서 유일하면 된다.
 @immutable
 class PathOverlayId {
-  PathOverlayId(this.value) : assert(value != null);
+  PathOverlayId(this.value);
 
   final String value;
 
@@ -14,8 +13,7 @@ class PathOverlayId {
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
     if (other.runtimeType != runtimeType) return false;
-    final PathOverlayId typedOther = other as PathOverlayId;
-    return value == typedOther.value;
+    return other is PathOverlayId && value == other.value;
   }
 
   @override
@@ -166,9 +164,7 @@ class PathOverlay {
     this.progress = 0,
     this.width = 10,
     this.onPathOverlayTab,
-  })  : assert(pathOverlayId != null),
-        assert(coords != null),
-        assert(coords.length > 1);
+  }) : assert(coords.length > 1);
 
   /// 주어진 파라미터를 덮어씌운 새로운 [PathOverlay] 객체를 생성합니다.
   PathOverlay copyWith({
@@ -216,22 +212,22 @@ class PathOverlay {
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
     if (other.runtimeType != runtimeType) return false;
-    final PathOverlay typedOther = other as PathOverlay;
-    return pathOverlayId == typedOther.pathOverlayId &&
-        listEquals(coords, typedOther.coords) &&
-        globalZIndex == typedOther.globalZIndex &&
-        hideCollidedCaptions == typedOther.hideCollidedCaptions &&
-        hideCollidedMarkers == typedOther.hideCollidedMarkers &&
-        hideCollidedSymbols == typedOther.hideCollidedSymbols &&
-        color == typedOther.color &&
-        outlineColor == typedOther.outlineColor &&
-        outlineWidth == typedOther.outlineWidth &&
-        passedColor == typedOther.passedColor &&
-        passedOutlineColor == typedOther.passedOutlineColor &&
-        patternImage == typedOther.patternImage &&
-        patternInterval == typedOther.patternInterval &&
-        progress == typedOther.progress &&
-        width == typedOther.width;
+    return other is PathOverlay &&
+        pathOverlayId == other.pathOverlayId &&
+        listEquals(coords, other.coords) &&
+        globalZIndex == other.globalZIndex &&
+        hideCollidedCaptions == other.hideCollidedCaptions &&
+        hideCollidedMarkers == other.hideCollidedMarkers &&
+        hideCollidedSymbols == other.hideCollidedSymbols &&
+        color == other.color &&
+        outlineColor == other.outlineColor &&
+        outlineWidth == other.outlineWidth &&
+        passedColor == other.passedColor &&
+        passedOutlineColor == other.passedOutlineColor &&
+        patternImage == other.patternImage &&
+        patternInterval == other.patternInterval &&
+        progress == other.progress &&
+        width == other.width;
   }
 
   @override

@@ -93,10 +93,6 @@ class CircleOverlay {
       );
 
   Map<String, dynamic> _toJson() {
-    assert(overlayId != null);
-    assert(center != null);
-    assert(radius != null);
-
     final Map<String, dynamic> json = {};
 
     void addIfPresent(String fieldName, dynamic value) {
@@ -106,7 +102,7 @@ class CircleOverlay {
     }
 
     addIfPresent('overlayId', overlayId);
-    addIfPresent('center', center?._toJson());
+    addIfPresent('center', center._toJson());
     addIfPresent('radius', radius);
     addIfPresent('color', color?.value);
     addIfPresent('outlineColor', outlineColor?.value);
@@ -126,7 +122,6 @@ List<Map<String, dynamic>>? _serializeCircleSet(
 }
 
 Map<String, CircleOverlay> _keyByCircleId(Iterable<CircleOverlay> circles) {
-  if (circles == null) return {};
   return Map<String, CircleOverlay>.fromEntries(circles
       .map((e) => MapEntry<String, CircleOverlay>(e.overlayId, e.clone())));
 }

@@ -11,10 +11,7 @@ class CameraPosition {
     required this.target,
     this.tilt = 0.0,
     this.zoom = 15.0,
-  })  : assert(bearing != null),
-        assert(target != null),
-        assert(tilt != null),
-        assert(zoom != null);
+  }) ;
 
   /// 카메라 회전 각도. 북쪽에서 시계 방향으로의 회전량.
   ///

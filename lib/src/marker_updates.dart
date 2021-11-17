@@ -1,4 +1,3 @@
-
 part of naver_map_plugin;
 
 /// build 시에 새로운 마커들은 [NaverMap] 에 적용된다.
@@ -71,10 +70,10 @@ class _MarkerUpdates {
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
     if (other.runtimeType != runtimeType) return false;
-    final _MarkerUpdates typedOther = other as _MarkerUpdates;
-    return setEquals(markersToAdd, typedOther.markersToAdd) &&
-        setEquals(markerIdsToRemove, typedOther.markerIdsToRemove) &&
-        setEquals(markersToChange, typedOther.markersToChange);
+    return other is _MarkerUpdates &&
+        setEquals(markersToAdd, other.markersToAdd) &&
+        setEquals(markerIdsToRemove, other.markerIdsToRemove) &&
+        setEquals(markersToChange, other.markersToChange);
   }
 
   @override
