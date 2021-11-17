@@ -1,4 +1,3 @@
-
 part of naver_map_plugin;
 
 /// 마커에 쓰일 비트맵 이미지를 정의한다.
@@ -20,9 +19,23 @@ class OverlayImage {
   /// - .../2.0x/image.png  ---> android xhdpi(2.0x)와 ios @2x 에서 기본
   /// - .../3.0x/image.png  ---> android xxhdpi(3.0x)와 ios @3x 에서 기본
   /// - .../4.0x/image.png  ---> android xxxhdpi(4.0x)에서 기본
-  static Future<OverlayImage> fromAssetImage({required String assetName}) async {
+  static Future<OverlayImage> fromAssetImage({
+    required String assetName,
+    AssetBundle? bundle,
+    double? devicePixelRatio,
+    Locale? locale,
+    TextDirection? textDirection,
+    Size? size,
+    TargetPlatform? platform,
+  }) async {
     final _configuration = ImageConfiguration(
-      platform: Platform.isIOS ? TargetPlatform.iOS : TargetPlatform.android,
+      bundle: bundle,
+      devicePixelRatio: devicePixelRatio,
+      locale: locale,
+      textDirection: textDirection,
+      size: size,
+      platform: platform ??
+          (Platform.isIOS ? TargetPlatform.iOS : TargetPlatform.android),
     );
     final AssetImage assetImage = AssetImage(assetName);
     final AssetBundleImageKey key = await assetImage.obtainKey(_configuration);
