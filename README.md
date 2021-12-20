@@ -123,7 +123,7 @@ $ git lfs install
 ```
 
 
-> 이후 AppDelefate에서 위치 사용권한을 획득하는 예제.
+> 이후 AppDelegate에서 위치 사용권한을 획득하는 예제.
 ``` swift
 if (CLLocationManager.locationServicesEnabled()) {
     switch CLLocationManager.authorizationStatus() {
