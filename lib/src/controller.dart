@@ -142,7 +142,7 @@ class NaverMapController {
     );
   }
 
-  /// 현제 지도에 보여지는 영역에 대한 [LatLngBounds] 객체를 리턴.
+  /// 현재 지도에 보여지는 영역에 대한 [LatLngBounds] 객체를 리턴.
   Future<LatLngBounds> getVisibleRegion() async {
     final Map<String, dynamic> latLngBounds = (await _channel
         .invokeMapMethod<String, dynamic>('map#getVisibleRegion'))!;
@@ -152,7 +152,7 @@ class NaverMapController {
     return LatLngBounds(northeast: northeast, southwest: southwest);
   }
 
-  /// 현제 지도의 중심점 좌표에 대한 [CameraPosition] 객체를 리턴.
+  /// 현재 지도의 중심점 좌표에 대한 [CameraPosition] 객체를 리턴.
   Future<CameraPosition> getCameraPosition() async {
     final Map position = (await _channel.invokeMethod<Map>('map#getPosition'))!;
     return CameraPosition(
