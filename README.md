@@ -114,11 +114,11 @@ $ git lfs install
 ``` 
 <dict>
     <key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
-	<string>[USAGE PERPOSE]</string>
-	<key>NSLocationAlwaysUsageDescription</key>
-	<string>[USAGE PERPOSE]</string>
-	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>[USAGE PERPOSE]</string>
+    <string>[USAGE PERPOSE]</string>
+    <key>NSLocationAlwaysUsageDescription</key>
+    <string>[USAGE PERPOSE]</string>
+    <key>NSLocationWhenInUseUsageDescription</key>
+    <string>[USAGE PERPOSE]</string>
 </dict>
 ```
 
