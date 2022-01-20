@@ -6,7 +6,7 @@ class CircleOverlay {
   final String overlayId;
 
   /// <h3>원형 오버레이의 중심점</h3>
-  LatLng center;
+  LatLng? center;
 
   /// <h3>원형 오버레이의 반지름</h3>
   double radius;
