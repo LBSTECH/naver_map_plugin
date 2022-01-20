@@ -362,7 +362,7 @@ class _NaverMapState extends State<NaverMap> {
   void _updatePolylineOverlay() async {
     final NaverMapController controller = await _controller.future;
     controller._updatePolylineOverlay(_PolylineOverlayUpdates.from(
-        _polylines.values?.toSet(), widget.polylineOverlays.toSet()));
+        _polylines.values.toSet(), widget.polylineOverlays.toSet()));
     _polylines = _keyByPolylineOverlayId(widget.polylineOverlays);
   }
 
