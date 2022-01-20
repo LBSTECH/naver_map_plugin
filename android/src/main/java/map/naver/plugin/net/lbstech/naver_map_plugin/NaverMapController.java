@@ -199,7 +199,9 @@ public class NaverMapController implements
     public void dispose() {
         if (disposed) return;
         disposed = true;
-        naverMap.setLocationTrackingMode(LocationTrackingMode.None);
+        if (naverMap != null) {
+            naverMap.setLocationTrackingMode(LocationTrackingMode.None);
+        }
         methodChannel.setMethodCallHandler(null);
         mapView.onDestroy();
         activity.getApplication().unregisterActivityLifecycleCallbacks(this);
