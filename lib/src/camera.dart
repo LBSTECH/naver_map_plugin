@@ -69,7 +69,7 @@ class CameraPosition {
 }
 
 /// 카메라의 동적 움직임을 정의한 클래스입니다.
-/// 현제 위치로 부터의 온전한 움직임을 지원합니다.
+/// 현재 위치로 부터의 온전한 움직임을 지원합니다.
 class CameraUpdate {
   final dynamic _json;
 

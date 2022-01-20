@@ -114,16 +114,16 @@ $ git lfs install
 ``` 
 <dict>
     <key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
-	<string>[USAGE PERPOSE]</string>
-	<key>NSLocationAlwaysUsageDescription</key>
-	<string>[USAGE PERPOSE]</string>
-	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>[USAGE PERPOSE]</string>
+    <string>[USAGE PERPOSE]</string>
+    <key>NSLocationAlwaysUsageDescription</key>
+    <string>[USAGE PERPOSE]</string>
+    <key>NSLocationWhenInUseUsageDescription</key>
+    <string>[USAGE PERPOSE]</string>
 </dict>
 ```
 
 
-> 이후 AppDelefate에서 위치 사용권한을 획득하는 예제.
+> 이후 AppDelegate에서 위치 사용권한을 획득하는 예제.
 ``` swift
 if (CLLocationManager.locationServicesEnabled()) {
     switch CLLocationManager.authorizationStatus() {
