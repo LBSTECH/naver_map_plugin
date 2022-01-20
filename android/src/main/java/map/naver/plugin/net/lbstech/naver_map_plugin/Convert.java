@@ -4,17 +4,21 @@ import android.annotation.SuppressLint;
 import android.graphics.Color;
 import android.graphics.PointF;
 
+import androidx.annotation.NonNull;
+
 import com.naver.maps.geometry.LatLng;
 import com.naver.maps.geometry.LatLngBounds;
 import com.naver.maps.map.CameraPosition;
 import com.naver.maps.map.CameraUpdate;
 import com.naver.maps.map.overlay.OverlayImage;
 
+import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 
 import io.flutter.view.FlutterMain;
 
@@ -107,30 +111,76 @@ class Convert {
 
     @SuppressWarnings("unchecked")
     static CameraUpdate toCameraUpdate(Object o, float density) {
-        final List data = (List) o;
-        switch ((String) data.get(0)) {
-            case "newCameraPosition":
-                Map<String, Object> positionMap = (Map<String, Object>) data.get(1);
-                return CameraUpdate.toCameraPosition(toCameraPosition(positionMap));
-            case "scrollTo":
-                return CameraUpdate.scrollTo(toLatLng(data.get(1)));
-            case "zoomIn":
-                return CameraUpdate.zoomIn();
-            case "zoomOut":
-                return CameraUpdate.zoomOut();
-            case "zoomBy":
-                double amount = (double) data.get(1);
-                return CameraUpdate.zoomBy(amount);
-            case "zoomTo":
-                double level = (double) data.get(1);
-                return CameraUpdate.zoomTo(level);
-            case "fitBounds":
-                int dp = (int) data.get(2);
-                int px = Math.round(dp * density);
-                return CameraUpdate.fitBounds(toLatLngBounds(data.get(1)), px);
-            default:
-                throw new IllegalArgumentException("Cannot interpret " + o + " as CameraUpdate");
+
+        Map<String, Object> map = (HashMap<String, Object>) o;
+
+        if (map.isEmpty())
+            throw new IllegalArgumentException("Cannot interpret " + o + " as CameraUpdate");
+
+        Map<String, Object> position = (Map<String, Object>) map.get("newCameraPosition");
+        if (position != null)
+            return CameraUpdate.toCameraPosition(toCameraPosition(position));
+
+        Object scrollTo = map.get("scrollTo");
+        if (scrollTo != null) {
+            LatLng latLng = toLatLng(scrollTo);
+
+            double zoomTo = (double) map.get("zoomTo");
+            if (zoomTo == 0.0)
+                return CameraUpdate.scrollTo(latLng);
+            else
+                return CameraUpdate.scrollAndZoomTo(latLng, zoomTo);
         }
+
+        if (map.containsKey("zoomIn"))
+            return CameraUpdate.zoomIn();
+
+        if (map.containsKey("zoomOut"))
+            return CameraUpdate.zoomOut();
+
+        double zoomBy = (double) map.get("zoomBy");
+        if (zoomBy != 0.0)
+            return CameraUpdate.zoomBy(zoomBy);
+
+        List fitBounds = (List) map.get("fitBounds");
+        if (fitBounds != null) {
+            int dp = (int) fitBounds.get(1);
+            int px = Math.round(dp * density);
+            return CameraUpdate.fitBounds(toLatLngBounds(fitBounds.get(0)), px);
+        }
+
+        return null;
+//                return CameraUpdate.zoomIn();
+//            case "zoomOut":
+//                return CameraUpdate.zoomOut();
+//            case "zoomBy":
+//                double amount = (double) data.get(1);
+//                return CameraUpdate.zoomBy(amount);
+
+//        final List data = (List) o;
+//        switch ((String) data.get(0)) {
+//            case "newCameraPosition":
+//                Map<String, Object> positionMap = (Map<String, Object>) data.get(1);
+//                return CameraUpdate.toCameraPosition(toCameraPosition(positionMap));
+//            case "scrollTo":
+//                return CameraUpdate.scrollTo(toLatLng(data.get(1)));
+//            case "zoomIn":
+//                return CameraUpdate.zoomIn();
+//            case "zoomOut":
+//                return CameraUpdate.zoomOut();
+//            case "zoomBy":
+//                double amount = (double) data.get(1);
+//                return CameraUpdate.zoomBy(amount);
+//            case "zoomTo":
+//                double level = (double) data.get(1);
+//                return CameraUpdate.zoomTo(level);
+//            case "fitBounds":
+//                int dp = (int) data.get(2);
+//                int px = Math.round(dp * density);
+//                return CameraUpdate.fitBounds(toLatLngBounds(data.get(1)), px);
+//            default:
+//                throw new IllegalArgumentException("Cannot interpret " + o + " as CameraUpdate");
+//        }
     }
 
     static Object cameraPositionToJson(CameraPosition position) {

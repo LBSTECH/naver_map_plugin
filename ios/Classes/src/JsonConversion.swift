@@ -28,25 +28,34 @@ public func toCameraPosition(json: Any) -> NMFCameraPosition{
 }
 
 public func toCameraUpdate(json: Any) -> NMFCameraUpdate{
-    let data = json as! Array<Any>
-    let type = data[0] as! String
-    switch type {
-    case "newCameraPosition":
-        return NMFCameraUpdate(position: toCameraPosition(json: data[1]))
-    case "scrollTo":
-        return NMFCameraUpdate(scrollTo: toLatLng(json: data[1]))
-    case "zoomIn":
-        return NMFCameraUpdate.withZoomIn()
-    case "zoomOut":
-        return NMFCameraUpdate.withZoomOut()
-    case "zoomTo":
-        return NMFCameraUpdate(zoomTo: data[1] as! Double)
-    case "fitBounds":
-        let pt = data[2] as! Int
-        return NMFCameraUpdate(fit: toLatLngBounds(json: data[1]), padding: CGFloat(pt))
-    default:
-        return NMFCameraUpdate()
+    let data = json as! NSDictionary
+    print(data)
+    var cameraUpdate: NMFCameraUpdate?
+    
+    if let position = data["newCameraPosition"] as? Array<Double>{
+        cameraUpdate = .init(position: toCameraPosition(json: position))
     }
+
+    if let scrollTo = data["scrollTo"] as? Array<Double>{
+        if let zoomTo = data["zoomTo"] as? Double{
+            cameraUpdate = .init(scrollTo: toLatLng(json: scrollTo), zoomTo: zoomTo)
+        } else {
+            cameraUpdate = .init(scrollTo: toLatLng(json: scrollTo))
+        }
+    }
+
+    if data["zoomIn"] != nil{ cameraUpdate = .withZoomIn() }
+    if data["zoomOut"] != nil{ cameraUpdate = .withZoomOut() }
+
+    if let fitBounds = data["fitBounds"] as? Array<Any>{
+        let pt = fitBounds[1] as! Int
+        cameraUpdate = .init(fit: toLatLngBounds(json: fitBounds[0] as Any), padding: CGFloat(pt))
+    }
+
+    cameraUpdate?.animation = .easeOut
+    cameraUpdate?.animationDuration = data["duration"] as? Double ?? 0.0
+
+    return cameraUpdate ?? NMFCameraUpdate()
 }
 
 public func toColor(colorNumber: NSNumber) -> UIColor {
