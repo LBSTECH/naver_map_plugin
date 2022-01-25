@@ -102,7 +102,7 @@ class CircleOverlay {
     }
 
     addIfPresent('overlayId', overlayId);
-    addIfPresent('center', center._toJson());
+    addIfPresent('center', center?._toJson());
     addIfPresent('radius', radius);
     addIfPresent('color', color?.value);
     addIfPresent('outlineColor', outlineColor?.value);
