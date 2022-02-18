@@ -4,21 +4,17 @@ import android.annotation.SuppressLint;
 import android.graphics.Color;
 import android.graphics.PointF;
 
-import androidx.annotation.NonNull;
-
 import com.naver.maps.geometry.LatLng;
 import com.naver.maps.geometry.LatLngBounds;
 import com.naver.maps.map.CameraPosition;
 import com.naver.maps.map.CameraUpdate;
 import com.naver.maps.map.overlay.OverlayImage;
 
-import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Properties;
 
 import io.flutter.view.FlutterMain;
 
@@ -55,13 +51,13 @@ class Convert {
             sink.setTiltGestureEnable((Boolean) options.get("tiltGestureEnable"));
         if (options.containsKey("locationButtonEnable"))
             sink.setLocationButtonEnable((Boolean) options.get("locationButtonEnable"));
-        if(options.containsKey("locationTrackingMode"))
+        if (options.containsKey("locationTrackingMode"))
             sink.setLocationTrackingMode((Integer) options.get("locationTrackingMode"));
-        if(options.containsKey("contentPadding"))
+        if (options.containsKey("contentPadding"))
             sink.setContentPadding(toDoubleList(options.get("contentPadding")));
-        if(options.containsKey("maxZoom"))
+        if (options.containsKey("maxZoom"))
             sink.setMaxZoom((Double) options.get("maxZoom"));
-        if(options.containsKey("minZoom"))
+        if (options.containsKey("minZoom"))
             sink.setMinZoom((Double) options.get("minZoom"));
     }
 
@@ -79,7 +75,7 @@ class Convert {
     static List<Double> toDoubleList(Object o) {
         final List data = (List) o;
         ArrayList<Double> result = new ArrayList<>();
-        for(Object element : data) {
+        for (Object element : data) {
             if (element instanceof Double) {
                 result.add((Double) element);
             }
@@ -124,12 +120,13 @@ class Convert {
         Object scrollTo = map.get("scrollTo");
         if (scrollTo != null) {
             LatLng latLng = toLatLng(scrollTo);
-
-            double zoomTo = (double) map.get("zoomTo");
-            if (zoomTo == 0.0)
-                return CameraUpdate.scrollTo(latLng);
-            else
-                return CameraUpdate.scrollAndZoomTo(latLng, zoomTo);
+            if (map.containsKey("zoomTo")) {
+                double zoomTo = (double) map.get("zoomTo");
+                if (zoomTo == 0.0)
+                    return CameraUpdate.scrollTo(latLng);
+                else
+                    return CameraUpdate.scrollAndZoomTo(latLng, zoomTo);
+            }
         }
 
         if (map.containsKey("zoomIn"))
@@ -138,9 +135,11 @@ class Convert {
         if (map.containsKey("zoomOut"))
             return CameraUpdate.zoomOut();
 
-        double zoomBy = (double) map.get("zoomBy");
-        if (zoomBy != 0.0)
-            return CameraUpdate.zoomBy(zoomBy);
+        if (map.containsKey("zoomBy")) {
+            double zoomBy = (double) map.get("zoomBy");
+            if (zoomBy != 0.0)
+                return CameraUpdate.zoomBy(zoomBy);
+        }
 
         List fitBounds = (List) map.get("fitBounds");
         if (fitBounds != null) {
@@ -150,37 +149,6 @@ class Convert {
         }
 
         return null;
-//                return CameraUpdate.zoomIn();
-//            case "zoomOut":
-//                return CameraUpdate.zoomOut();
-//            case "zoomBy":
-//                double amount = (double) data.get(1);
-//                return CameraUpdate.zoomBy(amount);
-
-//        final List data = (List) o;
-//        switch ((String) data.get(0)) {
-//            case "newCameraPosition":
-//                Map<String, Object> positionMap = (Map<String, Object>) data.get(1);
-//                return CameraUpdate.toCameraPosition(toCameraPosition(positionMap));
-//            case "scrollTo":
-//                return CameraUpdate.scrollTo(toLatLng(data.get(1)));
-//            case "zoomIn":
-//                return CameraUpdate.zoomIn();
-//            case "zoomOut":
-//                return CameraUpdate.zoomOut();
-//            case "zoomBy":
-//                double amount = (double) data.get(1);
-//                return CameraUpdate.zoomBy(amount);
-//            case "zoomTo":
-//                double level = (double) data.get(1);
-//                return CameraUpdate.zoomTo(level);
-//            case "fitBounds":
-//                int dp = (int) data.get(2);
-//                int px = Math.round(dp * density);
-//                return CameraUpdate.fitBounds(toLatLngBounds(data.get(1)), px);
-//            default:
-//                throw new IllegalArgumentException("Cannot interpret " + o + " as CameraUpdate");
-//        }
     }
 
     static Object cameraPositionToJson(CameraPosition position) {
@@ -231,7 +199,7 @@ class Convert {
         final List<?> data = (List) o;
         final List<List<LatLng>> holes = new ArrayList<>(data.size());
 
-        for (Object ob: data) {
+        for (Object ob : data) {
             List<LatLng> hole = toCoords(ob);
             holes.add(hole);
         }
@@ -239,11 +207,11 @@ class Convert {
     }
 
     @SuppressWarnings("MalformedFormatString")
-    static int toColorInt(Object value){
+    static int toColorInt(Object value) {
         if (value instanceof Long || value instanceof Integer) {
             String formed = String.format("#%08x", value);
             return Color.parseColor(formed);
-        }else {
+        } else {
             return 0;
         }
     }

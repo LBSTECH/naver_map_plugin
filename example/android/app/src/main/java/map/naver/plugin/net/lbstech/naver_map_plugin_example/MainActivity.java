@@ -29,8 +29,8 @@ public class MainActivity extends FlutterActivity {
         }
     }
 
-    private boolean verifyGrantResult(int[] grantResult){
-        for(int result : grantResult) {
+    private boolean verifyGrantResult(int[] grantResult) {
+        for (int result : grantResult) {
             if (result != PackageManager.PERMISSION_GRANTED)
                 return false;
         }
