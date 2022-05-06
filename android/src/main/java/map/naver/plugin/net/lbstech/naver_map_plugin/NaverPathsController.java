@@ -94,6 +94,9 @@ class NaverPathsController {
             final Object patternImage = option.get("patternImage");
             if (patternImage != null) path.setPatternImage(Convert.toOverlayImage(patternImage));
 
+            final Object patternImageFromFile = option.get("patternImageFromFile");
+            if (patternImageFromFile != null) path.setPatternImage(Convert.toOverlayImageFromFile(patternImageFromFile));
+
             final Object patternInterval = option.get("patternInterval");
             if (patternInterval != null) path.setPatternInterval(Math.round(((int) patternInterval)*density));
 

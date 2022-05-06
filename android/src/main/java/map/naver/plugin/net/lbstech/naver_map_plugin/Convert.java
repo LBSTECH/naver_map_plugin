@@ -184,6 +184,11 @@ class Convert {
         return OverlayImage.fromAsset(key);
     }
 
+    static OverlayImage toOverlayImageFromFile(Object o) {
+        String imagePath = (String) o;
+        return OverlayImage.fromPath(imagePath);
+    }
+
     static List<LatLng> toCoords(Object o) {
         final List<?> data = (List) o;
         final List<LatLng> points = new ArrayList<>(data.size());
