@@ -187,6 +187,9 @@ class NaverMarkerController {
             final Object icon = json.get("icon");
             if (icon != null) marker.setIcon(Convert.toOverlayImage(icon));
 
+            final Object iconFromFile = json.get("iconFromFile");
+            if (icon != null) marker.setIcon(Convert.toOverlayImageFromFile(iconFromFile));
+
             final Object infoWindow = json.get("infoWindow");
             if (infoWindow != null) this.infoWindowText = (String)infoWindow;
             else this.infoWindowText = null;
