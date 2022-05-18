@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:naver_map_plugin/naver_map_plugin.dart';
@@ -22,6 +23,7 @@ class _MarkerMapPageState extends State<MarkerMapPage> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       OverlayImage.fromAssetImage(
         assetName: 'icon/marker.png',
+        devicePixelRatio: window.devicePixelRatio,
       ).then((image) {
         setState(() {
           _markers.add(Marker(

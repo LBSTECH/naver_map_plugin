@@ -237,7 +237,7 @@ class Marker {
     addIfPresent('subCaptionColor', subCaptionColor?.value);
     addIfPresent('subCaptionHaloColor', subCaptionHaloColor?.value);
     addIfPresent('subCaptionRequestedWidth', subCaptionRequestedWidth);
-    addIfPresent('icon', icon?.assetName);
+    addIfPresent('icon', icon?.key.name);
     addIfPresent('infoWindow', infoWindow);
     addIfPresent('anchor', anchor?._json);
 
