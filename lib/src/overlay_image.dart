@@ -5,7 +5,7 @@ class OverlayImage {
   final AssetImage image;
   final AssetBundleImageKey key;
 
-  get assetName => Platform.isIOS ? image.assetName : key.name;
+  get assetName => key.name;
 
   const OverlayImage._(this.image, this.key);
 
