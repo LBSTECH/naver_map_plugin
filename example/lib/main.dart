@@ -8,6 +8,8 @@ import 'package:naver_map_plugin_example/path_map.dart';
 import 'package:naver_map_plugin_example/polygon_map.dart';
 import 'package:naver_map_plugin_example/text_field_page.dart';
 
+import 'camera_page.dart';
+
 void main() {
   runApp(MyApp());
 }
@@ -40,6 +42,7 @@ class _MainPageState extends State<MainPage> {
     '컨트롤러 테스트',
     '폴리곤 예제',
     'GLSurface Thread collision test',
+    'ㅋㅏ메라 예제',
   ];
 
   @override
@@ -127,6 +130,13 @@ class _MainPageState extends State<MainPage> {
           context,
           MaterialPageRoute(
             builder: (_) => TextFieldPage(),
+          ));
+        break;
+        case 7:
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (_) => CameraPage(),
           ));
     }
   }
