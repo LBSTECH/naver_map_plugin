@@ -14,7 +14,7 @@ class _CircleMapPageState extends State<CircleMapPage> {
   List<CircleOverlay> _circles = [];
   double _sliderValue = 40.0;
 
-  int _selectedCircleIndex;
+  late int _selectedCircleIndex;
 
   @override
   Widget build(BuildContext context) {
