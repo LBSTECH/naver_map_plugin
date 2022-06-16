@@ -68,11 +68,10 @@ class NaverMapController: NSObject, FlutterPlatformView, NaverMapOptionSink, NMF
                                                  touchHandler: overlayTouchHandler(overlay:))
         polygonController = NaverPolygonController(naverMap: naverMap!,
                                                    touchHandler: overlayTouchHandler(overlay:))
-        channel?.setMethodCallHandler(handle(call:result:))
+      
         
         // map view 설정
         NMFAuthManager.shared().delegate = self as NMFAuthManagerDelegate // for debug
-
         mapView!.touchDelegate = self
         mapView!.addCameraDelegate(delegate: self)
         if let arg = argument {
@@ -97,10 +96,11 @@ class NaverMapController: NSObject, FlutterPlatformView, NaverMapOptionSink, NMF
                 polygonController?.add(jsonArray: polygonData)
             }
         }
-        
+
         // 제대로 동작하지 않는 컨트롤러 UI로 원인이 밝혀지기 전까진 강제 비활성화.
         naverMap!.showZoomControls = false
         naverMap!.showIndoorLevelPicker = false
+        channel?.setMethodCallHandler(handle(call:result:))
     }
     
     func view() -> UIView {
@@ -382,7 +382,7 @@ class NaverMapController: NSObject, FlutterPlatformView, NaverMapOptionSink, NMF
             return markersController!.toggleInfoWindow(marker)
         } else if let path = overlay.userInfo["path"] as? NPathController {
             channel?.invokeMethod("path#onTap",
-                                  arguments: ["pathId" , path.id])
+                                  arguments: ["pathId" : path.id])
             return true
         } else if let circle = overlay.userInfo["circle"] as? NCircleController{
             channel?.invokeMethod("circle#onTap",
