@@ -320,6 +320,7 @@ class _NaverMapState extends State<NaverMap> {
 
   @override
   void didUpdateWidget(NaverMap oldWidget) {
+    print('--- didUpdateWidget naverMap');
     super.didUpdateWidget(oldWidget);
     _updateOptions();
     _updateMarkers();

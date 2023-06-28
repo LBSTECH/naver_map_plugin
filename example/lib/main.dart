@@ -6,6 +6,7 @@ import 'package:naver_map_plugin_example/padding_test.dart';
 import 'package:naver_map_plugin_example/marker_map_page.dart';
 import 'package:naver_map_plugin_example/path_map.dart';
 import 'package:naver_map_plugin_example/polygon_map.dart';
+import 'package:naver_map_plugin_example/tab_bar_map.dart';
 import 'package:naver_map_plugin_example/text_field_page.dart';
 
 import 'camera_page.dart';
@@ -43,6 +44,7 @@ class _MainPageState extends State<MainPage> {
     '폴리곤 예제',
     'GLSurface Thread collision test',
     'ㅋㅏ메라 예제',
+    '탭바 예제',
   ];
 
   @override
@@ -138,6 +140,14 @@ class _MainPageState extends State<MainPage> {
           MaterialPageRoute(
             builder: (_) => CameraPage(),
           ));
+        break;
+      case 8:
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => TabBarPage(),
+            ));
+        break;
     }
   }
 }

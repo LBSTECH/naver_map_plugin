@@ -4,50 +4,78 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:naver_map_plugin/naver_map_plugin.dart';
 
-class BaseMapPage extends StatefulWidget {
+class TabBarPage extends StatefulWidget {
   @override
-  _BaseMapPageState createState() => _BaseMapPageState();
+  _TabBarPageState createState() => _TabBarPageState();
 }
 
-class _BaseMapPageState extends State<BaseMapPage> {
+class _TabBarPageState extends State<TabBarPage> with TickerProviderStateMixin {
   final scaffoldKey = GlobalKey<ScaffoldState>();
   Completer<NaverMapController> _controller = Completer();
 
   MapType _mapType = MapType.Basic;
   LocationTrackingMode _trackingMode = LocationTrackingMode.Follow;
+  TabController tabController;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    tabController = TabController(length: 3, vsync: this);
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       key: scaffoldKey,
-      appBar: AppBar(),
-      body: Stack(
-        children: <Widget>[
-          NaverMap(
-            initialCameraPosition: CameraPosition(
-              target: LatLng(37.56378,126.96237),
-              zoom: 17,
-            ),
-            onMapCreated: onMapCreated,
-            mapType: _mapType,
-            initLocationTrackingMode: _trackingMode,
-            locationButtonEnable: true,
-            indoorEnable: true,
-            onCameraChange: _onCameraChange,
-            onCameraIdle: _onCameraIdle,
-            onMapTap: _onMapTap,
-            onMapLongTap: _onMapLongTap,
-            onMapDoubleTap: _onMapDoubleTap,
-            onMapTwoFingerTap: _onMapTwoFingerTap,
-            onSymbolTap: _onSymbolTap,
-            maxZoom: 17,
-            minZoom: 15,
+      appBar: AppBar(
+        bottom: TabBar(
+          controller: tabController,
+          tabs: [
+            SizedBox(height: 20, child: Text('1')),
+            SizedBox(height: 20, child: Text('2')),
+            SizedBox(height: 20, child: Text('3')),
+          ],
+        ),
+      ),
+      body: TabBarView(
+        controller: tabController,
+        children: [
+          Center(
+            child: Text("It's cloudy here"),
           ),
-          Padding(
-            padding: EdgeInsets.all(16),
-            child: _mapTypeSelector(),
+          Stack(
+            children: <Widget>[
+              NaverMap(
+                initialCameraPosition: CameraPosition(
+                  target: LatLng(37.56378, 126.96237),
+                  zoom: 17,
+                ),
+                onMapCreated: onMapCreated,
+                mapType: _mapType,
+                initLocationTrackingMode: _trackingMode,
+                locationButtonEnable: true,
+                indoorEnable: true,
+                onCameraChange: _onCameraChange,
+                onCameraIdle: _onCameraIdle,
+                onMapTap: _onMapTap,
+                onMapLongTap: _onMapLongTap,
+                onMapDoubleTap: _onMapDoubleTap,
+                onMapTwoFingerTap: _onMapTwoFingerTap,
+                onSymbolTap: _onSymbolTap,
+                maxZoom: 17,
+                minZoom: 15,
+              ),
+              Padding(
+                padding: EdgeInsets.all(16),
+                child: _mapTypeSelector(),
+              ),
+              _trackingModeSelector(),
+            ],
           ),
-          _trackingModeSelector(),
+          Center(
+            child: Text("It's cloudy here"),
+          ),
         ],
       ),
     );
@@ -231,5 +259,19 @@ class _BaseMapPageState extends State<BaseMapPage> {
             );
           });
     });
+  }
+
+ @override
+  void didUpdateWidget(covariant TabBarPage oldWidget) {
+    // TODO: implement didUpdateWidget
+   print('--- didUpdateWidget tabBar');
+    super.didUpdateWidget(oldWidget);
+  }
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    print('--- dispose');
+
+    super.dispose();
   }
 }
