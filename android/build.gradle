@@ -25,7 +25,7 @@ rootProject.allprojects {
 apply plugin: 'com.android.library'
 
 android {
-    compileSdkVersion 28
+    compileSdkVersion 31
 
     defaultConfig {
         minSdkVersion 16
@@ -41,6 +41,6 @@ android {
     dependencies {
         // 네이버 지도 SDK
         implementation 'com.naver.maps:map-sdk:3.16.2'
-        implementation 'com.google.android.gms:play-services-location:18.0.0'
+        implementation 'com.google.android.gms:play-services-location:21.0.1'
     }
 }

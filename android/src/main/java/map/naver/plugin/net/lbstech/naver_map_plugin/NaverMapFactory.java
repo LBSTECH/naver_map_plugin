@@ -33,6 +33,7 @@ public class NaverMapFactory extends PlatformViewFactory {
     public PlatformView create(Context context, int i, Object args) {
         Map<String, Object> params = (Map<String, Object>) args;
         NaverMapBuilder builder = new NaverMapBuilder();
+        System.out.println("--- test: NaverMapFactory ::: params"+ params);
 
         if (params.containsKey("initialCameraPosition")) {
             Map<String, Object> initPosition = (Map<String, Object>) params.get("initialCameraPosition");
@@ -58,6 +59,7 @@ public class NaverMapFactory extends PlatformViewFactory {
         if (params.containsKey("polygons")) {
             builder.setInitialPolygon((List) params.get("polygons"));
         }
+        System.out.println("--- test: NaverMapFactory ::: build");
 
         return builder.build(
                 i,

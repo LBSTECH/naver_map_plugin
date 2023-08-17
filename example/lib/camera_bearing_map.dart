@@ -4,12 +4,12 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:naver_map_plugin/naver_map_plugin.dart';
 
-class BaseMapPage extends StatefulWidget {
+class BearingPage extends StatefulWidget {
   @override
-  _BaseMapPageState createState() => _BaseMapPageState();
+  _BearingPageState createState() => _BearingPageState();
 }
 
-class _BaseMapPageState extends State<BaseMapPage> {
+class _BearingPageState extends State<BearingPage> {
   final scaffoldKey = GlobalKey<ScaffoldState>();
   Completer<NaverMapController> _controller = Completer();
 
@@ -17,15 +17,22 @@ class _BaseMapPageState extends State<BaseMapPage> {
   LocationTrackingMode _trackingMode = LocationTrackingMode.Follow;
 
   @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       key: scaffoldKey,
-      appBar: AppBar(),
-      body: Stack(
-        children: <Widget>[
+      appBar: AppBar(
+      ),
+      body:  Stack(
+        children: [
+
           NaverMap(
             initialCameraPosition: CameraPosition(
-              target: LatLng(37.56378,126.96237),
+              target: LatLng(37.56378, 126.96237),
               zoom: 17,
             ),
             onMapCreated: onMapCreated,
@@ -43,11 +50,14 @@ class _BaseMapPageState extends State<BaseMapPage> {
             maxZoom: 17,
             minZoom: 15,
           ),
-          Padding(
-            padding: EdgeInsets.all(16),
-            child: _mapTypeSelector(),
-          ),
-          _trackingModeSelector(),
+          Positioned(
+              bottom: 150,
+              left: 30,
+              right: 30,
+              child: ElevatedButton(onPressed: () async{
+                var future = await _controller.future;
+                future.moveCamera(CameraUpdate.toCameraPosition(CameraPosition(target: LatLng(37.56362422812855, 126.96269803941277),bearing: 110)));
+              }, child: Text('카메라 회전'))),
         ],
       ),
     );
@@ -231,5 +241,19 @@ class _BaseMapPageState extends State<BaseMapPage> {
             );
           });
     });
+  }
+
+ @override
+  void didUpdateWidget(covariant BearingPage oldWidget) {
+    // TODO: implement didUpdateWidget
+   print('--- didUpdateWidget tabBar');
+    super.didUpdateWidget(oldWidget);
+  }
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    print('--- dispose');
+
+    super.dispose();
   }
 }

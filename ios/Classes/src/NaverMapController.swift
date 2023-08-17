@@ -477,7 +477,9 @@ class NaverMapController: NSObject, FlutterPlatformView, NaverMapOptionSink, NMF
     }
     
     func setLocationTrackingMode(_ locationTrackingMode: UInt) {
-        mapView!.positionMode = NMFMyPositionMode(rawValue: locationTrackingMode)!
+
+        mapView!.positionMode = .compass
+        print(mapView!.positionMode.rawValue)
     }
     
     func setContentPadding(_ paddingData: Array<CGFloat>) {

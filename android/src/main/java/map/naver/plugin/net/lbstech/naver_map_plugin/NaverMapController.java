@@ -87,6 +87,7 @@ public class NaverMapController implements
             List initialCircles,
             List initialPolygons
     ) {
+        System.out.println("--- test: NaverMapController constructor");
         this.mapView = new MapView(context, options);
 
         this.activityState = activityState;

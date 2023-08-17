@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:naver_map_plugin_example/base_map.dart';
+import 'package:naver_map_plugin_example/camera_bearing_map.dart';
 import 'package:naver_map_plugin_example/circle_map.dart';
 import 'package:naver_map_plugin_example/padding_test.dart';
 import 'package:naver_map_plugin_example/marker_map_page.dart';
@@ -45,6 +46,7 @@ class _MainPageState extends State<MainPage> {
     'GLSurface Thread collision test',
     'ㅋㅏ메라 예제',
     '탭바 예제',
+    '카메라 베어링 예제',
   ];
 
   @override
@@ -146,6 +148,13 @@ class _MainPageState extends State<MainPage> {
             context,
             MaterialPageRoute(
               builder: (context) => TabBarPage(),
+            ));
+        break;
+      case 9:
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => BearingPage(),
             ));
         break;
     }
