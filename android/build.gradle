@@ -8,7 +8,7 @@ buildscript {
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:4.0.1'
+        classpath 'com.android.tools.build:gradle:7.3.1'
     }
 }
 
@@ -40,7 +40,7 @@ android {
     }
     dependencies {
         // 네이버 지도 SDK
-        implementation 'com.naver.maps:map-sdk:3.16.2'
+        implementation 'com.naver.maps:map-sdk:3.17.0'
         implementation 'com.google.android.gms:play-services-location:21.0.1'
     }
 }
